@@ -20,6 +20,8 @@ const db = getFirestore(app);
 document.getElementById('checkPhoneNumberButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
+    const numeroContainer = document.getElementById('numeroContainer');
+    const clientInfoContainer = document.getElementById('client-info');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -31,7 +33,11 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         if (userDoc.exists()) {
             const userData = userDoc.data();
             messageElement.style.display = 'none';
-            window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
+            numeroContainer.style.display = 'none';
+            clientInfoContainer.style.display = 'block';
+            const basicInfo = document.getElementById('basic-info');
+            basicInfo.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
+            window.history.replaceState(null, null, `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
