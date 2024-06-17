@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -78,10 +78,20 @@ async function addServiceToFirestore(phoneNumber, service, date) {
     const docRef = doc(db, "users", phoneNumber);
     
     try {
-        await updateDoc(docRef, {
-            services: arrayUnion({ date, type: service })
-        });
-        console.log('Firestore updated successfully');
+        const userDoc = await getDoc(docRef);
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const currentServices = userData.services || [];
+            currentServices.push({ date, type: service });
+
+            await updateDoc(docRef, {
+                services: currentServices
+            });
+
+            console.log('Firestore updated successfully');
+        } else {
+            console.error('User document not found');
+        }
     } catch (error) {
         console.error('Error updating Firestore:', error);
     }
