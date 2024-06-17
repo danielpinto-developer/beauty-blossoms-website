@@ -3,39 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beauty Blossoms</title>
-    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <title>Admin Page</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="background-container">
-      <h1>Hello Luna</h1>
-      <h3>Programa de Lealtad</h3>
-      <div class="numero">
-        <input type="text" placeholder="Número de teléfono" id="phone-number" />
-        <button id="buscarButton">Buscar</button>
+      <h1>Hello Lucy</h1>
+      <h3>Añadir más puntos</h3>
+      <div class="admin-container">
+        <div class="numero">
+          <input
+            type="text"
+            placeholder="Número de teléfono"
+            id="phone-number"
+          />
+          <button id="checkPhoneNumberButton">Buscar</button>
+        </div>
+        <p id="message" style="color: red; display: none">
+          Cuenta no encontrada
+        </p>
       </div>
-      <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
       <div id="client-info" style="display: none">
-        <div class="buttons-row">
-          <button id="showPreviousButton">Historial</button>
-          <button id="showAddPointsButton">Añadir puntos</button>
+        <div class="tabs">
+          <button class="tab-button" onclick="showTab('service-history')">
+            Previous Services
+          </button>
+          <button class="tab-button" onclick="showTab('add-points')">
+            Add Points
+          </button>
         </div>
-        <div id="previous-section" class="tab-content" style="display: none">
-          <!-- Previous services will be displayed here -->
-        </div>
-        <div id="add-points-section" class="tab-content" style="display: none">
+        <div id="service-history" class="tab-content"></div>
+        <div id="add-points" class="tab-content">
           <div class="service-selection">
-            <label for="service">Servicio</label>
+            <label for="service">Select Service:</label>
             <select id="service">
-              <option value="Eyelashes">Pestañas</option>
-              <option value="Nails">Uñas</option>
+              <option value="Eyelashes">Eyelashes</option>
+              <option value="Nails">Nails</option>
               <option value="Pedicure">Pedicure</option>
-              <option value="Retouches">Retoques</option>
+              <option value="Retouches">Retouches</option>
             </select>
-            <button id="addServiceButton">Confirmar</button>
+            <button onclick="addService()">Add Service</button>
           </div>
         </div>
+        <div id="discount-message" style="display: none"></div>
       </div>
     </div>
     <script type="module" src="admin.js"></script>

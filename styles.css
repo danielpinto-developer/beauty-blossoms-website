@@ -74,46 +74,39 @@ button:hover {
     margin-top: 20px;
 }
 
-.buttons-row {
+.tabs {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    margin-bottom: 20px;
 }
 
-.service-selection {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
+.tab-button {
+    padding: 10px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 5px;
 }
 
-.service-selection select {
-    margin-right: 10px;
+.tab-button:hover {
+    background-color: #0056b3;
 }
 
 .tab-content {
     display: none;
 }
 
-@media (max-width: 600px) {
-    .background-container {
-        width: calc(100% - 40px);
-        padding: 20px;
-        margin: 0 20px;
-    }
+.service-selection {
+    display: flex;
+    align-items: center;
+}
 
-    .numero {
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
-    }
+.service-selection select {
+    margin-right: 10px;
+}
 
-    input {
-        width: calc(100% - 90px);
-        margin-bottom: 0;
-    }
-
-    button {
-        width: auto;
-        margin-left: 10px;
-    }
+.service-selection button {
+    margin-left: 10px;
 }
