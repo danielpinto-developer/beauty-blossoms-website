@@ -31,8 +31,10 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            // Redirect to the new URL with parameters
-            window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
+            displayClientInfo(phoneNumber, userData.Name);
+            clientInfoContainer.style.display = 'block';
+            messageElement.style.display = 'none';
+            numeroContainer.style.display = 'none';
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
@@ -54,10 +56,7 @@ function showTab(tabId) {
     document.getElementById(tabId).style.display = 'block';
 }
 
-async function displayClientInfo() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const phoneNumber = urlParams.get('phone');
-    const name = urlParams.get('name');
+async function displayClientInfo(phoneNumber, name) {
     const clientInfoDiv = document.getElementById('basic-info');
 
     clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
@@ -96,7 +95,7 @@ async function addService() {
     await updateSheet(phoneNumber, service, date);
 
     // Refresh the service history
-    await displayClientInfo();
+    await displayClientInfo(phoneNumber);
 
     // Check discount eligibility and display the message
     checkDiscountEligibility(service);
@@ -138,6 +137,13 @@ function checkDiscountEligibility(service) {
     });
 }
 
-window.onload = displayClientInfo;
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const phoneNumber = urlParams.get('phone');
+    const name = urlParams.get('name');
+    if (phoneNumber && name) {
+        displayClientInfo(phoneNumber, name);
+    }
+};
 
 document.getElementById('addServiceButton').addEventListener('click', addService);
