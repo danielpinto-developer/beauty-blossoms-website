@@ -54,15 +54,21 @@ async function displayClientInfo() {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             if (userData.services && userData.services.length > 0) {
+                const serviceCounts = {
+                    Eyelashes: 0,
+                    Nails: 0,
+                    Pedicure: 0,
+                    Retouches: 0,
+                };
                 userData.services.forEach(service => {
-                    const serviceBoxes = document.querySelector(`.service-boxes[data-service="${service.type}"]`);
-                    if (serviceBoxes) {
-                        const completedBoxes = serviceBoxes.querySelectorAll('.completed').length;
-                        if (completedBoxes < 5) {
-                            serviceBoxes.innerHTML += `<div class="box completed"></div>`;
-                        }
+                    if (serviceCounts[service.type] !== undefined) {
+                        serviceCounts[service.type]++;
                     }
                 });
+                for (const serviceType in serviceCounts) {
+                    const serviceBoxes = document.querySelector(`.service-boxes[data-service="${serviceType}"]`);
+                    serviceBoxes.innerHTML = generateBoxes(serviceCounts[serviceType]);
+                }
             }
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
