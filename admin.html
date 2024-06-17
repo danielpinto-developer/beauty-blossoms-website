@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="background-container">
+      <h1>BB 27 Studio</h1>
+      <h3 id="quote">"Where Beauty Blossoms"</h3>
+      <h2>Admin - Programa de Lealtad</h2>
+      <div class="numero">
+        <input type="text" placeholder="Número de teléfono" id="phone-number" />
+        <button id="checkPhoneNumberButton">Buscar</button>
+      </div>
+      <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
+      <div id="dataContainer"></div>
+    </div>
+    <script type="module" src="admin.js"></script>
+  </body>
+</html>
