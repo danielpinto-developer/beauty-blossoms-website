@@ -1,3 +1,4 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -31,11 +32,10 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            displayClientInfo(phoneNumber, userData.Name);
+            document.getElementById('basic-info').innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
             clientInfoContainer.style.display = 'block';
             messageElement.style.display = 'none';
             numeroContainer.style.display = 'none';
-            window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
@@ -43,68 +43,38 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         }
     } catch (error) {
         console.error('Error checking phone number:', error);
-        messageElement.style.display = 'block';
+        messageElement.style.display = 'block'; // Show error message
         messageElement.textContent = 'Error checking account';
         clientInfoContainer.style.display = 'none';
     }
 });
 
-document.getElementById('showHistoryButton').addEventListener('click', () => showTab('service-history'));
-document.getElementById('showAddPointsButton').addEventListener('click', () => showTab('add-points'));
+document.getElementById('showHistoryButton').addEventListener('click', () => {
+    showTab('service-history');
+});
 
-function showTab(tabId) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.style.display = 'none';
-    });
-    document.getElementById(tabId).style.display = 'block';
-}
+document.getElementById('showAddPointsButton').addEventListener('click', () => {
+    showTab('add-points');
+});
 
-async function displayClientInfo(phoneNumber, name) {
-    const clientInfoDiv = document.getElementById('basic-info');
-    clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
-
-    try {
-        const userDoc = await getDoc(doc(db, "users", phoneNumber));
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const serviceHistoryDiv = document.getElementById('service-history');
-            serviceHistoryDiv.innerHTML = '';
-            if (userData.services && userData.services.length > 0) {
-                userData.services.forEach(service => {
-                    serviceHistoryDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
-                });
-            } else {
-                serviceHistoryDiv.innerHTML = '<p>No service records found.</p>';
-            }
-        } else {
-            clientInfoDiv.innerHTML = '<p>No records found.</p>';
-        }
-    } catch (error) {
-        console.error('Error displaying client info:', error);
-        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
-    }
-}
-
-async function addService() {
+document.getElementById('addServiceButton').addEventListener('click', async () => {
     const service = document.getElementById('service').value;
-    const urlParams = new URLSearchParams(window.location.search);
-    const phoneNumber = urlParams.get('phone');
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     const date = new Date().toLocaleDateString('en-GB'); // Get current date in dd/mm/yyyy format
 
     console.log('Adding service:', { phoneNumber, service, date });
 
-    // Update the Firestore with the new service and current date
-    await updateSheet(phoneNumber, service, date);
+    // Update Firestore with the new service and current date
+    await addServiceToFirestore(phoneNumber, service, date);
 
     // Refresh the service history
-    await displayClientInfo(phoneNumber, urlParams.get('name'));
+    await displayClientInfo(phoneNumber);
 
     // Check discount eligibility and display the message
     checkDiscountEligibility(service);
-}
+});
 
-async function updateSheet(phoneNumber, service, date) {
+async function addServiceToFirestore(phoneNumber, service, date) {
     const docRef = doc(db, "users", phoneNumber);
     
     try {
@@ -114,6 +84,34 @@ async function updateSheet(phoneNumber, service, date) {
         console.log('Firestore updated successfully');
     } catch (error) {
         console.error('Error updating Firestore:', error);
+    }
+}
+
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabId).style.display = 'block';
+}
+
+async function displayClientInfo(phoneNumber) {
+    const userDoc = await getDoc(doc(db, "users", phoneNumber));
+
+    if (userDoc.exists()) {
+        const clientInfoDiv = document.getElementById('service-history');
+        clientInfoDiv.innerHTML = '';
+
+        const userData = userDoc.data();
+        if (userData.services && userData.services.length > 0) {
+            userData.services.forEach(entry => {
+                clientInfoDiv.innerHTML += `<p>Date: ${entry.date} - Service: ${entry.type}</p>`;
+            });
+        } else {
+            clientInfoDiv.innerHTML = '<p>No records found.</p>';
+        }
+    } else {
+        document.getElementById('service-history').innerHTML = '<p>No records found.</p>';
     }
 }
 
@@ -143,10 +141,7 @@ function checkDiscountEligibility(service) {
 window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const phoneNumber = urlParams.get('phone');
-    const name = urlParams.get('name');
-    if (phoneNumber && name) {
-        displayClientInfo(phoneNumber, name);
+    if (phoneNumber) {
+        displayClientInfo(phoneNumber);
     }
 };
-
-document.getElementById('addServiceButton').addEventListener('click', addService);
