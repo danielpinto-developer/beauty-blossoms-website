@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,27 +17,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-document.getElementById('addDataButton').addEventListener('click', async () => {
-    try {
-        await addDoc(collection(db, "testCollection"), {
-            name: "Test Name",
-            timestamp: new Date()
-        });
-        alert("Data added successfully!");
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
-});
-
-document.getElementById('fetchDataButton').addEventListener('click', async () => {
+document.getElementById('checkPhoneNumberButton').addEventListener('click', async () => {
+    const phoneNumber = document.getElementById('phone-number').value;
+    const messageElement = document.getElementById('message');
     const dataContainer = document.getElementById('dataContainer');
-    dataContainer.innerHTML = ""; // Clear previous data
+
+    if (!phoneNumber) {
+        alert('Please enter a phone number');
+        return;
+    }
+
     try {
-        const querySnapshot = await getDocs(collection(db, "testCollection"));
-        querySnapshot.forEach((doc) => {
-            dataContainer.innerHTML += `<p>${doc.data().name} - ${doc.data().timestamp.toDate()}</p>`;
-        });
+        const userDoc = await getDoc(doc(db, "users", phoneNumber));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            dataContainer.innerHTML = `<p>Phone Number: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
+            messageElement.style.display = 'none';
+        } else {
+            messageElement.style.display = 'block'; // Show message if account not found
+            messageElement.textContent = 'Cuenta no encontrada';
+            dataContainer.innerHTML = '';
+        }
     } catch (e) {
-        console.error("Error fetching documents: ", e);
+        console.error("Error fetching document: ", e);
+        messageElement.style.display = 'block';
+        messageElement.textContent = 'Error checking account';
+        dataContainer.innerHTML = '';
     }
 });
