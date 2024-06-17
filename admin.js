@@ -35,6 +35,7 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
             messageElement.style.display = 'none';
             clientInfoContainer.style.display = 'block';
             numeroContainer.style.display = 'none';
+            window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
             displayClientInfo(phoneNumber);
         } else {
             messageElement.style.display = 'block';
