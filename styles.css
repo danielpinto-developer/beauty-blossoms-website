@@ -30,6 +30,38 @@ h1, h2, h3 {
     box-sizing: border-box;
 }
 
+.service-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.service-label {
+    width: 100px;
+    text-align: left;
+}
+
+.service-boxes {
+    display: flex;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+.service-boxes .box {
+    width: 30px;
+    height: 30px;
+    background-color: lightgray;
+}
+
+.service-boxes .box.completed {
+    background-color: green;
+}
+
+.service-discount {
+    width: 50px;
+    text-align: right;
+}
+
 .numero {
     display: flex;
     justify-content: center;
@@ -60,49 +92,17 @@ button {
     border-radius: 5px;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
-
 #quote {
     font-family: Great Vibes;
     font-weight: lighter;
     margin: 0;
 }
 
-.buttons-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 20px;
+button:hover {
+    background-color: #0056b3;
 }
 
-.service-selection {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.service-selection select {
-    flex: 1;
-}
-
-.service-selection button {
-    margin-left: 10px;
-    flex: none;
-}
-
-.tab-content {
-    width: 100%;
-}
-
-#client-info {
-    margin-top: 20px;
-}
-
-#discount-message {
+#clientInfo, #adminInfo {
     margin-top: 20px;
 }
 

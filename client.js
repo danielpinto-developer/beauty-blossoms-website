@@ -25,16 +25,44 @@ async function displayClientInfo() {
     const clientInfoDiv = document.getElementById('client-info');
     clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
 
+    const servicesGrid = document.getElementById('services-grid');
+    servicesGrid.innerHTML = `
+        <div class="service-row">
+            <div class="service-label">Eyelashes</div>
+            <div class="service-boxes" data-service="Eyelashes"></div>
+            <div class="service-discount">20%</div>
+        </div>
+        <div class="service-row">
+            <div class="service-label">Nails</div>
+            <div class="service-boxes" data-service="Nails"></div>
+            <div class="service-discount">20%</div>
+        </div>
+        <div class="service-row">
+            <div class="service-label">Pedicure</div>
+            <div class="service-boxes" data-service="Pedicure"></div>
+            <div class="service-discount">20%</div>
+        </div>
+        <div class="service-row">
+            <div class="service-label">Retouches</div>
+            <div class="service-boxes" data-service="Retouches"></div>
+            <div class="service-discount">30%</div>
+        </div>
+    `;
+
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(service => {
-                    clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
+                    const serviceBoxes = document.querySelector(`.service-boxes[data-service="${service.type}"]`);
+                    if (serviceBoxes) {
+                        const completedBoxes = serviceBoxes.querySelectorAll('.completed').length;
+                        if (completedBoxes < 5) {
+                            serviceBoxes.innerHTML += `<div class="box completed"></div>`;
+                        }
+                    }
                 });
-            } else {
-                clientInfoDiv.innerHTML += '<p>No service records found.</p>';
             }
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
