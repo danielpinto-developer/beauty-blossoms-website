@@ -28,6 +28,7 @@ async function displayClientInfo() {
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
+            console.log('Document data:', userDoc.data());
             const userData = userDoc.data();
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(service => {
@@ -37,6 +38,7 @@ async function displayClientInfo() {
                 clientInfoDiv.innerHTML += '<p>No service records found.</p>';
             }
         } else {
+            console.log('No such document!');
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
     } catch (error) {
