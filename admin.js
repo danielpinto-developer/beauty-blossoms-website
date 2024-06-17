@@ -58,7 +58,6 @@ function showTab(tabId) {
 
 async function displayClientInfo(phoneNumber, name) {
     const clientInfoDiv = document.getElementById('basic-info');
-
     clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
 
     try {
@@ -95,7 +94,7 @@ async function addService() {
     await updateSheet(phoneNumber, service, date);
 
     // Refresh the service history
-    await displayClientInfo(phoneNumber);
+    await displayClientInfo(phoneNumber, urlParams.get('name'));
 
     // Check discount eligibility and display the message
     checkDiscountEligibility(service);
