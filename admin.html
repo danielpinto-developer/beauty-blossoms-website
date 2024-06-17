@@ -8,17 +8,21 @@
   </head>
   <body>
     <div class="background-container">
-      <h1>BB 27 Studio</h1>
-      <h3 id="quote">"Where Beauty Blossoms"</h3>
-      <h2>Admin - Programa de Lealtad</h2>
-      <div class="numero" id="numeroContainer">
+      <h1>Hello Lucy</h1>
+      <h3>Añadir más puntos</h3>
+      <div id="numeroContainer" class="numero">
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="checkPhoneNumberButton">Buscar</button>
       </div>
       <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
       <div id="client-info" style="display: none">
-        <button onclick="showTab('service-history')">Previous</button>
-        <button onclick="showTab('add-points')">Add Points</button>
+        <div id="basic-info"></div>
+        <button id="previousButton" onclick="showTab('service-history')">
+          Previous Services
+        </button>
+        <button id="addPointsButton" onclick="showTab('add-points')">
+          Add Points
+        </button>
         <div
           id="service-history"
           class="tab-content"
@@ -33,7 +37,7 @@
               <option value="Pedicure">Pedicure</option>
               <option value="Retouches">Retouches</option>
             </select>
-            <button onclick="addService()">Add Service</button>
+            <button id="addServiceButton">Add Service</button>
           </div>
         </div>
         <div id="discount-message" style="display: none"></div>

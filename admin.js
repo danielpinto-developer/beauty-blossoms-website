@@ -58,8 +58,7 @@ async function displayClientInfo() {
     const urlParams = new URLSearchParams(window.location.search);
     const phoneNumber = urlParams.get('phone');
     const name = urlParams.get('name');
-    const clientInfoDiv = document.getElementById('client-info');
-    const messageElement = document.getElementById('message');
+    const clientInfoDiv = document.getElementById('basic-info');
 
     clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
 
@@ -67,12 +66,14 @@ async function displayClientInfo() {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
+            const serviceHistoryDiv = document.getElementById('service-history');
+            serviceHistoryDiv.innerHTML = '';
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(service => {
-                    clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
+                    serviceHistoryDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
                 });
             } else {
-                clientInfoDiv.innerHTML += '<p>No service records found.</p>';
+                serviceHistoryDiv.innerHTML = '<p>No service records found.</p>';
             }
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
@@ -138,3 +139,5 @@ function checkDiscountEligibility(service) {
 }
 
 window.onload = displayClientInfo;
+
+document.getElementById('addServiceButton').addEventListener('click', addService);
