@@ -26,14 +26,18 @@ async function displayClientInfo() {
     clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
 
     try {
-        const servicesSnapshot = await getDocs(collection(db, "users", phoneNumber, "services"));
-        if (!servicesSnapshot.empty) {
-            servicesSnapshot.forEach(serviceDoc => {
-                const serviceData = serviceDoc.data();
-                clientInfoDiv.innerHTML += `<p>Date: ${serviceData.ServiceDate} - Service: ${serviceData.ServiceType}</p>`;
-            });
+        const userDoc = await getDoc(doc(db, "users", phoneNumber));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.services && userData.services.length > 0) {
+                userData.services.forEach(service => {
+                    clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
+                });
+            } else {
+                clientInfoDiv.innerHTML += '<p>No service records found.</p>';
+            }
         } else {
-            clientInfoDiv.innerHTML += '<p>No service records found.</p>';
+            clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
     } catch (error) {
         console.error('Error displaying client info:', error);
