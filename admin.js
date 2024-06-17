@@ -1,5 +1,3 @@
-
-Copy code
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -34,7 +32,9 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
             const userData = userDoc.data();
             messageElement.style.display = 'none';
             document.querySelector('.numero').style.display = 'none';
+            document.querySelector('.tabs').style.display = 'flex';
             document.getElementById('client-info').style.display = 'block';
+            window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
         } else {
             messageElement.style.display = 'block';
             messageElement.textContent = 'Cuenta no encontrada';
@@ -95,7 +95,20 @@ async function addService() {
         alert('Service added successfully');
         document.getElementById('add-points').style.display = 'none';
         document.querySelector('.tabs').style.display = 'flex';
+        displayServiceHistory(phoneNumber); // Refresh the service history after adding the service
     } catch (error) {
         console.error('Error adding service:', error);
     }
 }
+
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const phoneNumber = urlParams.get('phone');
+    const name = urlParams.get('name');
+    if (phoneNumber) {
+        document.querySelector('.numero').style.display = 'none';
+        document.querySelector('.tabs').style.display = 'flex';
+        document.getElementById('client-info').style.display = 'block';
+        displayServiceHistory(phoneNumber);
+    }
+};
