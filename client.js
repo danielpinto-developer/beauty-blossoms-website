@@ -26,7 +26,7 @@ async function displayClientInfo() {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             const clientInfoDiv = document.getElementById('client-info');
-            clientInfoDiv.innerHTML = `<p>Name: ${userData.Name}</p>`;
+            clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p>`;
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(service => {
                     clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
