@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,11 +17,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-document.getElementById('checkPhoneNumberButton').addEventListener('click', async () => {
+document.getElementById('buscarButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
-    const numeroContainer = document.getElementById('numeroContainer');
     const clientInfoContainer = document.getElementById('client-info');
+    const numeroContainer = document.querySelector('.numero');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -33,80 +33,21 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         if (userDoc.exists()) {
             const userData = userDoc.data();
             messageElement.style.display = 'none';
-            numeroContainer.style.display = 'none';
             clientInfoContainer.style.display = 'block';
-            const basicInfo = document.getElementById('basic-info');
-            basicInfo.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
-            window.history.replaceState(null, null, `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
-            displayClientInfo(phoneNumber); // Display client info after loading the page
+            numeroContainer.style.display = 'none';
+            displayClientInfo(phoneNumber);
         } else {
-            messageElement.style.display = 'block'; // Show message if account not found
+            messageElement.style.display = 'block';
             messageElement.textContent = 'Cuenta no encontrada';
         }
-    } catch (error) {
-        console.error('Error checking phone number:', error);
-        messageElement.style.display = 'block'; // Show error message
+    } catch (e) {
+        console.error("Error fetching document: ", e);
+        messageElement.style.display = 'block';
         messageElement.textContent = 'Error checking account';
     }
 });
 
-document.getElementById('showHistoryButton').addEventListener('click', () => {
-    showTab('service-history');
-});
-
-document.getElementById('showAddPointsButton').addEventListener('click', () => {
-    showTab('add-points');
-});
-
-document.getElementById('addServiceButton').addEventListener('click', async () => {
-    const service = document.getElementById('service').value;
-    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    const date = new Date().toLocaleDateString('en-GB'); // Get current date in dd/mm/yyyy format
-
-    console.log('Adding service:', { phoneNumber, service, date });
-
-    // Update Firestore with the new service and current date
-    await addServiceToFirestore(phoneNumber, service, date);
-
-    // Refresh the service history
-    await displayClientInfo(phoneNumber);
-
-    // Check discount eligibility and display the message
-    checkDiscountEligibility(service);
-});
-
-async function addServiceToFirestore(phoneNumber, service, date) {
-    const docRef = doc(db, "users", phoneNumber);
-    
-    try {
-        const userDoc = await getDoc(docRef);
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const currentServices = userData.services || [];
-            currentServices.push({ date, type: service });
-
-            await updateDoc(docRef, {
-                services: currentServices
-            });
-
-            console.log('Firestore updated successfully');
-        } else {
-            console.error('User document not found');
-        }
-    } catch (error) {
-        console.error('Error updating Firestore:', error);
-    }
-}
-
-function showTab(tabId) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.style.display = 'none';
-    });
-    document.getElementById(tabId).style.display = 'block';
-}
-
-async function displayClientInfo(phoneNumber) {
+function displayClientInfo(phoneNumber) {
     const userDoc = await getDoc(doc(db, "users", phoneNumber));
 
     if (userDoc.exists()) {
@@ -126,33 +67,27 @@ async function displayClientInfo(phoneNumber) {
     }
 }
 
-function checkDiscountEligibility(service) {
+document.getElementById('showPreviousButton').addEventListener('click', () => {
+    document.getElementById('previous-section').style.display = 'block';
+    document.getElementById('add-points-section').style.display = 'none';
+});
+
+document.getElementById('showAddPointsButton').addEventListener('click', () => {
+    document.getElementById('previous-section').style.display = 'none';
+    document.getElementById('add-points-section').style.display = 'block';
+});
+
+document.getElementById('addServiceButton').addEventListener('click', async () => {
+    const service = document.getElementById('service').value;
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    fetchSheetData().then(data => {
-        const userEntries = data.filter(row => row.PhoneNumber == phoneNumber && row.ServiceType == service);
+    const date = new Date().toLocaleDateString('en-GB');
 
-        const visitCount = userEntries.length;
-        let discountMessage = '';
-
-        if (service === 'Retouches' && visitCount >= 5) {
-            discountMessage = `You have ${visitCount}/5 visits for ${service}. You have earned a 30% discount!`;
-        } else if (visitCount >= 5) {
-            discountMessage = `You have ${visitCount}/5 visits for ${service}. You have earned a 20% discount!`;
-        } else {
-            discountMessage = `You have ${visitCount}/5 visits for ${service}.`;
-        }
-
-        const discountElement = document.getElementById('discount-message');
-        discountElement.style.display = 'block';
-        discountElement.textContent = discountMessage;
-        discountElement.style.color = visitCount >= 5 ? 'green' : 'black';
-    });
-}
-
-window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const phoneNumber = urlParams.get('phone');
-    if (phoneNumber) {
+    try {
+        await updateDoc(doc(db, "users", phoneNumber), {
+            services: arrayUnion({ date, type: service })
+        });
         displayClientInfo(phoneNumber);
+    } catch (error) {
+        console.error('Error updating Firestore:', error);
     }
-};
+});
