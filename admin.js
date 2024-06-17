@@ -35,6 +35,7 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
             clientInfoContainer.style.display = 'block';
             messageElement.style.display = 'none';
             numeroContainer.style.display = 'none';
+            window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
@@ -47,6 +48,9 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         clientInfoContainer.style.display = 'none';
     }
 });
+
+document.getElementById('showHistoryButton').addEventListener('click', () => showTab('service-history'));
+document.getElementById('showAddPointsButton').addEventListener('click', () => showTab('add-points'));
 
 function showTab(tabId) {
     const tabs = document.querySelectorAll('.tab-content');
