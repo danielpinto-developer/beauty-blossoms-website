@@ -47,23 +47,27 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
     }
 });
 
-function displayClientInfo(phoneNumber) {
-    const userDoc = await getDoc(doc(db, "users", phoneNumber));
-
-    if (userDoc.exists()) {
-        const clientInfoDiv = document.getElementById('service-history');
+async function displayClientInfo(phoneNumber) {
+    try {
+        const userDoc = await getDoc(doc(db, "users", phoneNumber));
+        const clientInfoDiv = document.getElementById('previous-section');
         clientInfoDiv.innerHTML = '';
 
-        const userData = userDoc.data();
-        if (userData.services && userData.services.length > 0) {
-            userData.services.forEach(entry => {
-                clientInfoDiv.innerHTML += `<p>Date: ${entry.date} - Service: ${entry.type}</p>`;
-            });
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.services && userData.services.length > 0) {
+                userData.services.forEach(entry => {
+                    clientInfoDiv.innerHTML += `<p>Date: ${entry.date} - Service: ${entry.type}</p>`;
+                });
+            } else {
+                clientInfoDiv.innerHTML = '<p>No records found.</p>';
+            }
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
-    } else {
-        document.getElementById('service-history').innerHTML = '<p>No records found.</p>';
+    } catch (error) {
+        console.error('Error displaying client info:', error);
+        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
     }
 }
 
