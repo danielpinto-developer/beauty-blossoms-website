@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
-    background: url('background.jpg') repeat;
+    background: url('/background1.jpg') repeat;
     background-size: cover;
     padding-top: 10vh;
 }
@@ -72,6 +72,23 @@ button:hover {
 
 #clientInfo, #adminInfo {
     margin-top: 20px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.service-selection {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.service-selection select {
+    margin-right: 10px;
 }
 
 @media (max-width: 600px) {
