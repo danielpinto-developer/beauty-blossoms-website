@@ -29,22 +29,22 @@ async function displayClientInfo() {
     servicesGrid.innerHTML = `
         <div class="service-row">
             <div class="service-label">Eyelashes</div>
-            <div class="service-boxes" data-service="Eyelashes"></div>
+            <div class="service-boxes" data-service="Eyelashes">${generateBoxes(0)}</div>
             <div class="service-discount">20%</div>
         </div>
         <div class="service-row">
             <div class="service-label">Nails</div>
-            <div class="service-boxes" data-service="Nails"></div>
+            <div class="service-boxes" data-service="Nails">${generateBoxes(0)}</div>
             <div class="service-discount">20%</div>
         </div>
         <div class="service-row">
             <div class="service-label">Pedicure</div>
-            <div class="service-boxes" data-service="Pedicure"></div>
+            <div class="service-boxes" data-service="Pedicure">${generateBoxes(0)}</div>
             <div class="service-discount">20%</div>
         </div>
         <div class="service-row">
             <div class="service-label">Retouches</div>
-            <div class="service-boxes" data-service="Retouches"></div>
+            <div class="service-boxes" data-service="Retouches">${generateBoxes(0)}</div>
             <div class="service-discount">30%</div>
         </div>
     `;
@@ -71,6 +71,18 @@ async function displayClientInfo() {
         console.error('Error displaying client info:', error);
         clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
     }
+}
+
+function generateBoxes(filledCount) {
+    let boxesHTML = '';
+    for (let i = 0; i < 5; i++) {
+        if (i < filledCount) {
+            boxesHTML += '<div class="box completed"></div>';
+        } else {
+            boxesHTML += '<div class="box"></div>';
+        }
+    }
+    return boxesHTML;
 }
 
 window.onload = displayClientInfo;
