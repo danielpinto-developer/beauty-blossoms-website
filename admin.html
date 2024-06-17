@@ -3,39 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beauty Blossoms</title>
-    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <title>Admin Page</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="background-container">
       <h1>Hello Lucy</h1>
       <h3>Añadir más puntos</h3>
-      <div id="numeroContainer" class="admin-container">
-        <div class="numero">
-          <input
-            type="text"
-            placeholder="Número de teléfono"
-            id="phone-number"
-          />
-          <button id="checkPhoneNumberButton">Buscar</button>
-        </div>
-        <p id="message" style="color: red; display: none">
-          Cuenta no encontrada
-        </p>
+      <div class="numero">
+        <input type="text" placeholder="Número de teléfono" id="phone-number" />
+        <button id="buscarButton">Buscar</button>
       </div>
+      <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
       <div id="client-info" style="display: none">
-        <div id="basic-info"></div>
-        <div class="buttons-container">
-          <button id="showHistoryButton">Previous</button>
+        <div class="buttons-row">
+          <button id="showPreviousButton">Previous</button>
           <button id="showAddPointsButton">Add Points</button>
         </div>
-        <div
-          id="service-history"
-          class="tab-content"
-          style="display: none"
-        ></div>
-        <div id="add-points" class="tab-content" style="display: none">
+        <div id="previous-section" class="tab-content" style="display: none">
+          <!-- Previous services will be displayed here -->
+        </div>
+        <div id="add-points-section" class="tab-content" style="display: none">
           <div class="service-selection">
             <label for="service">Select Service:</label>
             <select id="service">
@@ -47,7 +35,6 @@
             <button id="addServiceButton">Add Service</button>
           </div>
         </div>
-        <div id="discount-message" style="display: none"></div>
       </div>
     </div>
     <script type="module" src="admin.js"></script>

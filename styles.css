@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
-    background: url('background.jpg') repeat;
+    background: url('/background1.jpg') repeat;
     background-size: cover;
     padding-top: 10vh;
 }
@@ -28,38 +28,6 @@ h1, h2, h3 {
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-}
-
-.service-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.service-label {
-    width: 100px;
-    text-align: left;
-}
-
-.service-boxes {
-    display: flex;
-    flex-grow: 1;
-    gap: 5px;
-}
-
-.service-boxes .box {
-    width: 30px;
-    height: 30px;
-    background-color: lightgray;
-}
-
-.service-boxes .box.completed {
-    background-color: green;
-}
-
-.service-discount {
-    width: 50px;
-    text-align: right;
 }
 
 .numero {
@@ -104,6 +72,59 @@ button:hover {
 
 #clientInfo, #adminInfo {
     margin-top: 20px;
+}
+
+.buttons-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.service-selection {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.service-selection select {
+    margin-right: 10px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.service-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.service-label {
+    width: 100px;
+    text-align: left;
+}
+
+.service-boxes {
+    display: flex;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+.service-boxes .box {
+    width: 30px;
+    height: 30px;
+    background-color: lightgray;
+}
+
+.service-boxes .box.completed {
+    background-color: green;
+}
+
+.service-discount {
+    width: 50px;
+    text-align: right;
 }
 
 @media (max-width: 600px) {
