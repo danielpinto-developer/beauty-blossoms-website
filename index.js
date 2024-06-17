@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -28,12 +27,16 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
     }
 
     try {
+        console.log(`Checking phone number: ${phoneNumber}`);
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
+            console.log('User found:', userData);
+            dataContainer.innerHTML = `<p>Phone Number: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
             messageElement.style.display = 'none';
-            window.location.href = `/client.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
+            window.location.href = `client.html?phone=${phoneNumber}&name=${userData.Name}`;
         } else {
+            console.log('User not found');
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
             dataContainer.innerHTML = '';

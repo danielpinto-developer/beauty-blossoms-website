@@ -1,6 +1,5 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -26,20 +25,14 @@ async function displayClientInfo() {
     clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
 
     try {
-        const userDoc = await getDoc(doc(db, "users", phoneNumber));
-        if (userDoc.exists()) {
-            console.log('Document data:', userDoc.data());
-            const userData = userDoc.data();
-            if (userData.services && userData.services.length > 0) {
-                userData.services.forEach(service => {
-                    clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
-                });
-            } else {
-                clientInfoDiv.innerHTML += '<p>No service records found.</p>';
-            }
+        const querySnapshot = await getDocs(collection(db, `users/${phoneNumber}/services`));
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach(doc => {
+                const service = doc.data();
+                clientInfoDiv.innerHTML += `<p>Date: ${service.ServiceDate} - Service: ${service.ServiceType}</p>`;
+            });
         } else {
-            console.log('No such document!');
-            clientInfoDiv.innerHTML = '<p>No records found.</p>';
+            clientInfoDiv.innerHTML += '<p>No service records found.</p>';
         }
     } catch (error) {
         console.error('Error displaying client info:', error);
