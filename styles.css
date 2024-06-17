@@ -76,18 +76,18 @@ button:hover {
 
 .tabs {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .tab-button {
-    padding: 10px;
-    border: none;
+    padding: 10px 20px;
     background-color: #007BFF;
     color: white;
+    border: none;
     cursor: pointer;
     border-radius: 5px;
-    margin: 0 5px;
 }
 
 .tab-button:hover {
@@ -95,18 +95,20 @@ button:hover {
 }
 
 .tab-content {
-    display: none;
+    margin-top: 20px;
 }
 
 .service-selection {
     display: flex;
+    justify-content: center;
+    gap: 10px;
     align-items: center;
 }
 
 .service-selection select {
-    margin-right: 10px;
+    padding: 5px;
 }
 
 .service-selection button {
-    margin-left: 10px;
+    padding: 5px 10px;
 }
