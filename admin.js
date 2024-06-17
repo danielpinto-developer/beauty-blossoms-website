@@ -20,8 +20,6 @@ const db = getFirestore(app);
 document.getElementById('checkPhoneNumberButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
-    const numeroContainer = document.getElementById('numeroContainer');
-    const clientInfoContainer = document.getElementById('client-info');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -32,20 +30,16 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            document.getElementById('basic-info').innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
-            clientInfoContainer.style.display = 'block';
             messageElement.style.display = 'none';
-            numeroContainer.style.display = 'none';
+            window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
-            clientInfoContainer.style.display = 'none';
         }
     } catch (error) {
         console.error('Error checking phone number:', error);
         messageElement.style.display = 'block'; // Show error message
         messageElement.textContent = 'Error checking account';
-        clientInfoContainer.style.display = 'none';
     }
 });
 
