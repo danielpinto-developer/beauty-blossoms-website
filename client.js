@@ -1,6 +1,5 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -28,10 +27,13 @@ async function displayClientInfo() {
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
-            const userData = userDoc.data();
-            if (userData.services && userData.services.length > 0) {
-                userData.services.forEach(service => {
-                    clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
+            const servicesCollectionRef = collection(db, "users", phoneNumber, "services");
+            const servicesSnapshot = await getDocs(servicesCollectionRef);
+
+            if (!servicesSnapshot.empty) {
+                servicesSnapshot.forEach(serviceDoc => {
+                    const serviceData = serviceDoc.data();
+                    clientInfoDiv.innerHTML += `<p>Date: ${serviceData.ServiceDate} - Service: ${serviceData.ServiceType}</p>`;
                 });
             } else {
                 clientInfoDiv.innerHTML += '<p>No service records found.</p>';
