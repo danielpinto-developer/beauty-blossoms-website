@@ -10,15 +10,23 @@
     <div class="background-container">
       <h1>Hello Lucy</h1>
       <h3>Añadir más puntos</h3>
-      <div id="numeroContainer" class="numero">
-        <input type="text" placeholder="Número de teléfono" id="phone-number" />
-        <button id="checkPhoneNumberButton">Buscar</button>
+      <div id="numeroContainer" class="admin-container">
+        <div class="numero">
+          <input
+            type="text"
+            placeholder="Número de teléfono"
+            id="phone-number"
+          />
+          <button id="checkPhoneNumberButton">Buscar</button>
+        </div>
+        <p id="message" style="color: red; display: none">
+          Cuenta no encontrada
+        </p>
       </div>
-      <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
       <div id="client-info" style="display: none">
         <div id="basic-info"></div>
-        <div class="button-row">
-          <button id="showHistoryButton">Previous Services</button>
+        <div class="buttons-container">
+          <button id="showHistoryButton">Previous</button>
           <button id="showAddPointsButton">Add Points</button>
         </div>
         <div

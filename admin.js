@@ -38,6 +38,7 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
             const basicInfo = document.getElementById('basic-info');
             basicInfo.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
             window.history.replaceState(null, null, `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
+            displayClientInfo(phoneNumber); // Display client info after loading the page
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
