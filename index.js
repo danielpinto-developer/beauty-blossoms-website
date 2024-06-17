@@ -17,9 +17,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function checkPhoneNumber() {
+document.getElementById('checkPhoneNumberButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
+    const dataContainer = document.getElementById('dataContainer');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -27,16 +28,23 @@ async function checkPhoneNumber() {
     }
 
     try {
+        console.log(`Checking phone number: ${phoneNumber}`);
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
-            window.location.href = '/client.html?phone=' + phoneNumber; // Redirect to client page with phone number
+            const userData = userDoc.data();
+            console.log('User found:', userData);
+            dataContainer.innerHTML = `<p>Phone Number: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
+            messageElement.style.display = 'none';
         } else {
+            console.log('User not found');
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
+            dataContainer.innerHTML = '';
         }
-    } catch (error) {
-        console.error('Error checking phone number:', error);
+    } catch (e) {
+        console.error("Error fetching document: ", e);
         messageElement.style.display = 'block';
         messageElement.textContent = 'Error checking account';
+        dataContainer.innerHTML = '';
     }
-}
+});

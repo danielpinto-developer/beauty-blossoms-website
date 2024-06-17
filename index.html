@@ -4,18 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Programa de Lealtad</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="background-container">
       <h1>BB 27 Studio</h1>
-      <h3 id="quote">"Where Beauty Blossomss"</h3>
+      <h3 id="quote">"Where Beauty Blossoms"</h3>
       <h2>Programa de Lealtad</h2>
       <div class="numero">
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
-        <button onclick="checkPhoneNumber()">Login</button>
+        <button id="checkPhoneNumberButton">Login</button>
       </div>
       <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
+      <div id="dataContainer"></div>
     </div>
     <script type="module" src="index.js"></script>
   </body>
