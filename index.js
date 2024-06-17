@@ -29,6 +29,7 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
     try {
         console.log(`Checking phone number: ${phoneNumber}`);
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
+        console.log('Firebase response:', userDoc);
         if (userDoc.exists()) {
             const userData = userDoc.data();
             console.log('User found:', userData);
