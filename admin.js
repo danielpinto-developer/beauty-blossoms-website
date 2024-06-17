@@ -21,7 +21,6 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
     const clientInfoContainer = document.getElementById('client-info');
-    const numeroContainer = document.querySelector('.numero');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -34,34 +33,78 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
             const userData = userDoc.data();
             messageElement.style.display = 'none';
             clientInfoContainer.style.display = 'block';
-            numeroContainer.style.display = 'none';
+            document.getElementById('phone-number').style.display = 'none';
+            document.getElementById('buscarButton').style.display = 'none';
             window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
-            displayClientInfo(phoneNumber);
         } else {
             messageElement.style.display = 'block';
             messageElement.textContent = 'Cuenta no encontrada';
         }
     } catch (e) {
-        console.error("Error fetching document: ", e);
+        console.error("Error checking phone number: ", e);
         messageElement.style.display = 'block';
         messageElement.textContent = 'Error checking account';
     }
 });
 
-async function displayClientInfo(phoneNumber) {
+document.getElementById('showPreviousButton').addEventListener('click', () => {
+    showTab('previous-section');
+    displayClientInfo();
+});
+
+document.getElementById('showAddPointsButton').addEventListener('click', () => {
+    showTab('add-points-section');
+});
+
+document.getElementById('addServiceButton').addEventListener('click', async () => {
+    const service = document.getElementById('service').value;
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+    const date = new Date().toLocaleDateString('en-GB');
+
+    try {
+        const userDocRef = doc(db, "users", phoneNumber);
+        await updateDoc(userDocRef, {
+            services: arrayUnion({ date, type: service })
+        });
+        alert('Service added successfully!');
+        showTab('previous-section');
+        displayClientInfo();
+    } catch (e) {
+        console.error("Error adding service: ", e);
+        alert('Error adding service');
+    }
+});
+
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabId).style.display = 'block';
+    if (tabId === 'add-points-section') {
+        document.getElementById('showPreviousButton').style.display = 'none';
+        document.getElementById('showAddPointsButton').style.display = 'none';
+    } else {
+        document.getElementById('showPreviousButton').style.display = 'inline-block';
+        document.getElementById('showAddPointsButton').style.display = 'inline-block';
+    }
+}
+
+async function displayClientInfo() {
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+    const clientInfoDiv = document.getElementById('previous-section');
+
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
-        const clientInfoDiv = document.getElementById('previous-section');
-        clientInfoDiv.innerHTML = '';
-
         if (userDoc.exists()) {
             const userData = userDoc.data();
+            clientInfoDiv.innerHTML = '';
             if (userData.services && userData.services.length > 0) {
-                userData.services.forEach(entry => {
-                    clientInfoDiv.innerHTML += `<p>Date: ${entry.date} - Service: ${entry.type}</p>`;
+                userData.services.forEach(service => {
+                    clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
                 });
             } else {
-                clientInfoDiv.innerHTML = '<p>No records found.</p>';
+                clientInfoDiv.innerHTML = '<p>No service records found.</p>';
             }
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
@@ -71,28 +114,3 @@ async function displayClientInfo(phoneNumber) {
         clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
     }
 }
-
-document.getElementById('showPreviousButton').addEventListener('click', () => {
-    document.getElementById('previous-section').style.display = 'block';
-    document.getElementById('add-points-section').style.display = 'none';
-});
-
-document.getElementById('showAddPointsButton').addEventListener('click', () => {
-    document.getElementById('previous-section').style.display = 'none';
-    document.getElementById('add-points-section').style.display = 'block';
-});
-
-document.getElementById('addServiceButton').addEventListener('click', async () => {
-    const service = document.getElementById('service').value;
-    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    const date = new Date().toLocaleDateString('en-GB');
-
-    try {
-        await updateDoc(doc(db, "users", phoneNumber), {
-            services: arrayUnion({ date, type: service })
-        });
-        displayClientInfo(phoneNumber);
-    } catch (error) {
-        console.error('Error updating Firestore:', error);
-    }
-});
