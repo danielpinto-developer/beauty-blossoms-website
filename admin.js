@@ -148,7 +148,7 @@ async function redeemDiscount(phoneNumber, type) {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             const updatedServices = userData.services.map(service => {
-                if (service.type === type && !service.redeemed) {
+                if (service.type === type) {
                     return { ...service, redeemed: true };
                 }
                 return service;
@@ -156,6 +156,7 @@ async function redeemDiscount(phoneNumber, type) {
 
             await updateDoc(userDocRef, { services: updatedServices });
             displayDiscounts();
+            resetClientGrid(phoneNumber, type);
             alert(`${type} discount redeemed successfully!`);
         } else {
             console.error('Error redeeming discount: user document not found.');
@@ -182,4 +183,20 @@ function showTab(tabId) {
         tab.style.display = 'none';
     });
     document.getElementById(tabId).style.display = 'block';
+}
+
+async function resetClientGrid(phoneNumber, serviceType) {
+    const userDocRef = doc(db, "users", phoneNumber);
+
+    try {
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const updatedServices = userData.services.filter(service => service.type !== serviceType || service.redeemed);
+
+            await updateDoc(userDocRef, { services: updatedServices });
+        }
+    } catch (error) {
+        console.error('Error resetting client grid:', error);
+    }
 }
