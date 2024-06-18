@@ -15,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Function to check phone number and display services
 async function checkPhoneNumber() {
   const phoneNumber = document.getElementById('phone-number').value;
   const messageElement = document.getElementById('message');
@@ -33,7 +32,8 @@ async function checkPhoneNumber() {
         <p>Phone Number: ${phoneNumber}</p>
         <p>Name: ${userData.Name}</p>
       `;
-      showTabs();
+      document.querySelector('.numero').style.display = 'none';
+      document.getElementById('client-info').style.display = 'block';
       messageElement.style.display = 'none';
     } else {
       messageElement.style.display = 'block';
@@ -46,14 +46,12 @@ async function checkPhoneNumber() {
   }
 }
 
-// Function to show tabs for previous services and add points
-function showTabs() {
-  document.querySelector('.numero').style.display = 'none';
-  document.getElementById('add-points').style.display = 'block';
-  document.getElementById('previous-services').style.display = 'block';
+function showTab(tabId) {
+  const tabs = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => tab.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
 }
 
-// Function to add service
 async function addService() {
   const service = document.getElementById('service').value;
   const phoneNumber = new URLSearchParams(window.location.search).get('phone');
@@ -65,13 +63,13 @@ async function addService() {
       services: arrayUnion({ date, type: service })
     });
     alert('Service added successfully!');
+    showTab('service-history');
     showPreviousServices(phoneNumber);
   } catch (error) {
     console.error('Error updating Firestore:', error);
   }
 }
 
-// Function to display previous services
 async function showPreviousServices(phoneNumber) {
   try {
     const userDoc = await getDoc(doc(db, "users", phoneNumber));
@@ -92,10 +90,13 @@ async function showPreviousServices(phoneNumber) {
   }
 }
 
-// Event listeners
 document.getElementById('checkPhoneNumberButton').addEventListener('click', checkPhoneNumber);
-document.getElementById('addServiceButton').addEventListener('click', addService);
 document.getElementById('previousButton').addEventListener('click', () => {
   const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+  showTab('service-history');
   showPreviousServices(phoneNumber);
 });
+document.getElementById('addPointsButton').addEventListener('click', () => {
+  showTab('add-points');
+});
+document.getElementById('addServiceButton').addEventListener('click', addService);
