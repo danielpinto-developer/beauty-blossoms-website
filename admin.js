@@ -172,16 +172,25 @@ async function displayDiscounts() {
             const servicesGrouped = groupServices(userData.services);
 
             let hasDiscounts = false;
+
             for (const [type, count] of Object.entries(servicesGrouped)) {
                 if (count >= 5) {
                     hasDiscounts = true;
-                    const button = document.createElement('button');
-                    button.textContent = 'Canjear';
-                    button.addEventListener('click', () => redeemDiscount(type));
+                    const translatedType = serviceTranslation[type] || type;
+
+                    const serviceContainer = document.createElement('div');
+                    serviceContainer.className = 'service-container';
+
                     const p = document.createElement('p');
-                    p.textContent = `${serviceTranslation[type] || type} - `;
-                    p.appendChild(button);
-                    discountsDiv.appendChild(p);
+                    p.textContent = translatedType;
+
+                    const button = document.createElement('button');
+                    button.textContent = 'Activar';
+                    button.addEventListener('click', () => redeemDiscount(type));
+
+                    serviceContainer.appendChild(p);
+                    serviceContainer.appendChild(button);
+                    discountsDiv.appendChild(serviceContainer);
                 }
             }
 
