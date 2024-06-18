@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin</title>
+    <title>Beauty Blossoms</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="background-container">
-      <h1 id="header">Admin Panel</h1>
+      <h1 id="header">Hola Lucy</h1>
       <div class="numero">
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="buscarButton">Buscar</button>
@@ -38,12 +39,11 @@
         Cuenta no encontrada
       </div>
       <div id="client-info" style="display: none">
-        <h2>Info de Cuenta</h2>
         <p id="client-details"></p>
         <div class="buttons-row">
-          <button id="showPreviousButton">Previous</button>
-          <button id="showDiscountsButton">Discounts</button>
-          <button id="showAddPointsButton">Add Points</button>
+          <button id="showPreviousButton">Historial</button>
+          <button id="showDiscountsButton">Descuentos</button>
+          <button id="showAddPointsButton">Puntos</button>
         </div>
         <div id="previous-section" class="tab-content" style="display: none">
           <!-- Previous services will be displayed here -->
@@ -53,14 +53,14 @@
         </div>
         <div id="add-points-section" class="tab-content" style="display: none">
           <div class="service-selection">
-            <label for="service">Select Service:</label>
+            <label for="service">Servicio:</label>
             <select id="service">
-              <option value="Eyelashes">Eyelashes</option>
-              <option value="Nails">Nails</option>
+              <option value="Eyelashes">Pestañas</option>
+              <option value="Nails">Uñas</option>
               <option value="Pedicure">Pedicure</option>
-              <option value="Retouches">Retouches</option>
+              <option value="Retouches">Retoques</option>
             </select>
-            <button id="addServiceButton">Add Service</button>
+            <button id="addServiceButton">Agregar</button>
           </div>
         </div>
       </div>
