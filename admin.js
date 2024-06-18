@@ -38,7 +38,7 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
             numeroContainer.style.display = 'none';
             registerButton.style.display = 'none';
             window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
-            displayClientInfo(phoneNumber);
+            displayClientInfo(phoneNumber, userData.Name);
         } else {
             messageElement.style.display = 'block';
             messageElement.textContent = 'Cuenta no encontrada';
@@ -82,10 +82,15 @@ document.getElementById('addButton').addEventListener('click', async () => {
     }
 });
 
-async function displayClientInfo(phoneNumber) {
+async function displayClientInfo(phoneNumber, clientName) {
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         const clientInfoDiv = document.getElementById('previous-section');
+        const clientDetails = document.getElementById('client-details');
+        const header = document.getElementById('header');
+
+        header.textContent = 'Info de Cuenta';
+        clientDetails.innerHTML = `Nombre: ${clientName}<br>Teléfono: ${phoneNumber}`;
         clientInfoDiv.innerHTML = '';
 
         if (userDoc.exists()) {
@@ -137,7 +142,7 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
             const userData = userDoc.data();
             const updatedServices = [...(userData.services || []), { date, type: service }];
             await updateDoc(userRef, { services: updatedServices });
-            displayClientInfo(phoneNumber);
+            displayClientInfo(phoneNumber, userData.Name);
             alert("Service added successfully!");
             showTab('previous-section');
         }

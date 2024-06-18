@@ -3,27 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beauty Blossoms</title>
-    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <title>Admin</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="background-container">
-      <h1>Hola Lucy</h1>
-      <div class="numero" style="margin-top: 20px">
+      <h1 id="header">Admin Panel</h1>
+      <div class="numero">
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="buscarButton">Buscar</button>
       </div>
       <div class="spacing" style="height: 35px"></div>
       <div class="register">
-        <button id="registerButton" style="background-color: #19a337">
-          Registar nuevo numero
-        </button>
+        <button id="registerButton">Registar nuevo numero</button>
       </div>
 
       <!-- Modal for adding new number -->
       <div id="modal" class="modal" style="display: none">
         <div class="modal-content">
+          <h2>Agregar Nuevo Numero</h2>
           <div class="register-inputs">
             <input type="text" placeholder="Nombre" id="new-name" />
             <input
@@ -40,6 +38,8 @@
         Cuenta no encontrada
       </div>
       <div id="client-info" style="display: none">
+        <h2>Info de Cuenta</h2>
+        <p id="client-details"></p>
         <div class="buttons-row">
           <button id="showPreviousButton">Previous</button>
           <button id="showDiscountsButton">Discounts</button>
