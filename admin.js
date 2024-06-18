@@ -98,12 +98,15 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
 
     try {
         const userRef = doc(db, "users", phoneNumber);
-        await updateDoc(userRef, {
-            services: arrayUnion({ date, type: service })
-        });
-        displayClientInfo(phoneNumber);
-        alert("Service added successfully!");
-        showTab('previous-section');
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const updatedServices = [...(userData.services || []), { date, type: service }];
+            await updateDoc(userRef, { services: updatedServices });
+            displayClientInfo(phoneNumber);
+            alert("Service added successfully!");
+            showTab('previous-section');
+        }
     } catch (error) {
         console.error('Error updating Firestore:', error);
         alert("Error adding service.");
