@@ -10,18 +10,28 @@
     <div class="background-container">
       <h1>Hello Lucy</h1>
       <h3>Añadir más puntos</h3>
-      <div class="numero">
-        <input type="text" placeholder="Número de teléfono" id="phone-number" />
-        <button id="buscarButton">Buscar</button>
-      </div>
-      <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
-      <div id="client-info" style="display: none">
-        <div class="button-container">
-          <button id="previousButton">Previous</button>
-          <button id="addPointsButton">Add Points</button>
+      <div class="admin-container">
+        <div class="numero">
+          <input
+            type="text"
+            placeholder="Número de teléfono"
+            id="phone-number"
+          />
+          <button id="checkPhoneNumberButton">Buscar</button>
         </div>
-        <div id="service-history" class="tab-content"></div>
-        <div id="add-points" class="tab-content">
+        <p id="message" style="color: red; display: none">
+          Cuenta no encontrada
+        </p>
+      </div>
+      <div id="client-info" style="display: none">
+        <button id="previousButton">Previous Services</button>
+        <button id="addPointsButton">Add Points</button>
+        <div
+          id="service-history"
+          class="tab-content"
+          style="display: none"
+        ></div>
+        <div id="add-points" class="tab-content" style="display: none">
           <div class="service-selection">
             <label for="service">Select Service:</label>
             <select id="service">

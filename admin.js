@@ -48,8 +48,7 @@ async function checkPhoneNumber() {
 
 // Function to show tabs for previous services and add points
 function showTabs() {
-  document.getElementById('phone-number').style.display = 'none';
-  document.querySelector('button[onclick="checkPhoneNumber()"]').style.display = 'none';
+  document.querySelector('.numero').style.display = 'none';
   document.getElementById('add-points').style.display = 'block';
   document.getElementById('previous-services').style.display = 'block';
 }

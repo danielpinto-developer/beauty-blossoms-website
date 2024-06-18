@@ -8,15 +8,15 @@ body {
     background: url('background.jpg') repeat;
     background-size: cover;
     padding-top: 10vh;
-}
-
-h1, h2, h3 {
+  }
+  
+  h1, h2, h3 {
     color: black;
     margin: 0;
     text-align: center;
-}
-
-.background-container {
+  }
+  
+  .background-container {
     background-color: whitesmoke;
     width: calc(100% - 40px);
     max-width: 600px;
@@ -28,23 +28,23 @@ h1, h2, h3 {
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-}
-
-.numero {
+  }
+  
+  .numero {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-input {
+  }
+  
+  input {
     width: 100%;
     max-width: 150px;
     box-sizing: border-box;
     height: 30px;
-}
-
-button {
+  }
+  
+  button {
     background-color: #007BFF;
     color: white;
     border: none;
@@ -58,36 +58,63 @@ button {
     text-align: center;
     padding: 0 20px;
     border-radius: 5px;
-}
-
-#quote {
+  }
+  
+  #quote {
     font-family: Great Vibes;
     font-weight: lighter;
     margin: 0;
-}
-
-button:hover {
+  }
+  
+  button:hover {
     background-color: #0056b3;
-}
-
-#clientInfo, #adminInfo {
+  }
+  
+  #clientInfo, #adminInfo {
     margin-top: 20px;
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.service-selection {
+  }
+  
+  .service-selection {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.tab-content {
-    display: none;
+  }
+  
+  #add-points {
     margin-top: 20px;
-}
+  }
+  
+  .tab-content {
+    display: none;
+  }
+  
+  #previousButton, #addPointsButton {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 600px) {
+    .background-container {
+      width: calc(100% - 40px);
+      padding: 20px;
+      margin: 0 20px;
+    }
+  
+    .numero {
+      flex-direction: row;
+      width: 100%;
+      justify-content: center;
+    }
+  
+    input {
+      width: calc(100% - 90px);
+      margin-bottom: 0;
+    }
+  
+    button {
+      width: auto;
+      margin-left: 10px;
+    }
+  }
