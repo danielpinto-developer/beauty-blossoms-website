@@ -98,9 +98,14 @@ async function addService() {
     console.log(`Adding service: ${service} for phone number: ${phoneNumber} on date: ${date}`);
 
     try {
-        await updateDoc(doc(db, "users", phoneNumber), {
+        const userDocRef = doc(db, "users", phoneNumber);
+        console.log('Document reference:', userDocRef);
+
+        await updateDoc(userDocRef, {
             services: arrayUnion({ date, type: service })
         });
+        console.log('Service added to Firestore');
+
         alert('Service added successfully');
         displayServiceHistory(phoneNumber); // Refresh the service history after adding the service
     } catch (error) {
