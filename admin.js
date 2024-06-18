@@ -34,6 +34,7 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
             document.querySelector('.numero').style.display = 'none';
             document.querySelector('.tabs').style.display = 'flex';
             document.getElementById('client-info').style.display = 'block';
+            displayServiceHistory(phoneNumber);
             window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
         } else {
             messageElement.style.display = 'block';
@@ -77,6 +78,16 @@ async function displayServiceHistory(phoneNumber) {
 }
 
 document.querySelector('.tab-button[onclick="showTab(\'add-points\')"]').addEventListener('click', () => {
+    document.getElementById('add-points').style.display = 'block';
+    document.querySelector('.tabs').style.display = 'none';
+    const urlParams = new URLSearchParams(window.location.search);
+    const phoneNumber = urlParams.get('phone');
+    displayServiceHistory(phoneNumber);
+});
+
+document.querySelector('.tab-button[onclick="showTab(\'service-history\')"]').addEventListener('click', () => {
+    document.getElementById('service-history').style.display = 'block';
+    document.querySelector('.tabs').style.display = 'none';
     const urlParams = new URLSearchParams(window.location.search);
     const phoneNumber = urlParams.get('phone');
     displayServiceHistory(phoneNumber);
