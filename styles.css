@@ -108,6 +108,27 @@ button:hover {
     background-color: grey;
 }
 
+.buttons-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.service-selection {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.service-selection select {
+    flex: 1;
+}
+
+.service-selection button {
+    margin-left: 10px;
+}
+
 /* Media queries for responsiveness */
 @media (max-width: 600px) {
     .background-container {

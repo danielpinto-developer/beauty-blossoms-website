@@ -73,37 +73,28 @@ async function displayClientInfo(phoneNumber) {
 }
 
 document.getElementById('showPreviousButton').addEventListener('click', () => {
-    showTab('previous-section');
+    document.getElementById('previous-section').style.display = 'block';
+    document.getElementById('add-points-section').style.display = 'none';
 });
 
 document.getElementById('showAddPointsButton').addEventListener('click', () => {
-    showTab('add-points-section');
+    document.getElementById('previous-section').style.display = 'none';
+    document.getElementById('add-points-section').style.display = 'block';
 });
 
 document.getElementById('addServiceButton').addEventListener('click', async () => {
     const service = document.getElementById('service').value;
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     const date = new Date().toLocaleDateString('en-GB');
-    const timestamp = new Date().getTime(); // Ensure uniqueness
 
     try {
-        const userRef = doc(db, "users", phoneNumber);
-        await updateDoc(userRef, {
-            services: arrayUnion({ date: date, type: service, timestamp: timestamp })
+        await updateDoc(doc(db, "users", phoneNumber), {
+            services: arrayUnion({ date, type: service })
         });
-        alert('Service added successfully!');
+        alert('Service added successfully');
         displayClientInfo(phoneNumber);
-        showTab('previous-section');
     } catch (error) {
         console.error('Error updating Firestore:', error);
-        alert(`Error adding service: ${error.message}`);
+        alert('Error adding service');
     }
 });
-
-function showTab(tabId) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.style.display = 'none';
-    });
-    document.getElementById(tabId).style.display = 'block';
-}
