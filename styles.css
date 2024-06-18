@@ -52,6 +52,10 @@ input {
     height: 30px;
 }
 
+#addServiceButton {
+    background-color: #19a337;
+}
+
 button {
     background-color: #007BFF;
     color: white;
