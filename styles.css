@@ -120,9 +120,9 @@ button:hover {
 }
 
 .box {
-    width: 35px; /* Reduced size */
-    height: 35px; /* Reduced size */
-    margin: 0 3px; /* Adjusted margin */
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
     background-color: grey;
     border: 1px solid black;
     border-radius: 5px;
@@ -133,9 +133,8 @@ button:hover {
 }
 
 .label {
-    width: 60px; /* Adjusted width */
+    width: 80px;
     text-align: center;
-    font-size: 0.9em; /* Slightly smaller font size */
 }
 
 .spacing {
@@ -204,8 +203,8 @@ button:hover {
     }
 
     .box {
-        width: 30px; /* Further reduced size for mobile */
-        height: 30px; /* Further reduced size for mobile */
+        width: 30px; /* Reduced size for mobile */
+        height: 30px; /* Reduced size for mobile */
         margin: 0 2px; /* Adjusted margin for mobile */
     }
 
