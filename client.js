@@ -22,73 +22,54 @@ async function displayClientInfo() {
     const phoneNumber = urlParams.get('phone');
     const name = urlParams.get('name');
 
-    const clientInfoDiv = document.getElementById('client-info');
-    clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
+    const clientName = document.getElementById('client-name');
+    clientName.textContent = `Client: ${name}`;
 
-    const servicesGrid = document.getElementById('services-grid');
-    servicesGrid.innerHTML = `
-        <div class="service-row">
-            <div class="service-label">Eyelashes</div>
-            <div class="service-boxes" data-service="Eyelashes">${generateBoxes(0)}</div>
-            <div class="service-discount">20%</div>
-        </div>
-        <div class="service-row">
-            <div class="service-label">Nails</div>
-            <div class="service-boxes" data-service="Nails">${generateBoxes(0)}</div>
-            <div class="service-discount">20%</div>
-        </div>
-        <div class="service-row">
-            <div class="service-label">Pedicure</div>
-            <div class="service-boxes" data-service="Pedicure">${generateBoxes(0)}</div>
-            <div class="service-discount">20%</div>
-        </div>
-        <div class="service-row">
-            <div class="service-label">Retouches</div>
-            <div class="service-boxes" data-service="Retouches">${generateBoxes(0)}</div>
-            <div class="service-discount">30%</div>
-        </div>
-    `;
+    const serviceGrid = document.getElementById('service-grid');
+    serviceGrid.innerHTML = '';
 
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
+            const services = { Eyelashes: 0, Nails: 0, Pedicure: 0, Retouches: 0 };
             if (userData.services && userData.services.length > 0) {
-                const serviceCounts = {
-                    Eyelashes: 0,
-                    Nails: 0,
-                    Pedicure: 0,
-                    Retouches: 0,
-                };
                 userData.services.forEach(service => {
-                    if (serviceCounts[service.type] !== undefined) {
-                        serviceCounts[service.type]++;
-                    }
+                    services[service.type]++;
                 });
-                for (const serviceType in serviceCounts) {
-                    const serviceBoxes = document.querySelector(`.service-boxes[data-service="${serviceType}"]`);
-                    serviceBoxes.innerHTML = generateBoxes(serviceCounts[serviceType]);
-                }
             }
+
+            const serviceTypes = ["Eyelashes", "Nails", "Pedicure", "Retouches"];
+            serviceTypes.forEach(serviceType => {
+                const row = document.createElement('div');
+                row.classList.add('grid-row');
+
+                const serviceLabel = document.createElement('div');
+                serviceLabel.classList.add('grid-item');
+                serviceLabel.textContent = serviceType;
+                row.appendChild(serviceLabel);
+
+                for (let i = 0; i < 5; i++) {
+                    const box = document.createElement('div');
+                    box.classList.add('grid-item');
+                    box.style.backgroundColor = i < services[serviceType] ? 'green' : 'grey';
+                    row.appendChild(box);
+                }
+
+                const discountLabel = document.createElement('div');
+                discountLabel.classList.add('grid-item');
+                discountLabel.textContent = serviceType === "Retouches" ? "30%" : "20%";
+                row.appendChild(discountLabel);
+
+                serviceGrid.appendChild(row);
+            });
         } else {
-            clientInfoDiv.innerHTML = '<p>No records found.</p>';
+            serviceGrid.innerHTML = '<p>No records found.</p>';
         }
     } catch (error) {
         console.error('Error displaying client info:', error);
-        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
+        serviceGrid.innerHTML = '<p>Error fetching records.</p>';
     }
-}
-
-function generateBoxes(filledCount) {
-    let boxesHTML = '';
-    for (let i = 0; i < 5; i++) {
-        if (i < filledCount) {
-            boxesHTML += '<div class="box completed"></div>';
-        } else {
-            boxesHTML += '<div class="box"></div>';
-        }
-    }
-    return boxesHTML;
 }
 
 window.onload = displayClientInfo;
