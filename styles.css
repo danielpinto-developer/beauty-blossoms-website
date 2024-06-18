@@ -19,7 +19,7 @@ h1, h2, h3 {
 .logo {
     display: block;
     margin: 20px auto;
-    max-width: 150px;
+    max-width: 200px;
     height: auto;
     opacity: 1;
 }
@@ -72,7 +72,7 @@ button {
     font-family: cursive;
     font-weight: lighter;
     margin: 0;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 button:hover {
