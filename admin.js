@@ -17,7 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-document.getElementById('checkPhoneNumberButton').addEventListener('click', async () => {
+async function checkPhoneNumber() {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
     const clientInfoContainer = document.getElementById('client-info');
@@ -32,20 +32,20 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            messageElement.style.display = 'none';
             clientInfoContainer.style.display = 'block';
+            messageElement.style.display = 'none';
             numeroContainer.style.display = 'none';
-            displayClientInfo(phoneNumber, userData.Name);
+            window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
         }
     } catch (e) {
-        console.error("Error checking phone number: ", e);
+        console.error("Error fetching document: ", e);
         messageElement.style.display = 'block';
         messageElement.textContent = 'Error checking account';
     }
-});
+}
 
 function showTab(tabId) {
     const tabs = document.querySelectorAll('.tab-content');
@@ -55,70 +55,84 @@ function showTab(tabId) {
     document.getElementById(tabId).style.display = 'block';
 }
 
-document.getElementById('previousButton').addEventListener('click', () => {
-    showTab('service-history');
-    displayServiceHistory();
-});
-
-document.getElementById('addPointsButton').addEventListener('click', () => {
-    showTab('add-points');
-});
-
-document.getElementById('addServiceButton').addEventListener('click', async () => {
+async function addService() {
     const service = document.getElementById('service').value;
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     const date = new Date().toLocaleDateString('en-GB'); // Get current date in dd/mm/yyyy format
 
+    console.log('Adding service:', { phoneNumber, service, date });
+
+    // Update the Firestore with the new service and current date
+    await updateSheet(phoneNumber, service, date);
+
+    // Refresh the service history
+    await displayClientInfo(phoneNumber);
+
+    // Check discount eligibility and display the message
+    checkDiscountEligibility(service);
+}
+
+async function updateSheet(phoneNumber, service, date) {
+    const docRef = doc(db, "users", phoneNumber);
+    
     try {
-        const docRef = doc(db, "users", phoneNumber);
         await updateDoc(docRef, {
             services: arrayUnion({ date, type: service })
         });
-        alert("Service added successfully!");
-        document.getElementById('add-points').style.display = 'none';
-        document.getElementById('previousButton').style.display = 'block';
-        document.getElementById('addPointsButton').style.display = 'block';
+        console.log('Firestore updated successfully');
+        alert('Service added successfully!');
     } catch (error) {
-        console.error('Error adding service:', error);
+        console.error('Error updating Firestore:', error);
     }
-});
-
-async function displayClientInfo(phoneNumber, name) {
-    const clientInfoDiv = document.getElementById('client-info');
-    clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
-    await displayServiceHistory();
 }
 
-async function displayServiceHistory() {
-    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    const serviceHistoryDiv = document.getElementById('service-history');
+async function displayClientInfo(phoneNumber) {
+    const userDoc = await getDoc(doc(db, "users", phoneNumber));
 
-    try {
-        const userDoc = await getDoc(doc(db, "users", phoneNumber));
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            if (userData.services && userData.services.length > 0) {
-                serviceHistoryDiv.innerHTML = '';
-                userData.services.forEach(service => {
-                    serviceHistoryDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
-                });
-            } else {
-                serviceHistoryDiv.innerHTML = '<p>No service records found.</p>';
-            }
+    if (userDoc.exists()) {
+        const clientInfoDiv = document.getElementById('service-history');
+        clientInfoDiv.innerHTML = '';
+
+        const userData = userDoc.data();
+        if (userData.services && userData.services.length > 0) {
+            userData.services.forEach(entry => {
+                clientInfoDiv.innerHTML += `<p>Date: ${entry.date} - Service: ${entry.type}</p>`;
+            });
         } else {
-            serviceHistoryDiv.innerHTML = '<p>No records found.</p>';
+            clientInfoDiv.innerHTML = '<p>No service records found.</p>';
         }
-    } catch (error) {
-        console.error('Error displaying service history:', error);
-        serviceHistoryDiv.innerHTML = '<p>Error fetching records.</p>';
+    } else {
+        document.getElementById('service-history').innerHTML = '<p>No records found.</p>';
     }
+}
+
+function checkDiscountEligibility(service) {
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+    fetchSheetData().then(data => {
+        const userEntries = data.filter(row => row.PhoneNumber == phoneNumber && row.ServiceType == service);
+
+        const visitCount = userEntries.length;
+        let discountMessage = '';
+
+        if (service === 'Retouches' && visitCount >= 5) {
+            discountMessage = `You have ${visitCount}/5 visits for ${service}. You have earned a 30% discount!`;
+        } else if (visitCount >= 5) {
+            discountMessage = `You have ${visitCount}/5 visits for ${service}. You have earned a 20% discount!`;
+        } else {
+            discountMessage = `You have ${visitCount}/5 visits for ${service}.`;
+        }
+
+        const discountElement = document.getElementById('discount-message');
+        discountElement.style.display = 'block';
+        discountElement.textContent = discountMessage;
+        discountElement.style.color = visitCount >= 5 ? 'green' : 'black';
+    });
 }
 
 window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const phoneNumber = urlParams.get('phone');
-    const name = urlParams.get('name');
-    if (phoneNumber && name) {
-        displayClientInfo(phoneNumber, name);
+    if (phoneNumber) {
+        displayClientInfo(phoneNumber);
     }
 };
