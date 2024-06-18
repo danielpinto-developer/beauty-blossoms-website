@@ -162,6 +162,9 @@ async function redeemDiscount(type) {
             await updateDoc(userDocRef, { services: updatedServices });
             displayDiscounts();
             alert(`${type} discount redeemed successfully!`);
+
+            // Notify client page to reset the grid
+            localStorage.setItem('redeemed', 'true');
         } else {
             console.error('Error redeeming discount: user document not found.');
             alert('Error redeeming discount.');
@@ -179,12 +182,4 @@ function groupServices(services) {
         }
         return acc;
     }, {});
-}
-
-function showTab(tabId) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.style.display = 'none';
-    });
-    document.getElementById(tabId).style.display = 'block';
 }

@@ -41,10 +41,10 @@ async function displayClientInfo() {
 
 function displayGrid(services) {
     const serviceCounts = {
-        Eyelashes: services.filter(service => service.type === "Eyelashes").length,
-        Nails: services.filter(service => service.type === "Nails").length,
-        Pedicure: services.filter(service => service.type === "Pedicure").length,
-        Retouches: services.filter(service => service.type === "Retouches").length
+        Eyelashes: services.filter(service => service.type === "Eyelashes" && !service.redeemed).length,
+        Nails: services.filter(service => service.type === "Nails" && !service.redeemed).length,
+        Pedicure: services.filter(service => service.type === "Pedicure" && !service.redeemed).length,
+        Retouches: services.filter(service => service.type === "Retouches" && !service.redeemed).length
     };
 
     const gridContainer = document.getElementById('grid-container');
@@ -94,4 +94,20 @@ function checkDiscountEligibility(serviceCounts) {
     }
 }
 
-window.onload = displayClientInfo;
+window.onload = () => {
+    displayClientInfo();
+
+    // Check if a discount was redeemed and reset the grid
+    if (localStorage.getItem('redeemed') === 'true') {
+        localStorage.removeItem('redeemed');
+        // Reset the grid (all boxes gray)
+        const gridContainer = document.getElementById('grid-container');
+        const rows = gridContainer.getElementsByClassName('row');
+        for (let row of rows) {
+            const boxes = row.getElementsByClassName('box');
+            for (let box of boxes) {
+                box.classList.remove('filled');
+            }
+        }
+    }
+};
