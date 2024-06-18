@@ -104,6 +104,4 @@ async function addService() {
     }
 }
 
-document.getElementById('add-service-btn').addEventListener('click', addService);
-
 window.onload = displayClientInfo;
