@@ -147,7 +147,7 @@ async function redeemDiscount(phoneNumber, type) {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const updatedServices = userData.services.map(service => {
+            let updatedServices = userData.services.map(service => {
                 if (service.type === type && !service.redeemed) {
                     service.redeemed = true;
                 }
@@ -192,7 +192,7 @@ async function resetClientGrid(phoneNumber, serviceType) {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const updatedServices = userData.services.map(service => {
+            let updatedServices = userData.services.map(service => {
                 if (service.type === serviceType && service.redeemed) {
                     service.redeemed = false;
                 }
