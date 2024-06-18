@@ -171,7 +171,7 @@ button:hover {
 .green-button {
     background-color: #19a337;
     color: white; /* Ensure the text is readable */
-    border: none; /* Remove any default border */
+    border: black; /* Remove any default border */
     padding: 10px 20px; /* For better spacing */
     border-radius: 5px; /* Match the existing style */
     cursor: pointer; /* Show a pointer cursor on hover */

@@ -89,9 +89,6 @@ document.getElementById('addButton').addEventListener('click', async () => {
     }
 });
 
-const agregarButton = document.getElementById('addButton');
-agregarButton.classList.add('green-button');
-
 async function displayClientInfo(phoneNumber, clientName) {
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
