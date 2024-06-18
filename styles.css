@@ -184,19 +184,18 @@ button:hover {
     }
 
     .numero {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
+        align-items: center;
     }
 
     input {
-        width: calc(100% - 20px);
-        margin-bottom: 10px;
+        flex: 1;
+        margin-bottom: 0;
     }
 
     button {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 10px;
+        flex: 0 0 auto;
+        margin-left: 10px;
     }
 
     #quote {
