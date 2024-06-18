@@ -30,38 +30,6 @@ h1, h2, h3 {
     box-sizing: border-box;
 }
 
-.service-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.service-label {
-    width: 100px;
-    text-align: left;
-}
-
-.service-boxes {
-    display: flex;
-    flex-grow: 1;
-    gap: 5px;
-}
-
-.service-boxes .box {
-    width: 30px;
-    height: 30px;
-    background-color: lightgray;
-}
-
-.service-boxes .box.completed {
-    background-color: green;
-}
-
-.service-discount {
-    width: 50px;
-    text-align: right;
-}
-
 .numero {
     display: flex;
     justify-content: center;
@@ -106,6 +74,38 @@ button:hover {
     margin-top: 20px;
 }
 
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.grid-item {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.service-label {
+    grid-column: span 1;
+    background-color: lightgrey;
+}
+
+.discount-label {
+    background-color: lightgrey;
+}
+
+.filled {
+    background-color: green;
+}
+
+.empty {
+    background-color: grey;
+}
+
+/* Media queries for responsiveness */
 @media (max-width: 600px) {
     .background-container {
         width: calc(100% - 40px);
