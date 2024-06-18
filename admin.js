@@ -97,7 +97,8 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
     const date = new Date().toLocaleDateString('en-GB');
 
     try {
-        await updateDoc(doc(db, "users", phoneNumber), {
+        const userRef = doc(db, "users", phoneNumber);
+        await updateDoc(userRef, {
             services: arrayUnion({ date, type: service })
         });
         displayClientInfo(phoneNumber);
