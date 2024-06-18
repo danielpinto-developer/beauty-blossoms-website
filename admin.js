@@ -73,13 +73,11 @@ async function displayClientInfo(phoneNumber) {
 }
 
 document.getElementById('showPreviousButton').addEventListener('click', () => {
-    document.getElementById('previous-section').style.display = 'block';
-    document.getElementById('add-points-section').style.display = 'none';
+    showTab('previous-section');
 });
 
 document.getElementById('showAddPointsButton').addEventListener('click', () => {
-    document.getElementById('previous-section').style.display = 'none';
-    document.getElementById('add-points-section').style.display = 'block';
+    showTab('add-points-section');
 });
 
 document.getElementById('addServiceButton').addEventListener('click', async () => {
@@ -94,9 +92,17 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         });
         alert('Service added successfully!');
         displayClientInfo(phoneNumber);
-        showTab('service-history');
+        showTab('previous-section');
     } catch (error) {
         console.error('Error updating Firestore:', error);
         alert(`Error adding service: ${error.message}`);
     }
 });
+
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabId).style.display = 'block';
+}
