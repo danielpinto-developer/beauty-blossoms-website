@@ -1,3 +1,4 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -16,11 +17,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-document.getElementById('checkPhoneNumberButton').addEventListener('click', async () => {
+async function checkPhoneNumber() {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
     const numeroContainer = document.querySelector('.numero');
-    const clientInfoContainer = document.getElementById('client-info');
+    const actionButtons = document.getElementById('action-buttons');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -31,72 +32,78 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            clientInfoContainer.style.display = 'block';
             messageElement.style.display = 'none';
             numeroContainer.style.display = 'none';
+            actionButtons.style.display = 'block';
             window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
         } else {
-            messageElement.style.display = 'block'; // Show message if account not found
+            messageElement.style.display = 'block';
             messageElement.textContent = 'Cuenta no encontrada';
-            clientInfoContainer.style.display = 'none';
         }
     } catch (e) {
         console.error("Error checking account:", e);
         messageElement.style.display = 'block';
         messageElement.textContent = 'Error checking account';
-        clientInfoContainer.style.display = 'none';
     }
-});
+}
 
-document.getElementById('addServiceButton').addEventListener('click', async () => {
-    const service = document.getElementById('service').value;
-    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    const date = new Date().toLocaleDateString('en-GB'); // Get current date in dd/mm/yyyy format
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabId).style.display = 'block';
+}
 
-    const docRef = doc(db, "users", phoneNumber);
+async function displayClientInfo() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const phoneNumber = urlParams.get('phone');
+    const name = urlParams.get('name');
+
+    document.getElementById('client-info').innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
 
     try {
-        await updateDoc(docRef, {
-            services: arrayUnion({ date, type: service })
-        });
-        alert('Service added successfully!');
-        displayClientInfo(phoneNumber); // Refresh the service history
-    } catch (error) {
-        console.error('Error updating Firestore:', error);
-        alert('Error adding service');
-    }
-});
-
-document.getElementById('previousButton').addEventListener('click', () => {
-    displayClientInfo(new URLSearchParams(window.location.search).get('phone'));
-});
-
-function displayClientInfo(phoneNumber) {
-    getDoc(doc(db, "users", phoneNumber)).then(userDoc => {
+        const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
-            const clientInfoDiv = document.getElementById('client-info');
             const userData = userDoc.data();
-            clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${userData.Name}</p>`;
+            const clientInfoDiv = document.getElementById('service-history');
+            clientInfoDiv.innerHTML = '';
+
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(service => {
                     clientInfoDiv.innerHTML += `<p>Date: ${service.date} - Service: ${service.type}</p>`;
                 });
             } else {
-                clientInfoDiv.innerHTML += '<p>No service records found.</p>';
+                clientInfoDiv.innerHTML = '<p>No service records found.</p>';
             }
         } else {
             document.getElementById('client-info').innerHTML = '<p>No records found.</p>';
         }
-    }).catch(error => {
-        console.error('Error fetching records:', error);
+    } catch (error) {
+        console.error('Error displaying client info:', error);
         document.getElementById('client-info').innerHTML = '<p>Error fetching records.</p>';
-    });
+    }
 }
 
-window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const phoneNumber = urlParams.get('phone');
-    if (phoneNumber) {
-        displayClientInfo(phoneNumber);
+async function addService() {
+    const service = document.getElementById('service').value;
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+    const date = new Date().toLocaleDateString('en-GB');
+
+    try {
+        const userRef = doc(db, "users", phoneNumber);
+        await updateDoc(userRef, {
+            services: arrayUnion({ date, type: service })
+        });
+        alert('Service added successfully!');
+        showTab('service-history');
+        displayClientInfo();
+    } catch (e) {
+        console.error("Error adding service: ", e);
+        alert('Error adding service');
     }
-};
+}
+
+document.getElementById('add-service-btn').addEventListener('click', addService);
+
+window.onload = displayClientInfo;
