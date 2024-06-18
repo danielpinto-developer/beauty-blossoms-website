@@ -41,27 +41,22 @@ async function displayClientInfo() {
 
             const serviceTypes = ["Eyelashes", "Nails", "Pedicure", "Retouches"];
             serviceTypes.forEach(serviceType => {
-                const row = document.createElement('div');
-                row.classList.add('grid-row');
-
-                const serviceLabel = document.createElement('div');
-                serviceLabel.classList.add('grid-item');
-                serviceLabel.textContent = serviceType;
-                row.appendChild(serviceLabel);
+                const label = document.createElement('div');
+                label.classList.add('grid-item', 'service-label');
+                label.textContent = serviceType;
+                serviceGrid.appendChild(label);
 
                 for (let i = 0; i < 5; i++) {
                     const box = document.createElement('div');
                     box.classList.add('grid-item');
                     box.style.backgroundColor = i < services[serviceType] ? 'green' : 'grey';
-                    row.appendChild(box);
+                    serviceGrid.appendChild(box);
                 }
 
                 const discountLabel = document.createElement('div');
-                discountLabel.classList.add('grid-item');
+                discountLabel.classList.add('grid-item', 'discount-label');
                 discountLabel.textContent = serviceType === "Retouches" ? "30%" : "20%";
-                row.appendChild(discountLabel);
-
-                serviceGrid.appendChild(row);
+                serviceGrid.appendChild(discountLabel);
             });
         } else {
             serviceGrid.innerHTML = '<p>No records found.</p>';

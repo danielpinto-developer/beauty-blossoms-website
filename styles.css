@@ -75,31 +75,25 @@ button:hover {
 }
 
 .grid-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 10px;
     width: 100%;
-    gap: 10px;
-}
-
-.grid-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .grid-item {
-    flex: 1;
     padding: 10px;
     text-align: center;
     border: 1px solid black;
 }
 
-.grid-item:first-child {
-    flex: 2;
+.service-label {
+    grid-column: span 2;
+    background-color: lightgrey;
 }
 
-.grid-item:last-child {
-    flex: 1;
+.discount-label {
+    background-color: lightgrey;
 }
 
 /* Media queries for responsiveness */
