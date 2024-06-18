@@ -128,7 +128,13 @@ async function displayDiscounts() {
             for (const [type, count] of Object.entries(servicesGrouped)) {
                 if (count >= 5) {
                     hasDiscounts = true;
-                    discountsDiv.innerHTML += `<p>${type} - <button onclick="redeemDiscount('${type}')">Redeem</button></p>`;
+                    const button = document.createElement('button');
+                    button.textContent = 'Redeem';
+                    button.addEventListener('click', () => redeemDiscount(type));
+                    const p = document.createElement('p');
+                    p.textContent = `${type} - `;
+                    p.appendChild(button);
+                    discountsDiv.appendChild(p);
                 }
             }
 
