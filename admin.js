@@ -88,11 +88,15 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
     const date = new Date().toLocaleDateString('en-GB');
 
     try {
-        await updateDoc(doc(db, "users", phoneNumber), {
+        const userRef = doc(db, "users", phoneNumber);
+        await updateDoc(userRef, {
             services: arrayUnion({ date, type: service })
         });
+        alert('Service added successfully!');
         displayClientInfo(phoneNumber);
+        showTab('service-history');
     } catch (error) {
         console.error('Error updating Firestore:', error);
+        alert('Error adding service');
     }
 });

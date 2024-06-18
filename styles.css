@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
-    background: url('background.jpg') repeat;
+    background: url('/background1.jpg') repeat;
     background-size: cover;
     padding-top: 10vh;
 }
@@ -74,24 +74,22 @@ button:hover {
     margin-top: 20px;
 }
 
-.buttons-row {
+#action-buttons {
     display: flex;
     justify-content: space-between;
     width: 100%;
-}
-
-.service-selection {
-    display: flex;
-    align-items: center;
     margin-top: 20px;
-}
-
-.service-selection select {
-    margin-right: 10px;
 }
 
 .tab-content {
     display: none;
+    margin-top: 20px;
+}
+
+.service-selection {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 @media (max-width: 600px) {
