@@ -124,7 +124,7 @@ async function displayDiscounts() {
             for (const [type, count] of Object.entries(servicesGrouped)) {
                 if (count >= 5) {
                     hasDiscounts = true;
-                    discountsDiv.innerHTML += `<p>${type} - <button onclick="redeemDiscount('${type}')">Redeem</button></p>`;
+                    discountsDiv.innerHTML += `<p>${type} - <button onclick="redeemDiscount('${phoneNumber}', '${type}')">Redeem</button></p>`;
                 }
             }
 
@@ -140,8 +140,7 @@ async function displayDiscounts() {
     }
 }
 
-async function redeemDiscount(type) {
-    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+async function redeemDiscount(phoneNumber, type) {
     const userDocRef = doc(db, "users", phoneNumber);
 
     try {
