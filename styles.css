@@ -74,22 +74,22 @@ button:hover {
     margin-top: 20px;
 }
 
-.service-selection {
+#action-buttons {
     display: flex;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.service-selection select {
-    margin-right: 10px;
-}
-
-#previous-button, #add-points-button {
-    margin: 5px;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .tab-content {
     display: none;
+    margin-top: 20px;
+}
+
+.service-selection {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 @media (max-width: 600px) {

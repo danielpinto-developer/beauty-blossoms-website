@@ -34,7 +34,7 @@ async function checkPhoneNumber() {
             const userData = userDoc.data();
             messageElement.style.display = 'none';
             numeroContainer.style.display = 'none';
-            actionButtons.style.display = 'block';
+            actionButtons.style.display = 'flex'; // Display action buttons
             window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
         } else {
             messageElement.style.display = 'block';
