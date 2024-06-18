@@ -208,14 +208,13 @@ button:hover {
         margin: 0 2px; /* Adjusted margin for mobile */
     }
 
-    .row .label {
-        width: auto; /* Adjusted width for mobile */
+    .label {
+        width: 50px; /* Adjusted width for mobile */
         font-size: 0.8em; /* Smaller font size for mobile */
-        margin-left: -10px; /* Move label slightly to the left for mobile */
+        margin-left: -20px; /* Move label slightly to the left for mobile */
     }
 
     .row .label + .label {
-        font-weight: bold;
-        margin-left: 10px; /* Move percentage labels slightly to the right */
+        margin-left: 20px; /* Move percentage labels slightly to the right */
     }
 }

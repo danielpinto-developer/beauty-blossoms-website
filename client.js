@@ -52,22 +52,22 @@ function displayGrid(services) {
         <div class="row">
             <div class="label">Pestañas</div>
             ${createBoxes(serviceCounts.Eyelashes, 5)}
-            <div class="label">20%</div>
+            <div class="label"><strong>20%</strong></div>
         </div>
         <div class="row">
             <div class="label">Uñas</div>
             ${createBoxes(serviceCounts.Nails, 5)}
-            <div class="label">20%</div>
+            <div class="label"><strong>20%</strong></div>
         </div>
         <div class="row">
             <div class="label">Pedicure</div>
             ${createBoxes(serviceCounts.Pedicure, 5)}
-            <div class="label">20%</div>
+            <div class="label"><strong>20%</strong></div>
         </div>
         <div class="row">
             <div class="label">Retoques</div>
             ${createBoxes(serviceCounts.Retouches, 5)}
-            <div class="label">30%</div>
+            <div class="label"><strong>30%</strong></div>
         </div>
     `;
 
