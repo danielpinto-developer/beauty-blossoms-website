@@ -3,18 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Page</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="background-container">
-      <h1>Hello Lucy</h1>
-      <h3>Añadir más puntos</h3>
+    <div class="container">
+      <h1>Admin Panel</h1>
       <div class="numero">
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="buscarButton">Buscar</button>
       </div>
-      <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
+      <div class="spacing"></div>
+      <div class="register">
+        <button id="registerButton">Registar nuevo numero</button>
+      </div>
+
+      <!-- Modal for adding new number -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Agregar Nuevo Numero</h2>
+          <input type="text" placeholder="Nombre" id="new-name" />
+          <input
+            type="text"
+            placeholder="Nuevo Número de teléfono"
+            id="new-phone-number"
+          />
+          <button id="addButton">Agregar</button>
+        </div>
+      </div>
+
+      <div id="message" style="color: red; display: none">
+        Cuenta no encontrada
+      </div>
       <div id="client-info" style="display: none">
         <div class="buttons-row">
           <button id="showPreviousButton">Previous</button>

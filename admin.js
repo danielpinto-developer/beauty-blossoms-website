@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -45,6 +45,38 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
         console.error("Error fetching document: ", e);
         messageElement.style.display = 'block';
         messageElement.textContent = 'Error checking account';
+    }
+});
+
+document.getElementById('registerButton').addEventListener('click', () => {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'block';
+});
+
+document.querySelector('.close').addEventListener('click', () => {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+});
+
+document.getElementById('addButton').addEventListener('click', async () => {
+    const name = document.getElementById('new-name').value;
+    const phoneNumber = document.getElementById('new-phone-number').value;
+
+    if (!name || !phoneNumber) {
+        alert('Please enter a name and phone number');
+        return;
+    }
+
+    try {
+        await setDoc(doc(db, "users", phoneNumber), {
+            Name: name,
+            services: []
+        });
+        alert("New number added successfully!");
+        location.reload(); // Refresh the page
+    } catch (error) {
+        console.error('Error adding new number:', error);
+        alert('Error adding new number.');
     }
 });
 
