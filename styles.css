@@ -115,6 +115,7 @@ button:hover {
     text-align: center;
 }
 
+/*
 @media (max-width: 600px) {
     .background-container {
         width: calc(100% - 40px);
@@ -138,3 +139,4 @@ button:hover {
         margin-left: 10px;
     }
 }
+*/

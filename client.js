@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -29,19 +29,7 @@ async function displayClientInfo() {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const services = {
-                Eyelashes: userData.services.filter(service => service.type === "Eyelashes").length,
-                Nails: userData.services.filter(service => service.type === "Nails").length,
-                Pedicure: userData.services.filter(service => service.type === "Pedicure").length,
-                Retouches: userData.services.filter(service => service.type === "Retouches").length
-            };
-
-            updateGrid('eyelashes-boxes', services.Eyelashes);
-            updateGrid('nails-boxes', services.Nails);
-            updateGrid('pedicure-boxes', services.Pedicure);
-            updateGrid('retouches-boxes', services.Retouches);
-
-            checkForDiscounts(services);
+            displayGrid(userData.services);
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
@@ -51,25 +39,59 @@ async function displayClientInfo() {
     }
 }
 
-function updateGrid(elementId, count) {
-    const container = document.getElementById(elementId);
-    container.innerHTML = '';
-    for (let i = 0; i < 5; i++) {
-        const box = document.createElement('div');
-        box.classList.add('box');
-        box.style.backgroundColor = i < count ? 'green' : 'grey';
-        container.appendChild(box);
-    }
+function displayGrid(services) {
+    const serviceCounts = {
+        Eyelashes: services.filter(service => service.type === "Eyelashes").length,
+        Nails: services.filter(service => service.type === "Nails").length,
+        Pedicure: services.filter(service => service.type === "Pedicure").length,
+        Retouches: services.filter(service => service.type === "Retouches").length
+    };
+
+    const gridContainer = document.getElementById('grid-container');
+    gridContainer.innerHTML = `
+        <div class="row">
+            <div class="label">Eyelashes</div>
+            ${createBoxes(serviceCounts.Eyelashes, 5)}
+            <div class="label">20%</div>
+        </div>
+        <div class="row">
+            <div class="label">Nails</div>
+            ${createBoxes(serviceCounts.Nails, 5)}
+            <div class="label">20%</div>
+        </div>
+        <div class="row">
+            <div class="label">Pedicure</div>
+            ${createBoxes(serviceCounts.Pedicure, 5)}
+            <div class="label">20%</div>
+        </div>
+        <div class="row">
+            <div class="label">Retouches</div>
+            ${createBoxes(serviceCounts.Retouches, 5)}
+            <div class="label">30%</div>
+        </div>
+    `;
+
+    checkDiscountEligibility(serviceCounts);
 }
 
-function checkForDiscounts(services) {
-    let discountMessage = '';
-    if (services.Eyelashes >= 5) discountMessage += '<p>Congrats, schedule your next Eyelashes appointment to receive your 20% discount.</p>';
-    if (services.Nails >= 5) discountMessage += '<p>Congrats, schedule your next Nails appointment to receive your 20% discount.</p>';
-    if (services.Pedicure >= 5) discountMessage += '<p>Congrats, schedule your next Pedicure appointment to receive your 20% discount.</p>';
-    if (services.Retouches >= 5) discountMessage += '<p>Congrats, schedule your next Retouches appointment to receive your 30% discount.</p>';
+function createBoxes(filled, total) {
+    let boxes = '';
+    for (let i = 0; i < filled; i++) {
+        boxes += '<div class="box filled"></div>';
+    }
+    for (let i = filled; i < total; i++) {
+        boxes += '<div class="box"></div>';
+    }
+    return boxes;
+}
 
-    document.getElementById('discount-message').innerHTML = discountMessage;
+function checkDiscountEligibility(serviceCounts) {
+    const discountMessage = document.getElementById('discount-message');
+    discountMessage.style.display = 'none';
+
+    if (serviceCounts.Eyelashes >= 5 || serviceCounts.Nails >= 5 || serviceCounts.Pedicure >= 5 || serviceCounts.Retouches >= 5) {
+        discountMessage.style.display = 'block';
+    }
 }
 
 window.onload = displayClientInfo;
