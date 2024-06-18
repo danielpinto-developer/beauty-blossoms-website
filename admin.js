@@ -132,6 +132,13 @@ document.getElementById('showDiscountsButton').addEventListener('click', () => {
 
 document.getElementById('addServiceButton').addEventListener('click', async () => {
     const service = document.getElementById('service').value;
+    const serviceTranslation = {
+        'Pestañas': 'Eyelashes',
+        'Uñas': 'Nails',
+        'Pedicure': 'Pedicure',
+        'Retoques': 'Retouches'
+    };
+    const translatedService = serviceTranslation[service];
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     const date = new Date().toLocaleDateString('en-GB');
 
@@ -140,7 +147,7 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         const userDoc = await getDoc(userRef);
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const updatedServices = [...(userData.services || []), { date, type: service }];
+            const updatedServices = [...(userData.services || []), { date, type: translatedService }];
             await updateDoc(userRef, { services: updatedServices });
             displayClientInfo(phoneNumber, userData.Name);
             alert("Servicio agregado exitosamente!");
@@ -168,7 +175,7 @@ async function displayDiscounts() {
                 if (count >= 5) {
                     hasDiscounts = true;
                     const button = document.createElement('button');
-                    button.textContent = 'Redeem';
+                    button.textContent = 'Canjear';
                     button.addEventListener('click', () => redeemDiscount(type));
                     const p = document.createElement('p');
                     p.textContent = `${type} - `;
