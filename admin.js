@@ -139,6 +139,10 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         'Retoques': 'Retouches'
     };
     const translatedService = serviceTranslation[service];
+    if (!translatedService) {
+        alert("Tipo de servicio no válido.");
+        return;
+    }
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     const date = new Date().toLocaleDateString('en-GB');
 
