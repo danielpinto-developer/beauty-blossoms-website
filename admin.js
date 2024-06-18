@@ -60,12 +60,6 @@ document.getElementById('registerButton').addEventListener('click', () => {
     modal.style.display = 'block';
 });
 
-document.querySelector('.close').addEventListener('click', () => {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'none';
-    location.reload(); // Refresh the page
-});
-
 document.getElementById('addButton').addEventListener('click', async () => {
     const name = document.getElementById('new-name').value;
     const phoneNumber = document.getElementById('new-phone-number').value;

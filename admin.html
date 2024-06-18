@@ -13,7 +13,7 @@
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="buscarButton">Buscar</button>
       </div>
-      <div class="spacing"></div>
+      <div class="spacing" style="height: 35px"></div>
       <div class="register">
         <button id="registerButton">Registar nuevo numero</button>
       </div>
@@ -21,15 +21,16 @@
       <!-- Modal for adding new number -->
       <div id="modal" class="modal" style="display: none">
         <div class="modal-content">
-          <span class="close">&times;</span>
           <h2>Agregar Nuevo Numero</h2>
-          <input type="text" placeholder="Nombre" id="new-name" />
-          <input
-            type="text"
-            placeholder="Nuevo Número de teléfono"
-            id="new-phone-number"
-          />
-          <button id="addButton">Agregar</button>
+          <div class="register-inputs">
+            <input type="text" placeholder="Nombre" id="new-name" />
+            <input
+              type="text"
+              placeholder="Nuevo Número de teléfono"
+              id="new-phone-number"
+            />
+          </div>
+          <button id="addButton" style="margin-top: 10px">Agregar</button>
         </div>
       </div>
 
