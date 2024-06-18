@@ -9,19 +9,20 @@
   <body>
     <div class="background-container">
       <h1>Admin Panel</h1>
-      <div class="numero">
+      <div class="numero" style="margin-top: 20px">
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="buscarButton">Buscar</button>
       </div>
       <div class="spacing" style="height: 35px"></div>
       <div class="register">
-        <button id="registerButton">Registar nuevo numero</button>
+        <button id="registerButton" style="background-color: #45f248">
+          Registar nuevo numero
+        </button>
       </div>
 
       <!-- Modal for adding new number -->
       <div id="modal" class="modal" style="display: none">
         <div class="modal-content">
-          <h2>Agregar Nuevo Numero</h2>
           <div class="register-inputs">
             <input type="text" placeholder="Nombre" id="new-name" />
             <input
