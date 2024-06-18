@@ -19,8 +19,9 @@ h1, h2, h3 {
 .logo {
     display: block;
     margin: 20px auto;
-    max-width: 100%;
+    max-width: 150px;
     height: auto;
+    opacity: 1;
 }
 
 .background-container {
