@@ -99,6 +99,7 @@ window.onload = () => {
 
     // Check if a discount was redeemed and reset the grid
     if (localStorage.getItem('redeemed') === 'true') {
+        console.log("Discount redeemed, resetting grid."); // Add log
         localStorage.removeItem('redeemed');
         // Reset the grid (all boxes gray)
         const gridContainer = document.getElementById('grid-container');

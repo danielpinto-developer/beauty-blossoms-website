@@ -145,6 +145,7 @@ async function displayDiscounts() {
 }
 
 async function redeemDiscount(type) {
+    console.log("Redeem button clicked for:", type); // Add log
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     const userDocRef = doc(db, "users", phoneNumber);
 
@@ -154,6 +155,7 @@ async function redeemDiscount(type) {
             const userData = userDoc.data();
             const updatedServices = userData.services.map(service => {
                 if (service.type === type && !service.redeemed) {
+                    console.log("Redeeming service:", service); // Add log
                     return { ...service, redeemed: true };
                 }
                 return service;
