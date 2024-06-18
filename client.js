@@ -1,3 +1,4 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -16,95 +17,58 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.onload = async function() {
+async function displayClientInfo() {
     const urlParams = new URLSearchParams(window.location.search);
     const phoneNumber = urlParams.get('phone');
     const name = urlParams.get('name');
-    displayClientInfo(phoneNumber, name);
-};
 
-async function displayClientInfo(phoneNumber, name) {
     const clientInfoDiv = document.getElementById('client-info');
     clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
-
-    const gridContainer = document.getElementById('grid-container');
-    gridContainer.innerHTML = `
-        <div class="grid-row">
-            <div class="service-label">Eyelashes</div>
-            ${generateGrid('Eyelashes')}
-            <div class="service-discount">20%</div>
-        </div>
-        <div class="grid-row">
-            <div class="service-label">Nails</div>
-            ${generateGrid('Nails')}
-            <div class="service-discount">20%</div>
-        </div>
-        <div class="grid-row">
-            <div class="service-label">Pedicure</div>
-            ${generateGrid('Pedicure')}
-            <div class="service-discount">20%</div>
-        </div>
-        <div class="grid-row">
-            <div class="service-label">Retouches</div>
-            ${generateGrid('Retouches')}
-            <div class="service-discount">30%</div>
-        </div>
-    `;
 
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            updateGrid(userData.services);
-            checkDiscountEligibility(userData.services);
+            ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'].forEach(serviceType => {
+                const serviceCount = userData.services.filter(service => service.type === serviceType).length;
+                const boxesContainer = document.getElementById(`${serviceType.toLowerCase()}-boxes`);
+                boxesContainer.innerHTML = '';
+
+                for (let i = 0; i < 5; i++) {
+                    const box = document.createElement('div');
+                    box.classList.add('box');
+                    if (i < serviceCount) {
+                        box.classList.add('filled');
+                    }
+                    boxesContainer.appendChild(box);
+                }
+            });
+
+            checkDiscountEligibility(userData);
         } else {
-            console.error('No such document!');
+            clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
     } catch (error) {
-        console.error('Error fetching document:', error);
+        console.error('Error displaying client info:', error);
+        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
     }
 }
 
-function generateGrid(service) {
-    return Array(5).fill().map((_, i) => `<div class="grid-box" data-service="${service}" data-index="${i}"></div>`).join('');
-}
-
-function updateGrid(services) {
-    const serviceCount = {
-        Eyelashes: 0,
-        Nails: 0,
-        Pedicure: 0,
-        Retouches: 0
-    };
-
-    services.forEach(service => {
-        serviceCount[service.type]++;
-    });
-
-    Object.keys(serviceCount).forEach(service => {
-        for (let i = 0; i < serviceCount[service]; i++) {
-            document.querySelector(`.grid-box[data-service="${service}"][data-index="${i}"]`).classList.add('filled');
+function checkDiscountEligibility(userData) {
+    let discountMessage = '';
+    ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'].forEach(serviceType => {
+        const serviceCount = userData.services.filter(service => service.type === serviceType).length;
+        if (serviceType === 'Retouches' && serviceCount >= 5) {
+            discountMessage = 'Congrats, schedule your next appointment to receive your 30% discount!';
+        } else if (serviceCount >= 5) {
+            discountMessage = 'Congrats, schedule your next appointment to receive your 20% discount!';
         }
     });
+
+    if (discountMessage) {
+        document.getElementById('discount-message').textContent = discountMessage;
+        document.getElementById('discount-message').style.display = 'block';
+    }
 }
 
-function checkDiscountEligibility(services) {
-    const serviceCount = {
-        Eyelashes: 0,
-        Nails: 0,
-        Pedicure: 0,
-        Retouches: 0
-    };
-
-    services.forEach(service => {
-        serviceCount[service.type]++;
-    });
-
-    Object.keys(serviceCount).forEach(service => {
-        if (serviceCount[service] >= 5) {
-            const discountMessage = document.getElementById('discount-message');
-            discountMessage.style.display = 'block';
-            discountMessage.textContent = `Congrats, schedule your next appointment to receive your discount for ${service}!`;
-        }
-    });
-}
+window.onload = displayClientInfo;

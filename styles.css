@@ -78,60 +78,57 @@ button:hover {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .service-selection {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.service-selection select {
+.service-selection label {
     margin-right: 10px;
 }
 
-.tab-content {
-    display: none;
+.service-selection select {
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
-#grid-container {
+#service-grid {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 20px;
 }
 
-.grid-row {
+.service-row {
     display: flex;
     align-items: center;
 }
 
-.service-label {
-    flex: 1;
+.service-label, .discount-label {
+    width: 80px;
+    text-align: center;
 }
 
-.grid-box {
+.service-boxes {
+    display: flex;
+    gap: 5px;
+    flex-grow: 1;
+}
+
+.box {
     width: 30px;
     height: 30px;
-    margin: 0 2px;
-    border: 1px solid #ccc;
+    border: 1px solid black;
     background-color: gray;
 }
 
-.grid-box.filled {
+.box.filled {
     background-color: green;
-}
-
-.service-discount {
-    flex: 1;
-    text-align: right;
-}
-
-#discount-message {
-    margin-top: 20px;
-    color: green;
-    font-weight: bold;
 }
 
 @media (max-width: 600px) {

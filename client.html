@@ -1,18 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Client Page</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="background-container">
-      <h1>Client Information</h1>
-      <div id="client-info"></div>
-      <div id="grid-container"></div>
-      <div id="discount-message" style="display: none"></div>
-    </div>
-    <script type="module" src="client.js"></script>
-  </body>
+  ### Complete `client.html` ```html
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Client Page</title>
+      <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+      <div class="background-container">
+        <h1>Client Information</h1>
+        <div id="client-info">
+          <div id="service-grid">
+            <div class="service-row">
+              <span class="service-label">Eyelashes</span>
+              <div class="service-boxes" id="eyelashes-boxes"></div>
+              <span class="discount-label">20%</span>
+            </div>
+            <div class="service-row">
+              <span class="service-label">Nails</span>
+              <div class="service-boxes" id="nails-boxes"></div>
+              <span class="discount-label">20%</span>
+            </div>
+            <div class="service-row">
+              <span class="service-label">Pedicure</span>
+              <div class="service-boxes" id="pedicure-boxes"></div>
+              <span class="discount-label">20%</span>
+            </div>
+            <div class="service-row">
+              <span class="service-label">Retouches</span>
+              <div class="service-boxes" id="retouches-boxes"></div>
+              <span class="discount-label">30%</span>
+            </div>
+          </div>
+          <p id="discount-message" style="display: none">
+            Congrats, schedule your next appointment to receive your discount!
+          </p>
+        </div>
+      </div>
+      <script type="module" src="client.js"></script>
+    </body>
+  </html>
 </html>
