@@ -22,47 +22,75 @@ async function displayClientInfo() {
     const phoneNumber = urlParams.get('phone');
     const name = urlParams.get('name');
 
-    const clientName = document.getElementById('client-name');
-    clientName.textContent = `Client: ${name}`;
-
-    const serviceGrid = document.getElementById('service-grid');
-    serviceGrid.innerHTML = '';
+    const clientInfoDiv = document.getElementById('client-info');
+    clientInfoDiv.innerHTML = `<p>Phone: ${phoneNumber}</p><p>Name: ${name}</p>`;
 
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const services = { Eyelashes: 0, Nails: 0, Pedicure: 0, Retouches: 0 };
-            if (userData.services && userData.services.length > 0) {
-                userData.services.forEach(service => {
-                    services[service.type]++;
-                });
-            }
-
-            const serviceTypes = ["Eyelashes", "Nails", "Pedicure", "Retouches"];
-            serviceTypes.forEach(serviceType => {
-                const label = document.createElement('div');
-                label.classList.add('service-label');
-                label.textContent = serviceType;
-                serviceGrid.appendChild(label);
-
-                for (let i = 0; i < 5; i++) {
-                    const box = document.createElement('div');
-                    box.classList.add('grid-item', i < services[serviceType] ? 'filled' : 'empty');
-                    serviceGrid.appendChild(box);
-                }
-
-                const discountLabel = document.createElement('div');
-                discountLabel.classList.add('discount-label');
-                discountLabel.textContent = serviceType === "Retouches" ? "30%" : "20%";
-                serviceGrid.appendChild(discountLabel);
-            });
+            displayGrid(userData.services);
         } else {
-            serviceGrid.innerHTML = '<p>No records found.</p>';
+            clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
     } catch (error) {
         console.error('Error displaying client info:', error);
-        serviceGrid.innerHTML = '<p>Error fetching records.</p>';
+        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
+    }
+}
+
+function displayGrid(services) {
+    const serviceCounts = {
+        Eyelashes: services.filter(service => service.type === "Eyelashes").length,
+        Nails: services.filter(service => service.type === "Nails").length,
+        Pedicure: services.filter(service => service.type === "Pedicure").length,
+        Retouches: services.filter(service => service.type === "Retouches").length
+    };
+
+    const gridContainer = document.getElementById('grid-container');
+    gridContainer.innerHTML = `
+        <div class="row">
+            <div class="label">Eyelashes</div>
+            ${createBoxes(serviceCounts.Eyelashes, 5)}
+            <div class="label">20%</div>
+        </div>
+        <div class="row">
+            <div class="label">Nails</div>
+            ${createBoxes(serviceCounts.Nails, 5)}
+            <div class="label">20%</div>
+        </div>
+        <div class="row">
+            <div class="label">Pedicure</div>
+            ${createBoxes(serviceCounts.Pedicure, 5)}
+            <div class="label">20%</div>
+        </div>
+        <div class="row">
+            <div class="label">Retouches</div>
+            ${createBoxes(serviceCounts.Retouches, 5)}
+            <div class="label">30%</div>
+        </div>
+    `;
+
+    checkDiscountEligibility(serviceCounts);
+}
+
+function createBoxes(filled, total) {
+    let boxes = '';
+    for (let i = 0; i < filled; i++) {
+        boxes += '<div class="box filled"></div>';
+    }
+    for (let i = filled; i < total; i++) {
+        boxes += '<div class="box"></div>';
+    }
+    return boxes;
+}
+
+function checkDiscountEligibility(serviceCounts) {
+    const discountMessage = document.getElementById('discount-message');
+    discountMessage.style.display = 'none';
+
+    if (serviceCounts.Eyelashes >= 5 || serviceCounts.Nails >= 5 || serviceCounts.Pedicure >= 5 || serviceCounts.Retouches >= 5) {
+        discountMessage.style.display = 'block';
     }
 }
 

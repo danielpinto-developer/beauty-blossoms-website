@@ -74,82 +74,43 @@ button:hover {
     margin-top: 20px;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: auto repeat(5, 1fr) auto;
-    grid-gap: 10px;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.grid-item {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid black;
-}
-
-.service-label {
-    grid-column: 1;
-    display: flex;
-    align-items: center;
-}
-
-.discount-label {
-    grid-column: 8;
-    display: flex;
-    align-items: center;
-}
-
-.filled {
-    background-color: green;
-}
-
-.empty {
-    background-color: grey;
-}
-
 .buttons-row {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    margin-bottom: 20px;
 }
 
 .service-selection {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .service-selection select {
-    flex: 1;
+    margin-right: 10px;
 }
 
-.service-selection button {
-    margin-left: 10px;
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
 }
 
-/* Media queries for responsiveness */
-@media (max-width: 600px) {
-    .background-container {
-        width: calc(100% - 40px);
-        padding: 20px;
-        margin: 0 20px;
-    }
+.box {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    background-color: grey;
+    border: 1px solid black;
+    border-radius: 5px;
+}
 
-    .numero {
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
-    }
+.box.filled {
+    background-color: green;
+}
 
-    input {
-        width: calc(100% - 90px);
-        margin-bottom: 0;
-    }
-
-    button {
-        width: auto;
-        margin-left: 10px;
-    }
+.label {
+    width: 80px;
+    text-align: center;
 }
