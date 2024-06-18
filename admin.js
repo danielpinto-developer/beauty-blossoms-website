@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC4eMq0Y8ERerdBIzsySqtG9QnisI3CBIc",
@@ -145,10 +145,15 @@ async function redeemDiscount(service) {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const newServices = userData.services.filter(s => s.type !== service || s.date !== "redeemed");
-            await updateDoc(doc(db, "users", phoneNumber), {
-                services: newServices
+            const services = userData.services.map(entry => {
+                if (entry.type === service) {
+                    entry.redeemed = true;
+                }
+                return entry;
             });
+
+            await updateDoc(doc(db, "users", phoneNumber), { services });
+
             alert(`${service} discount redeemed!`);
             displayClientInfo(phoneNumber);
             displayDiscounts();
@@ -157,12 +162,4 @@ async function redeemDiscount(service) {
         console.error('Error redeeming discount:', error);
         alert('Error redeeming discount');
     }
-}
-
-function showTab(tabId) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.style.display = 'none';
-    });
-    document.getElementById(tabId).style.display = 'block';
 }
