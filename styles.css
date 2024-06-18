@@ -78,55 +78,16 @@ button:hover {
     display: flex;
     justify-content: space-between;
     width: 100%;
-}
-
-.tab-content {
-    display: none;
-    width: 100%;
+    margin-top: 20px;
 }
 
 .service-selection {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 10px;
 }
 
-.service-selection select {
-    margin-right: 10px;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid black;
-}
-
-.service-selection button {
-    height: 40px; /* Make the button height consistent */
-}
-
-#discount-message {
+.tab-content {
+    display: none;
     margin-top: 20px;
-    font-weight: bold;
-}
-
-@media (max-width: 600px) {
-    .background-container {
-        width: calc(100% - 40px);
-        padding: 20px;
-        margin: 0 20px;
-    }
-
-    .numero {
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
-    }
-
-    input {
-        width: calc(100% - 90px);
-        margin-bottom: 0;
-    }
-
-    button {
-        width: auto;
-        margin-left: 10px;
-    }
 }

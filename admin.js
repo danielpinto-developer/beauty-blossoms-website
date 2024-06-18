@@ -20,6 +20,8 @@ const db = getFirestore(app);
 document.getElementById('buscarButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
+    const numeroContainer = document.querySelector('.numero');
+    const clientInfoContainer = document.getElementById('client-info');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -31,8 +33,8 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             messageElement.style.display = 'none';
-            document.querySelector('.numero').style.display = 'none';
-            document.getElementById('client-info').style.display = 'block';
+            numeroContainer.style.display = 'none';
+            clientInfoContainer.style.display = 'block';
             window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
