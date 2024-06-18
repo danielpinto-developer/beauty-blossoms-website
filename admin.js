@@ -100,73 +100,87 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         await updateDoc(doc(db, "users", phoneNumber), {
             services: arrayUnion({ date, type: service })
         });
-        alert("Service added successfully");
         displayClientInfo(phoneNumber);
-        document.getElementById('add-points-section').style.display = 'none';
-        document.getElementById('showAddPointsButton').style.display = 'block';
+        alert("Service added successfully!");
+        showTab('previous-section');
     } catch (error) {
         console.error('Error updating Firestore:', error);
-        alert("Error adding service");
+        alert("Error adding service.");
     }
 });
 
 async function displayDiscounts() {
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    const userDoc = await getDoc(doc(db, "users", phoneNumber));
-    const discountsSection = document.getElementById('discounts-section');
-    discountsSection.innerHTML = '';
+    const discountsDiv = document.getElementById('discounts-section');
+    discountsDiv.innerHTML = '';
 
-    if (userDoc.exists()) {
-        const userData = userDoc.data();
-        const discountServices = [];
+    try {
+        const userDoc = await getDoc(doc(db, "users", phoneNumber));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const servicesGrouped = groupServices(userData.services);
 
-        ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'].forEach(serviceType => {
-            const serviceCount = userData.services.filter(service => service.type === serviceType).length;
-            if (serviceCount >= 5) {
-                discountServices.push(serviceType);
+            let hasDiscounts = false;
+            for (const [type, count] of Object.entries(servicesGrouped)) {
+                if (count >= 5) {
+                    hasDiscounts = true;
+                    discountsDiv.innerHTML += `<p>${type} - <button onclick="redeemDiscount('${type}')">Redeem</button></p>`;
+                }
             }
-        });
 
-        if (discountServices.length > 0) {
-            discountServices.forEach(serviceType => {
-                discountsSection.innerHTML += `<p>${serviceType} - <button class="redeem-button" data-service="${serviceType}">Redeem</button></p>`;
-            });
-
-            document.querySelectorAll('.redeem-button').forEach(button => {
-                button.addEventListener('click', async () => {
-                    const serviceType = button.getAttribute('data-service');
-                    await redeemDiscount(phoneNumber, serviceType);
-                });
-            });
+            if (!hasDiscounts) {
+                discountsDiv.innerHTML = '<p>No available discounts at the moment.</p>';
+            }
         } else {
-            discountsSection.innerHTML = '<p>No available discounts at the moment.</p>';
+            discountsDiv.innerHTML = '<p>No available discounts at the moment.</p>';
         }
+    } catch (error) {
+        console.error('Error displaying discounts:', error);
+        discountsDiv.innerHTML = '<p>Error fetching discounts.</p>';
     }
 }
 
-async function redeemDiscount(phoneNumber, serviceType) {
-    const userRef = doc(db, "users", phoneNumber);
+async function redeemDiscount(type) {
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+    const userDocRef = doc(db, "users", phoneNumber);
 
     try {
-        const userDoc = await getDoc(userRef);
+        const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const updatedServices = userData.services.filter((service, index) => {
-                if (service.type === serviceType && index < 5) {
-                    return false;
+            const updatedServices = userData.services.map(service => {
+                if (service.type === type && !service.redeemed) {
+                    return { ...service, redeemed: true };
                 }
-                return true;
+                return service;
             });
 
-            await updateDoc(userRef, {
-                services: updatedServices
-            });
-
-            alert("Discount redeemed successfully");
+            await updateDoc(userDocRef, { services: updatedServices });
             displayDiscounts();
+            alert(`${type} discount redeemed successfully!`);
+        } else {
+            console.error('Error redeeming discount: user document not found.');
+            alert('Error redeeming discount.');
         }
     } catch (error) {
         console.error('Error redeeming discount:', error);
-        alert("Error redeeming discount");
+        alert('Error redeeming discount.');
     }
+}
+
+function groupServices(services) {
+    return services.reduce((acc, service) => {
+        if (!service.redeemed) {
+            acc[service.type] = (acc[service.type] || 0) + 1;
+        }
+        return acc;
+    }, {});
+}
+
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabId).style.display = 'block';
 }

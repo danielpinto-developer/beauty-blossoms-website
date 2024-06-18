@@ -77,58 +77,42 @@ button:hover {
 .buttons-row {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     margin-bottom: 20px;
 }
 
 .service-selection {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-}
-
-.service-selection label {
-    margin-right: 10px;
 }
 
 .service-selection select {
-    flex-grow: 1;
     margin-right: 10px;
 }
 
-#service-grid {
-    width: 100%;
+.row {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.service-row {
-    display: flex;
+    justify-content: center;
     align-items: center;
-}
-
-.service-label, .discount-label {
-    width: 80px;
-    text-align: center;
-}
-
-.service-boxes {
-    display: flex;
-    gap: 5px;
-    flex-grow: 1;
+    margin: 5px 0;
 }
 
 .box {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    background-color: grey;
     border: 1px solid black;
-    background-color: gray;
+    border-radius: 5px;
 }
 
 .box.filled {
     background-color: green;
+}
+
+.label {
+    width: 80px;
+    text-align: center;
 }
 
 @media (max-width: 600px) {

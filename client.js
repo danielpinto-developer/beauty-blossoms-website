@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -29,22 +29,19 @@ async function displayClientInfo() {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'].forEach(serviceType => {
-                const serviceCount = userData.services.filter(service => service.type === serviceType).length;
-                const boxesContainer = document.getElementById(`${serviceType.toLowerCase()}-boxes`);
-                boxesContainer.innerHTML = '';
+            const services = {
+                Eyelashes: userData.services.filter(service => service.type === "Eyelashes").length,
+                Nails: userData.services.filter(service => service.type === "Nails").length,
+                Pedicure: userData.services.filter(service => service.type === "Pedicure").length,
+                Retouches: userData.services.filter(service => service.type === "Retouches").length
+            };
 
-                for (let i = 0; i < 5; i++) {
-                    const box = document.createElement('div');
-                    box.classList.add('box');
-                    if (i < serviceCount) {
-                        box.classList.add('filled');
-                    }
-                    boxesContainer.appendChild(box);
-                }
-            });
+            updateGrid('eyelashes-boxes', services.Eyelashes);
+            updateGrid('nails-boxes', services.Nails);
+            updateGrid('pedicure-boxes', services.Pedicure);
+            updateGrid('retouches-boxes', services.Retouches);
 
-            checkDiscountEligibility(userData);
+            checkForDiscounts(services);
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
@@ -54,21 +51,25 @@ async function displayClientInfo() {
     }
 }
 
-function checkDiscountEligibility(userData) {
-    let discountMessage = '';
-    ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'].forEach(serviceType => {
-        const serviceCount = userData.services.filter(service => service.type === serviceType).length;
-        if (serviceType === 'Retouches' && serviceCount >= 5) {
-            discountMessage = 'Congrats, schedule your next appointment to receive your 30% discount!';
-        } else if (serviceCount >= 5) {
-            discountMessage = 'Congrats, schedule your next appointment to receive your 20% discount!';
-        }
-    });
-
-    if (discountMessage) {
-        document.getElementById('discount-message').textContent = discountMessage;
-        document.getElementById('discount-message').style.display = 'block';
+function updateGrid(elementId, count) {
+    const container = document.getElementById(elementId);
+    container.innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+        const box = document.createElement('div');
+        box.classList.add('box');
+        box.style.backgroundColor = i < count ? 'green' : 'grey';
+        container.appendChild(box);
     }
+}
+
+function checkForDiscounts(services) {
+    let discountMessage = '';
+    if (services.Eyelashes >= 5) discountMessage += '<p>Congrats, schedule your next Eyelashes appointment to receive your 20% discount.</p>';
+    if (services.Nails >= 5) discountMessage += '<p>Congrats, schedule your next Nails appointment to receive your 20% discount.</p>';
+    if (services.Pedicure >= 5) discountMessage += '<p>Congrats, schedule your next Pedicure appointment to receive your 20% discount.</p>';
+    if (services.Retouches >= 5) discountMessage += '<p>Congrats, schedule your next Retouches appointment to receive your 30% discount.</p>';
+
+    document.getElementById('discount-message').innerHTML = discountMessage;
 }
 
 window.onload = displayClientInfo;
