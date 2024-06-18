@@ -79,18 +79,14 @@ async function displayServiceHistory(phoneNumber) {
 
 document.querySelector('.tab-button[onclick="showTab(\'add-points\')"]').addEventListener('click', () => {
     document.getElementById('add-points').style.display = 'block';
-    document.querySelector('.tabs').style.display = 'none';
-    const urlParams = new URLSearchParams(window.location.search);
-    const phoneNumber = urlParams.get('phone');
-    displayServiceHistory(phoneNumber);
+    document.querySelector('.tabs').style.display = 'flex';
+    document.getElementById('service-history').style.display = 'none';
 });
 
 document.querySelector('.tab-button[onclick="showTab(\'service-history\')"]').addEventListener('click', () => {
     document.getElementById('service-history').style.display = 'block';
-    document.querySelector('.tabs').style.display = 'none';
-    const urlParams = new URLSearchParams(window.location.search);
-    const phoneNumber = urlParams.get('phone');
-    displayServiceHistory(phoneNumber);
+    document.querySelector('.tabs').style.display = 'flex';
+    document.getElementById('add-points').style.display = 'none';
 });
 
 async function addService() {
@@ -104,8 +100,6 @@ async function addService() {
             services: arrayUnion({ date, type: service })
         });
         alert('Service added successfully');
-        document.getElementById('add-points').style.display = 'none';
-        document.querySelector('.tabs').style.display = 'flex';
         displayServiceHistory(phoneNumber); // Refresh the service history after adding the service
     } catch (error) {
         console.error('Error adding service:', error);
