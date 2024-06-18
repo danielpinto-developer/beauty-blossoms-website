@@ -98,7 +98,7 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
 
     try {
         await updateDoc(doc(db, "users", phoneNumber), {
-            services: arrayUnion({ date, type: service })
+            services: arrayUnion({ date, type: service, redeemed: false })
         });
         displayClientInfo(phoneNumber);
         alert("Service added successfully!");
@@ -148,8 +148,8 @@ async function redeemDiscount(phoneNumber, type) {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             const updatedServices = userData.services.map(service => {
-                if (service.type === type) {
-                    return { ...service, redeemed: true };
+                if (service.type === type && !service.redeemed) {
+                    service.redeemed = true;
                 }
                 return service;
             });
@@ -192,7 +192,12 @@ async function resetClientGrid(phoneNumber, serviceType) {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const updatedServices = userData.services.filter(service => service.type !== serviceType || service.redeemed);
+            const updatedServices = userData.services.map(service => {
+                if (service.type === serviceType && service.redeemed) {
+                    service.redeemed = false;
+                }
+                return service;
+            });
 
             await updateDoc(userDocRef, { services: updatedServices });
         }
