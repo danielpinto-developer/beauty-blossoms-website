@@ -41,22 +41,22 @@ async function displayClientInfo() {
 
 function displayGrid(services) {
     const serviceCounts = {
-        Pestañas: services.filter(service => service.type === "Pestañas" && !service.redeemed).length,
-        Uñas: services.filter(service => service.type === "Uñas" && !service.redeemed).length,
+        Eyelashes: services.filter(service => service.type === "Eyelashes" && !service.redeemed).length,
+        Nails: services.filter(service => service.type === "Nails" && !service.redeemed).length,
         Pedicure: services.filter(service => service.type === "Pedicure" && !service.redeemed).length,
-        Retoques: services.filter(service => service.type === "Retoques" && !service.redeemed).length
+        Retouches: services.filter(service => service.type === "Retouches" && !service.redeemed).length
     };
 
     const gridContainer = document.getElementById('grid-container');
     gridContainer.innerHTML = `
         <div class="row">
             <div class="label">Pestañas</div>
-            ${createBoxes(serviceCounts.Pestañas, 5)}
+            ${createBoxes(serviceCounts.Eyelashes, 5)}
             <div class="label">20%</div>
         </div>
         <div class="row">
             <div class="label">Uñas</div>
-            ${createBoxes(serviceCounts.Uñas, 5)}
+            ${createBoxes(serviceCounts.Nails, 5)}
             <div class="label">20%</div>
         </div>
         <div class="row">
@@ -66,7 +66,7 @@ function displayGrid(services) {
         </div>
         <div class="row">
             <div class="label">Retoques</div>
-            ${createBoxes(serviceCounts.Retoques, 5)}
+            ${createBoxes(serviceCounts.Retouches, 5)}
             <div class="label">30%</div>
         </div>
     `;
@@ -89,7 +89,7 @@ function checkDiscountEligibility(serviceCounts) {
     const discountMessage = document.getElementById('discount-message');
     discountMessage.style.display = 'none';
 
-    if (serviceCounts.Pestañas >= 5 || serviceCounts.Uñas >= 5 || serviceCounts.Pedicure >= 5 || serviceCounts.Retoques >= 5) {
+    if (serviceCounts.Eyelashes >= 5 || serviceCounts.Nails >= 5 || serviceCounts.Pedicure >= 5 || serviceCounts.Retouches >= 5) {
         discountMessage.style.display = 'block';
     }
 }
