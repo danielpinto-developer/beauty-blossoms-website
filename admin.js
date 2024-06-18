@@ -1,19 +1,16 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyC4eMq0Y8ERerdBIzsySqtG9QnisI3CBIc",
-    authDomain: "bb27studio-loyalty-program.firebaseapp.com",
-    projectId: "bb27studio-loyalty-program",
-    storageBucket: "bb27studio-loyalty-program.appspot.com",
-    messagingSenderId: "827670961717",
-    appId: "1:827670961717:web:9e7b9d33ddd047dfcc9b7c",
-    measurementId: "G-Y30PX1R10P"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID",
+    measurementId: "YOUR_MEASUREMENT_ID"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -37,7 +34,6 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
             numeroContainer.style.display = 'none';
             window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
             displayClientInfo(phoneNumber);
-            showTab('previous-section');
         } else {
             messageElement.style.display = 'block';
             messageElement.textContent = 'Cuenta no encontrada';
@@ -74,15 +70,21 @@ async function displayClientInfo(phoneNumber) {
 }
 
 document.getElementById('showPreviousButton').addEventListener('click', () => {
-    showTab('previous-section');
+    document.getElementById('previous-section').style.display = 'block';
+    document.getElementById('add-points-section').style.display = 'none';
+    document.getElementById('discounts-section').style.display = 'none';
 });
 
 document.getElementById('showAddPointsButton').addEventListener('click', () => {
-    showTab('add-points-section');
+    document.getElementById('previous-section').style.display = 'none';
+    document.getElementById('add-points-section').style.display = 'block';
+    document.getElementById('discounts-section').style.display = 'none';
 });
 
 document.getElementById('showDiscountsButton').addEventListener('click', () => {
-    showTab('discounts-section');
+    document.getElementById('previous-section').style.display = 'none';
+    document.getElementById('add-points-section').style.display = 'none';
+    document.getElementById('discounts-section').style.display = 'block';
     displayDiscounts();
 });
 
@@ -95,14 +97,67 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         await updateDoc(doc(db, "users", phoneNumber), {
             services: arrayUnion({ date, type: service })
         });
-        displayClientInfo(phoneNumber);
         alert('Service added successfully!');
-        showTab('previous-section');
+        displayClientInfo(phoneNumber);
     } catch (error) {
         console.error('Error updating Firestore:', error);
-        alert('Error adding service.');
+        alert('Error adding service');
     }
 });
+
+async function displayDiscounts() {
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+    const discountsDiv = document.getElementById('discounts-section');
+    discountsDiv.innerHTML = '';
+
+    try {
+        const userDoc = await getDoc(doc(db, "users", phoneNumber));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const servicesCount = {
+                Eyelashes: 0,
+                Nails: 0,
+                Pedicure: 0,
+                Retouches: 0
+            };
+
+            userData.services.forEach(service => {
+                servicesCount[service.type]++;
+            });
+
+            Object.keys(servicesCount).forEach(service => {
+                if ((service !== 'Retouches' && servicesCount[service] >= 5) || (service === 'Retouches' && servicesCount[service] >= 5)) {
+                    const serviceDiv = document.createElement('div');
+                    serviceDiv.className = 'service-item';
+                    serviceDiv.innerHTML = `<span>${service} Discount</span><button onclick="redeemDiscount('${service}')">Redeem</button>`;
+                    discountsDiv.appendChild(serviceDiv);
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error displaying discounts:', error);
+    }
+}
+
+async function redeemDiscount(service) {
+    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
+    try {
+        const userDoc = await getDoc(doc(db, "users", phoneNumber));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const newServices = userData.services.filter(s => s.type !== service || s.date !== "redeemed");
+            await updateDoc(doc(db, "users", phoneNumber), {
+                services: newServices
+            });
+            alert(`${service} discount redeemed!`);
+            displayClientInfo(phoneNumber);
+            displayDiscounts();
+        }
+    } catch (error) {
+        console.error('Error redeeming discount:', error);
+        alert('Error redeeming discount');
+    }
+}
 
 function showTab(tabId) {
     const tabs = document.querySelectorAll('.tab-content');
@@ -110,64 +165,4 @@ function showTab(tabId) {
         tab.style.display = 'none';
     });
     document.getElementById(tabId).style.display = 'block';
-}
-
-async function displayDiscounts() {
-    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    try {
-        const userDoc = await getDoc(doc(db, "users", phoneNumber));
-        const discountsDiv = document.getElementById('discounts-section');
-        discountsDiv.innerHTML = '';
-
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            let hasDiscounts = false;
-            ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'].forEach(service => {
-                const serviceCount = userData.services.filter(s => s.type === service).length;
-                if (serviceCount >= 5) {
-                    hasDiscounts = true;
-                    discountsDiv.innerHTML += `
-                        <div>
-                            <span>${service} - ${service === 'Retouches' ? '30%' : '20%'} off</span>
-                            <button onclick="redeemDiscount('${service}')">Redeem</button>
-                        </div>
-                    `;
-                }
-            });
-            if (!hasDiscounts) {
-                discountsDiv.innerHTML = '<p>No available discounts at the moment.</p>';
-            }
-        } else {
-            discountsDiv.innerHTML = '<p>No records found.</p>';
-        }
-    } catch (error) {
-        console.error('Error displaying discounts:', error);
-        document.getElementById('discounts-section').innerHTML = '<p>Error fetching discounts.</p>';
-    }
-}
-
-async function redeemDiscount(service) {
-    const phoneNumber = new URLSearchParams(window.location.search).get('phone');
-    try {
-        const userRef = doc(db, "users", phoneNumber);
-        const userDoc = await getDoc(userRef);
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const updatedServices = userData.services.map(s => {
-                if (s.type === service) {
-                    return { ...s, redeemed: true };
-                }
-                return s;
-            });
-            await updateDoc(userRef, {
-                services: updatedServices
-            });
-            alert(`Discount for ${service} redeemed successfully!`);
-            displayDiscounts();
-            showTab('previous-section');
-        }
-    } catch (error) {
-        console.error('Error redeeming discount:', error);
-        alert('Error redeeming discount.');
-    }
 }

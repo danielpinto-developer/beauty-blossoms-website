@@ -1,8 +1,6 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyC4eMq0Y8ERerdBIzsySqtG9QnisI3CBIc",
     authDomain: "bb27studio-loyalty-program.firebaseapp.com",
@@ -13,7 +11,6 @@ const firebaseConfig = {
     measurementId: "G-Y30PX1R10P"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -29,34 +26,40 @@ async function displayClientInfo() {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const services = userData.services;
+            const services = {
+                Eyelashes: 0,
+                Nails: 0,
+                Pedicure: 0,
+                Retouches: 0
+            };
 
-            const serviceTypes = ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'];
-            const serviceCount = {};
-
-            serviceTypes.forEach(service => {
-                serviceCount[service] = services.filter(s => s.type === service && !s.redeemed).length;
+            userData.services.forEach(service => {
+                services[service.type]++;
             });
 
-            const gridDiv = document.getElementById('grid');
-            gridDiv.innerHTML = '';
+            const gridContainer = document.querySelector('.grid-container');
+            gridContainer.innerHTML = '';
 
-            serviceTypes.forEach(service => {
-                let row = `<div class="grid-row">
-                    <span>${service}</span>`;
+            Object.keys(services).forEach(service => {
                 for (let i = 0; i < 5; i++) {
-                    if (i < serviceCount[service]) {
-                        row += `<div class="grid-box filled"></div>`;
-                    } else {
-                        row += `<div class="grid-box empty"></div>`;
+                    const gridItem = document.createElement('div');
+                    gridItem.className = 'grid-item';
+                    if (i < services[service]) {
+                        gridItem.classList.add('green');
                     }
+                    gridContainer.appendChild(gridItem);
                 }
-                row += `<span>${service === 'Retouches' ? '30%' : '20%'}</span></div>`;
-                gridDiv.innerHTML += row;
             });
 
-            const discountMessage = document.getElementById('discount-message');
-            discountMessage.style.display = serviceTypes.some(service => serviceCount[service] >= 5) ? 'block' : 'none';
+            const discountMessage = document.querySelector('.discount-message');
+            discountMessage.style.display = 'none';
+
+            Object.keys(services).forEach(service => {
+                if (services[service] >= 5) {
+                    discountMessage.style.display = 'block';
+                    discountMessage.textContent = "Congrats, schedule your next appointment to receive your discount";
+                }
+            });
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
