@@ -97,6 +97,6 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         showTab('service-history');
     } catch (error) {
         console.error('Error updating Firestore:', error);
-        alert('Error adding service');
+        alert(`Error adding service: ${error.message}`);
     }
 });
