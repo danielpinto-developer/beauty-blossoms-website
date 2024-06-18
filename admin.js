@@ -152,6 +152,7 @@ async function redeemDiscount(type) {
     try {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
+            console.log("User document found:", userDoc.data()); // Add log
             const userData = userDoc.data();
             const updatedServices = userData.services.map(service => {
                 if (service.type === type && !service.redeemed) {
@@ -162,6 +163,7 @@ async function redeemDiscount(type) {
             });
 
             await updateDoc(userDocRef, { services: updatedServices });
+            console.log("Updated services:", updatedServices); // Add log
             displayDiscounts();
             alert(`${type} discount redeemed successfully!`);
 
