@@ -17,6 +17,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const serviceTranslation = {
+    'Eyelashes': 'Pestañas',
+    'Nails': 'Uñas',
+    'Pedicure': 'Pedicure',
+    'Retouches': 'Retoques'
+};
+
 document.getElementById('buscarButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('phone-number').value;
     const messageElement = document.getElementById('message');
@@ -97,7 +104,8 @@ async function displayClientInfo(phoneNumber, clientName) {
             const userData = userDoc.data();
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(entry => {
-                    clientInfoDiv.innerHTML += `<p>Fecha: ${entry.date} - Servicio: ${entry.type}</p>`;
+                    const translatedService = serviceTranslation[entry.type] || entry.type;
+                    clientInfoDiv.innerHTML += `<p>Fecha: ${entry.date} - Servicio: ${translatedService}</p>`;
                 });
             } else {
                 clientInfoDiv.innerHTML = '<p>No se encontraron registros.</p>';
@@ -171,7 +179,7 @@ async function displayDiscounts() {
                     button.textContent = 'Canjear';
                     button.addEventListener('click', () => redeemDiscount(type));
                     const p = document.createElement('p');
-                    p.textContent = `${type} - `;
+                    p.textContent = `${serviceTranslation[type] || type} - `;
                     p.appendChild(button);
                     discountsDiv.appendChild(p);
                 }
@@ -210,7 +218,7 @@ async function redeemDiscount(type) {
             await updateDoc(userDocRef, { services: updatedServices });
             console.log("Updated services:", updatedServices); // Add log
             displayDiscounts();
-            alert(`${type} descuento canjeado exitosamente!`);
+            alert(`${serviceTranslation[type] || type} descuento canjeado exitosamente!`);
 
             // Notify client page to reset the grid
             localStorage.setItem('redeemed', 'true');
