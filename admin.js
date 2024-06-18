@@ -49,6 +49,7 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
 
 document.getElementById('previousButton').addEventListener('click', () => {
     showTab('service-history');
+    displayClientInfo();
 });
 
 document.getElementById('addPointsButton').addEventListener('click', () => {
@@ -67,6 +68,7 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         });
         alert('Service added successfully!');
         showTab('service-history');
+        displayClientInfo();
     } catch (error) {
         console.error('Error updating Firestore:', error);
     }
