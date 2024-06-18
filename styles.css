@@ -16,6 +16,13 @@ h1, h2, h3 {
     text-align: center;
 }
 
+.logo {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    height: auto;
+}
+
 .background-container {
     background-color: whitesmoke;
     width: calc(100% - 40px);
