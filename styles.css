@@ -74,6 +74,7 @@ button {
     margin: 0;
     margin-top: 20px;
     font-size: x-large;
+    text-align: center;
 }
 
 button:hover {
@@ -167,27 +168,38 @@ button:hover {
     max-width: 75%;
 }
 
-
 @media (max-width: 600px) {
+    body {
+        padding-top: 5vh;
+    }
+
     .background-container {
-        width: calc(100% - 40px);
+        width: calc(100% - 20px);
         padding: 20px;
-        margin: 0 20px;
+        margin: 0 10px;
+    }
+
+    .logo {
+        max-width: 250px;
     }
 
     .numero {
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     input {
-        width: calc(100% - 90px);
-        margin-bottom: 0;
+        width: calc(100% - 20px);
+        margin-bottom: 10px;
     }
 
     button {
-        width: auto;
-        margin-left: 10px;
+        width: 100%;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    #quote {
+        font-size: large;
     }
 }
