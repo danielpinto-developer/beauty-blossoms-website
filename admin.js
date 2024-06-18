@@ -35,7 +35,7 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
             messageElement.style.display = 'none';
             numeroContainer.style.display = 'none';
             clientInfoContainer.style.display = 'block';
-            window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
+            history.replaceState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
         } else {
             messageElement.style.display = 'block'; // Show message if account not found
             messageElement.textContent = 'Cuenta no encontrada';
