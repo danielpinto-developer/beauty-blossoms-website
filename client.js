@@ -29,68 +29,40 @@ async function displayClientInfo() {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            displayGrid(userData.services);
+            const services = userData.services;
+
+            const serviceTypes = ['Eyelashes', 'Nails', 'Pedicure', 'Retouches'];
+            const serviceCount = {};
+
+            serviceTypes.forEach(service => {
+                serviceCount[service] = services.filter(s => s.type === service && !s.redeemed).length;
+            });
+
+            const gridDiv = document.getElementById('grid');
+            gridDiv.innerHTML = '';
+
+            serviceTypes.forEach(service => {
+                let row = `<div class="grid-row">
+                    <span>${service}</span>`;
+                for (let i = 0; i < 5; i++) {
+                    if (i < serviceCount[service]) {
+                        row += `<div class="grid-box filled"></div>`;
+                    } else {
+                        row += `<div class="grid-box empty"></div>`;
+                    }
+                }
+                row += `<span>${service === 'Retouches' ? '30%' : '20%'}</span></div>`;
+                gridDiv.innerHTML += row;
+            });
+
+            const discountMessage = document.getElementById('discount-message');
+            discountMessage.style.display = serviceTypes.some(service => serviceCount[service] >= 5) ? 'block' : 'none';
         } else {
             clientInfoDiv.innerHTML = '<p>No records found.</p>';
         }
     } catch (error) {
         console.error('Error displaying client info:', error);
         clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
-    }
-}
-
-function displayGrid(services) {
-    const serviceCounts = {
-        Eyelashes: services.filter(service => service.type === "Eyelashes").length,
-        Nails: services.filter(service => service.type === "Nails").length,
-        Pedicure: services.filter(service => service.type === "Pedicure").length,
-        Retouches: services.filter(service => service.type === "Retouches").length
-    };
-
-    const gridContainer = document.getElementById('grid-container');
-    gridContainer.innerHTML = `
-        <div class="row">
-            <div class="label">Eyelashes</div>
-            ${createBoxes(serviceCounts.Eyelashes, 5)}
-            <div class="label">20%</div>
-        </div>
-        <div class="row">
-            <div class="label">Nails</div>
-            ${createBoxes(serviceCounts.Nails, 5)}
-            <div class="label">20%</div>
-        </div>
-        <div class="row">
-            <div class="label">Pedicure</div>
-            ${createBoxes(serviceCounts.Pedicure, 5)}
-            <div class="label">20%</div>
-        </div>
-        <div class="row">
-            <div class="label">Retouches</div>
-            ${createBoxes(serviceCounts.Retouches, 5)}
-            <div class="label">30%</div>
-        </div>
-    `;
-
-    checkDiscountEligibility(serviceCounts);
-}
-
-function createBoxes(filled, total) {
-    let boxes = '';
-    for (let i = 0; i < filled; i++) {
-        boxes += '<div class="box filled"></div>';
-    }
-    for (let i = filled; i < total; i++) {
-        boxes += '<div class="box"></div>';
-    }
-    return boxes;
-}
-
-function checkDiscountEligibility(serviceCounts) {
-    const discountMessage = document.getElementById('discount-message');
-    discountMessage.style.display = 'none';
-
-    if (serviceCounts.Eyelashes >= 5 || serviceCounts.Nails >= 5 || serviceCounts.Pedicure >= 5 || serviceCounts.Retouches >= 5) {
-        discountMessage.style.display = 'block';
     }
 }
 

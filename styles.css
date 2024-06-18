@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
-    background: url('background.jpg') repeat;
+    background: url('/background1.jpg') repeat;
     background-size: cover;
     padding-top: 10vh;
 }
@@ -35,15 +35,13 @@ h1, h2, h3 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-bottom: 20px;
 }
 
-.numero input {
+input {
     width: 100%;
     max-width: 150px;
     box-sizing: border-box;
     height: 30px;
-    margin-right: 10px;
 }
 
 button {
@@ -51,6 +49,7 @@ button {
     color: white;
     border: none;
     cursor: pointer;
+    margin-left: 10px;
     height: 30px;
     display: flex;
     align-items: center;
@@ -65,57 +64,57 @@ button:hover {
     background-color: #0056b3;
 }
 
-.tab-content {
-    display: none;
-    flex-direction: column;
-    align-items: center;
+#quote {
+    font-family: Great Vibes;
+    font-weight: lighter;
+    margin: 0;
 }
 
-.service-selection select {
-    margin-right: 10px;
+#clientInfo, #adminInfo {
+    margin-top: 20px;
+}
+
+.tab-content {
+    display: none;
+    margin-top: 20px;
+}
+
+.buttons-row {
+    justify-content: space-between;
+    width: 100%;
+}
+
+.service-selection {
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .grid-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-gap: 10px;
-    width: 100%;
-    max-width: 600px;
+    gap: 10px;
     margin-top: 20px;
 }
 
 .grid-item {
     width: 100%;
-    padding-top: 100%; /* Maintain a square aspect ratio */
-    background-color: grey;
-    border: 1px solid black;
-    position: relative;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: gray;
+    color: white;
+    border-radius: 5px;
 }
 
-.grid-item.filled {
+.green {
     background-color: green;
 }
 
-.grid-item::after {
-    content: '';
-    display: block;
-    padding-bottom: 100%; /* Maintain a square aspect ratio */
-}
-
-.service-label, .discount-label {
-    grid-column: span 1;
-    align-self: center;
-    justify-self: start;
-}
-
-.discount-label {
-    justify-self: end;
-}
-
-#quote {
-    font-family: Great Vibes;
-    font-weight: lighter;
-    margin: 0;
+.discount-message {
+    margin-top: 20px;
+    color: green;
 }
 
 @media (max-width: 600px) {
@@ -125,20 +124,19 @@ button:hover {
         margin: 0 20px;
     }
 
-    .numero, .buttons-row, .service-selection {
-        flex-direction: column;
+    .numero {
+        flex-direction: row;
         width: 100%;
+        justify-content: center;
     }
 
-    .numero input, .service-selection select {
-        width: 100%;
-        max-width: none;
-        margin: 5px 0;
+    input {
+        width: calc(100% - 90px);
+        margin-bottom: 0;
     }
 
     button {
-        width: 100%;
-        max-width: none;
-        margin: 5px 0;
+        width: auto;
+        margin-left: 10px;
     }
 }

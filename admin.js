@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -149,10 +149,23 @@ async function displayDiscounts() {
 async function redeemDiscount(service) {
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     try {
-        // Just simulate the redeem by showing an alert and not updating the database
-        alert(`Discount for ${service} redeemed successfully!`);
-        displayDiscounts();
-        showTab('previous-section');
+        const userRef = doc(db, "users", phoneNumber);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const updatedServices = userData.services.map(s => {
+                if (s.type === service) {
+                    return { ...s, redeemed: true };
+                }
+                return s;
+            });
+            await updateDoc(userRef, {
+                services: updatedServices
+            });
+            alert(`Discount for ${service} redeemed successfully!`);
+            displayDiscounts();
+            showTab('previous-section');
+        }
     } catch (error) {
         console.error('Error redeeming discount:', error);
         alert('Error redeeming discount.');
