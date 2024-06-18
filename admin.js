@@ -22,6 +22,7 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
     const messageElement = document.getElementById('message');
     const clientInfoContainer = document.getElementById('client-info');
     const numeroContainer = document.querySelector('.numero');
+    const registerButton = document.getElementById('registerButton');
 
     if (!phoneNumber) {
         alert('Please enter a phone number');
@@ -35,6 +36,7 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
             messageElement.style.display = 'none';
             clientInfoContainer.style.display = 'block';
             numeroContainer.style.display = 'none';
+            registerButton.style.display = 'none';
             window.history.pushState({}, '', `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`);
             displayClientInfo(phoneNumber);
         } else {
@@ -49,13 +51,19 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
 });
 
 document.getElementById('registerButton').addEventListener('click', () => {
+    const numeroContainer = document.querySelector('.numero');
+    const registerButton = document.getElementById('registerButton');
     const modal = document.getElementById('modal');
+
+    numeroContainer.style.display = 'none';
+    registerButton.style.display = 'none';
     modal.style.display = 'block';
 });
 
 document.querySelector('.close').addEventListener('click', () => {
     const modal = document.getElementById('modal');
     modal.style.display = 'none';
+    location.reload(); // Refresh the page
 });
 
 document.getElementById('addButton').addEventListener('click', async () => {
