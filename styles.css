@@ -74,43 +74,89 @@ button:hover {
     margin-top: 20px;
 }
 
-.buttons-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+@media (max-width: 600px) {
+    .background-container {
+        width: calc(100% - 40px);
+        padding: 20px;
+        margin: 0 20px;
+    }
+
+    .numero {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+    }
+
+    input {
+        width: calc(100% - 90px);
+        margin-bottom: 0;
+    }
+
+    button {
+        width: auto;
+        margin-left: 10px;
+    }
 }
 
-.service-selection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+    margin-top: 20px;
 }
 
-.service-selection select {
-    margin-right: 10px;
-}
-
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px 0;
-}
-
-.box {
-    width: 40px;
-    height: 40px;
-    margin: 0 5px;
+.grid-item {
+    width: 50px;
+    height: 50px;
     background-color: grey;
-    border: 1px solid black;
-    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
 }
 
-.box.filled {
+.grid-item.green {
     background-color: green;
 }
 
-.label {
-    width: 80px;
-    text-align: center;
+.grid-item.text {
+    background-color: transparent;
+    color: black;
+    font-weight: normal;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.buttons-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.buttons-row button {
+    margin-right: 10px;
+}
+
+/* Style for discount items */
+.discount-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Optional: Style the discount button */
+.discount-item button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    height: 30px;
+    padding: 0 20px;
+    border-radius: 5px;
+}
+
+.discount-item button:hover {
+    background-color: #0056b3;
 }
