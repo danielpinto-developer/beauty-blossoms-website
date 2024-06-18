@@ -88,7 +88,7 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
     try {
         const userRef = doc(db, "users", phoneNumber);
         await updateDoc(userRef, {
-            services: arrayUnion({ date, type: service })
+            services: arrayUnion({ date: date, type: service })
         });
         alert('Service added successfully!');
         displayClientInfo(phoneNumber);
