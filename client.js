@@ -31,32 +31,32 @@ async function displayClientInfo() {
             const userData = userDoc.data();
             displayGrid(userData.services);
         } else {
-            clientInfoDiv.innerHTML = '<p>No records found.</p>';
+            clientInfoDiv.innerHTML = '<p>No se encontraron registros.</p>';
         }
     } catch (error) {
         console.error('Error displaying client info:', error);
-        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
+        clientInfoDiv.innerHTML = '<p>Error al recuperar registros.</p>';
     }
 }
 
 function displayGrid(services) {
     const serviceCounts = {
-        Eyelashes: services.filter(service => service.type === "Eyelashes" && !service.redeemed).length,
-        Nails: services.filter(service => service.type === "Nails" && !service.redeemed).length,
+        Pestañas: services.filter(service => service.type === "Pestañas" && !service.redeemed).length,
+        Uñas: services.filter(service => service.type === "Uñas" && !service.redeemed).length,
         Pedicure: services.filter(service => service.type === "Pedicure" && !service.redeemed).length,
-        Retouches: services.filter(service => service.type === "Retouches" && !service.redeemed).length
+        Retoques: services.filter(service => service.type === "Retoques" && !service.redeemed).length
     };
 
     const gridContainer = document.getElementById('grid-container');
     gridContainer.innerHTML = `
         <div class="row">
-            <div class="label">Eyelashes</div>
-            ${createBoxes(serviceCounts.Eyelashes, 5)}
+            <div class="label">Pestañas</div>
+            ${createBoxes(serviceCounts.Pestañas, 5)}
             <div class="label">20%</div>
         </div>
         <div class="row">
-            <div class="label">Nails</div>
-            ${createBoxes(serviceCounts.Nails, 5)}
+            <div class="label">Uñas</div>
+            ${createBoxes(serviceCounts.Uñas, 5)}
             <div class="label">20%</div>
         </div>
         <div class="row">
@@ -65,8 +65,8 @@ function displayGrid(services) {
             <div class="label">20%</div>
         </div>
         <div class="row">
-            <div class="label">Retouches</div>
-            ${createBoxes(serviceCounts.Retouches, 5)}
+            <div class="label">Retoques</div>
+            ${createBoxes(serviceCounts.Retoques, 5)}
             <div class="label">30%</div>
         </div>
     `;
@@ -89,7 +89,7 @@ function checkDiscountEligibility(serviceCounts) {
     const discountMessage = document.getElementById('discount-message');
     discountMessage.style.display = 'none';
 
-    if (serviceCounts.Eyelashes >= 5 || serviceCounts.Nails >= 5 || serviceCounts.Pedicure >= 5 || serviceCounts.Retouches >= 5) {
+    if (serviceCounts.Pestañas >= 5 || serviceCounts.Uñas >= 5 || serviceCounts.Pedicure >= 5 || serviceCounts.Retoques >= 5) {
         discountMessage.style.display = 'block';
     }
 }

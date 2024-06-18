@@ -23,7 +23,7 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
     const dataContainer = document.getElementById('dataContainer');
 
     if (!phoneNumber) {
-        alert('Please enter a phone number');
+        alert('Por favor, introduzca un número de teléfono');
         return;
     }
 
@@ -41,7 +41,7 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
     } catch (e) {
         console.error("Error fetching document: ", e);
         messageElement.style.display = 'block';
-        messageElement.textContent = 'Error checking account';
+        messageElement.textContent = 'Error en cuenta corriente';
         dataContainer.innerHTML = '';
     }
 });

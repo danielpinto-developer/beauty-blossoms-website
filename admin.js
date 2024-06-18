@@ -25,7 +25,7 @@ document.getElementById('buscarButton').addEventListener('click', async () => {
     const registerButton = document.getElementById('registerButton');
 
     if (!phoneNumber) {
-        alert('Please enter a phone number');
+        alert('Por favor, introduzca un número de teléfono');
         return;
     }
 
@@ -65,7 +65,7 @@ document.getElementById('addButton').addEventListener('click', async () => {
     const phoneNumber = document.getElementById('new-phone-number').value;
 
     if (!name || !phoneNumber) {
-        alert('Please enter a name and phone number');
+        alert('Por favor ingrese un nombre y número de teléfono');
         return;
     }
 
@@ -74,11 +74,11 @@ document.getElementById('addButton').addEventListener('click', async () => {
             Name: name,
             services: []
         });
-        alert("New number added successfully!");
+        alert("Nuevo número agregado exitosamente!");
         location.reload(); // Refresh the page
     } catch (error) {
-        console.error('Error adding new number:', error);
-        alert('Error adding new number.');
+        console.error('Error al agregar un nuevo número:', error);
+        alert('Error al agregar un nuevo número.');
     }
 });
 
@@ -97,17 +97,17 @@ async function displayClientInfo(phoneNumber, clientName) {
             const userData = userDoc.data();
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(entry => {
-                    clientInfoDiv.innerHTML += `<p>Date: ${entry.date} - Service: ${entry.type}</p>`;
+                    clientInfoDiv.innerHTML += `<p>Fecha: ${entry.date} - Servicio: ${entry.type}</p>`;
                 });
             } else {
-                clientInfoDiv.innerHTML = '<p>No records found.</p>';
+                clientInfoDiv.innerHTML = '<p>No se encontraron registros.</p>';
             }
         } else {
-            clientInfoDiv.innerHTML = '<p>No records found.</p>';
+            clientInfoDiv.innerHTML = '<p>No se encontraron registros.</p>';
         }
     } catch (error) {
-        console.error('Error displaying client info:', error);
-        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
+        console.error('Error al mostrar la información del cliente:', error);
+        clientInfoDiv.innerHTML = '<p>Error al recuperar registros.</p>';
     }
 }
 
@@ -143,12 +143,12 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
             const updatedServices = [...(userData.services || []), { date, type: service }];
             await updateDoc(userRef, { services: updatedServices });
             displayClientInfo(phoneNumber, userData.Name);
-            alert("Service added successfully!");
+            alert("Servicio agregado exitosamente!");
             showTab('previous-section');
         }
     } catch (error) {
         console.error('Error updating Firestore:', error);
-        alert("Error adding service.");
+        alert("Error al agregar el servicio.");
     }
 });
 
@@ -178,14 +178,14 @@ async function displayDiscounts() {
             }
 
             if (!hasDiscounts) {
-                discountsDiv.innerHTML = '<p>No available discounts at the moment.</p>';
+                discountsDiv.innerHTML = '<p>No hay descuentos disponibles por el momento.</p>';
             }
         } else {
-            discountsDiv.innerHTML = '<p>No available discounts at the moment.</p>';
+            discountsDiv.innerHTML = '<p>No hay descuentos disponibles por el momento.</p>';
         }
     } catch (error) {
         console.error('Error displaying discounts:', error);
-        discountsDiv.innerHTML = '<p>Error fetching discounts.</p>';
+        discountsDiv.innerHTML = '<p>Error al obtener descuentos.</p>';
     }
 }
 
@@ -210,17 +210,17 @@ async function redeemDiscount(type) {
             await updateDoc(userDocRef, { services: updatedServices });
             console.log("Updated services:", updatedServices); // Add log
             displayDiscounts();
-            alert(`${type} discount redeemed successfully!`);
+            alert(`${type} descuento canjeado exitosamente!`);
 
             // Notify client page to reset the grid
             localStorage.setItem('redeemed', 'true');
         } else {
             console.error('Error redeeming discount: user document not found.');
-            alert('Error redeeming discount.');
+            alert('Error al canjear el descuento.');
         }
     } catch (error) {
         console.error('Error redeeming discount:', error);
-        alert('Error redeeming discount.');
+        alert('Error al canjear el descuento.');
     }
 }
 
