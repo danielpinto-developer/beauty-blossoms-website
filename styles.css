@@ -52,10 +52,6 @@ input {
     height: 30px;
 }
 
-#addServiceButton {
-    background-color: #19a337;
-}
-
 button {
     background-color: #007BFF;
     color: white;
@@ -172,6 +168,19 @@ button:hover {
     max-width: 75%;
 }
 
+.green-button {
+    background-color: #19a337;
+    color: white; /* Ensure the text is readable */
+    border: none; /* Remove any default border */
+    padding: 10px 20px; /* For better spacing */
+    border-radius: 5px; /* Match the existing style */
+    cursor: pointer; /* Show a pointer cursor on hover */
+}
+
+.green-button:hover {
+    background-color: #148f2b; /* Optional: a darker shade for hover effect */
+}
+
 @media (max-width: 600px) {
     body {
         padding-top: 5vh;
@@ -212,13 +221,14 @@ button:hover {
         margin: 0 2px; /* Adjusted margin for mobile */
     }
 
-    .label {
-        width: 50px; /* Adjusted width for mobile */
+    .row .label {
+        width: auto; /* Adjusted width for mobile */
         font-size: 0.8em; /* Smaller font size for mobile */
-        padding-right: 10px; /* Move label slightly to the left for mobile */
+        margin-left: -10px; /* Move label slightly to the left for mobile */
     }
 
     .row .label + .label {
+        font-weight: bold;
         margin-left: 10px; /* Move percentage labels slightly to the right */
     }
 }

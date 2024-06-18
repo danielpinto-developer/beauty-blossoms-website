@@ -186,7 +186,7 @@ async function displayDiscounts() {
 
                     const button = document.createElement('button');
                     button.textContent = 'Activar';
-                    button.style.backgroundColor = '#19a337';
+                    button.classList.add('green-button');
                     button.addEventListener('click', () => redeemDiscount(type));
 
                     serviceContainer.appendChild(p);
