@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
-    background: url('background.jpg') repeat;
+    background: url('/background1.jpg') repeat;
     background-size: cover;
     padding-top: 10vh;
 }
@@ -30,18 +30,20 @@ h1, h2, h3 {
     box-sizing: border-box;
 }
 
-.numero {
+.numero, .buttons-row, .service-selection {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-bottom: 20px;
 }
 
-input {
+.numero input {
     width: 100%;
     max-width: 150px;
     box-sizing: border-box;
     height: 30px;
+    margin-right: 10px;
 }
 
 button {
@@ -49,7 +51,6 @@ button {
     color: white;
     border: none;
     cursor: pointer;
-    margin-left: 10px;
     height: 30px;
     display: flex;
     align-items: center;
@@ -60,18 +61,61 @@ button {
     border-radius: 5px;
 }
 
-#quote {
-    font-family: Great Vibes;
-    font-weight: lighter;
-    margin: 0;
-}
-
 button:hover {
     background-color: #0056b3;
 }
 
-#clientInfo, #adminInfo {
+.tab-content {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.service-selection select {
+    margin-right: 10px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+    width: 100%;
+    max-width: 600px;
     margin-top: 20px;
+}
+
+.grid-item {
+    width: 100%;
+    padding-top: 100%; /* Maintain a square aspect ratio */
+    background-color: grey;
+    border: 1px solid black;
+    position: relative;
+}
+
+.grid-item.filled {
+    background-color: green;
+}
+
+.grid-item::after {
+    content: '';
+    display: block;
+    padding-bottom: 100%; /* Maintain a square aspect ratio */
+}
+
+.service-label, .discount-label {
+    grid-column: span 1;
+    align-self: center;
+    justify-self: start;
+}
+
+.discount-label {
+    justify-self: end;
+}
+
+#quote {
+    font-family: Great Vibes;
+    font-weight: lighter;
+    margin: 0;
 }
 
 @media (max-width: 600px) {
@@ -81,82 +125,20 @@ button:hover {
         margin: 0 20px;
     }
 
-    .numero {
-        flex-direction: row;
+    .numero, .buttons-row, .service-selection {
+        flex-direction: column;
         width: 100%;
-        justify-content: center;
     }
 
-    input {
-        width: calc(100% - 90px);
-        margin-bottom: 0;
+    .numero input, .service-selection select {
+        width: 100%;
+        max-width: none;
+        margin: 5px 0;
     }
 
     button {
-        width: auto;
-        margin-left: 10px;
+        width: 100%;
+        max-width: none;
+        margin: 5px 0;
     }
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 10px;
-    margin-top: 20px;
-}
-
-.grid-item {
-    width: 50px;
-    height: 50px;
-    background-color: grey;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-weight: bold;
-}
-
-.grid-item.green {
-    background-color: green;
-}
-
-.grid-item.text {
-    background-color: transparent;
-    color: black;
-    font-weight: normal;
-    text-align: left;
-    padding-left: 10px;
-}
-
-.buttons-row {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.buttons-row button {
-    margin-right: 10px;
-}
-
-/* Style for discount items */
-.discount-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-/* Optional: Style the discount button */
-.discount-item button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-    height: 30px;
-    padding: 0 20px;
-    border-radius: 5px;
-}
-
-.discount-item button:hover {
-    background-color: #0056b3;
 }
