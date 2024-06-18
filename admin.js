@@ -95,6 +95,8 @@ async function addService() {
     const phoneNumber = urlParams.get('phone');
     const date = new Date().toLocaleDateString('en-GB');
 
+    console.log(`Adding service: ${service} for phone number: ${phoneNumber} on date: ${date}`);
+
     try {
         await updateDoc(doc(db, "users", phoneNumber), {
             services: arrayUnion({ date, type: service })
