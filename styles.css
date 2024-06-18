@@ -89,11 +89,15 @@ button:hover {
 }
 
 .service-label {
-    background-color: lightgrey;
+    grid-column: 1;
+    display: flex;
+    align-items: center;
 }
 
 .discount-label {
-    background-color: lightgrey;
+    grid-column: 8;
+    display: flex;
+    align-items: center;
 }
 
 .filled {

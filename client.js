@@ -42,7 +42,7 @@ async function displayClientInfo() {
             const serviceTypes = ["Eyelashes", "Nails", "Pedicure", "Retouches"];
             serviceTypes.forEach(serviceType => {
                 const label = document.createElement('div');
-                label.classList.add('grid-item', 'service-label');
+                label.classList.add('service-label');
                 label.textContent = serviceType;
                 serviceGrid.appendChild(label);
 
@@ -53,7 +53,7 @@ async function displayClientInfo() {
                 }
 
                 const discountLabel = document.createElement('div');
-                discountLabel.classList.add('grid-item', 'discount-label');
+                discountLabel.classList.add('discount-label');
                 discountLabel.textContent = serviceType === "Retouches" ? "30%" : "20%";
                 serviceGrid.appendChild(discountLabel);
             });
