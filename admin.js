@@ -89,7 +89,7 @@ document.querySelector('.tab-button[onclick="showTab(\'service-history\')"]').ad
     document.getElementById('add-points').style.display = 'none';
 });
 
-async function addService() {
+document.getElementById('addServiceButton').addEventListener('click', async () => {
     const service = document.getElementById('service').value;
     const urlParams = new URLSearchParams(window.location.search);
     const phoneNumber = urlParams.get('phone');
@@ -108,10 +108,15 @@ async function addService() {
 
         alert('Service added successfully');
         displayServiceHistory(phoneNumber); // Refresh the service history after adding the service
+
+        // Switch back to the previous tab after adding the service
+        showTab('service-history');
+        document.querySelector('.tabs').style.display = 'flex';
+        document.getElementById('add-points').style.display = 'none';
     } catch (error) {
         console.error('Error adding service:', error);
     }
-}
+});
 
 window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
