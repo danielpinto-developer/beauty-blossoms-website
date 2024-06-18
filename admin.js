@@ -34,7 +34,6 @@ document.getElementById('checkPhoneNumberButton').addEventListener('click', asyn
             document.querySelector('.numero').style.display = 'none';
             document.querySelector('.tabs').style.display = 'flex';
             document.getElementById('client-info').style.display = 'block';
-            displayServiceHistory(phoneNumber);
             window.location.href = `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`;
         } else {
             messageElement.style.display = 'block';
@@ -107,9 +106,8 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
         console.log('Service added to Firestore');
 
         alert('Service added successfully');
-        displayServiceHistory(phoneNumber); // Refresh the service history after adding the service
+        displayServiceHistory(phoneNumber);
 
-        // Switch back to the previous tab after adding the service
         showTab('service-history');
         document.querySelector('.tabs').style.display = 'flex';
         document.getElementById('add-points').style.display = 'none';

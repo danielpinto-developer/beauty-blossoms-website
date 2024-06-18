@@ -10,20 +10,20 @@
     <div class="background-container">
       <h1>Hello Lucy</h1>
       <h3>Añadir más puntos</h3>
-      <div class="numero">
+      <div class="admin-container numero">
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="checkPhoneNumberButton">Buscar</button>
       </div>
       <p id="message" style="color: red; display: none">Cuenta no encontrada</p>
-      <div class="tabs" style="display: none">
-        <button class="tab-button" onclick="showTab('service-history')">
-          Previous
-        </button>
-        <button class="tab-button" onclick="showTab('add-points')">
-          Add Points
-        </button>
-      </div>
       <div id="client-info" style="display: none">
+        <div class="tabs">
+          <button class="tab-button" onclick="showTab('service-history')">
+            Previous
+          </button>
+          <button class="tab-button" onclick="showTab('add-points')">
+            Add Points
+          </button>
+        </div>
         <div
           id="service-history"
           class="tab-content"
@@ -38,9 +38,10 @@
               <option value="Pedicure">Pedicure</option>
               <option value="Retouches">Retouches</option>
             </select>
-            <button onclick="addService()">Add Service</button>
+            <button id="addServiceButton">Add Service</button>
           </div>
         </div>
+        <div id="discount-message" style="display: none"></div>
       </div>
     </div>
     <script type="module" src="admin.js"></script>
