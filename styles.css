@@ -30,7 +30,40 @@ h1, h2, h3 {
     box-sizing: border-box;
 }
 
-.numero, .buttons-row, .service-selection {
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.service-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.box {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+}
+
+.box.green {
+    background-color: green;
+}
+
+.box.grey {
+    background-color: grey;
+}
+
+#discount-message {
+    margin-top: 20px;
+    color: green;
+    font-weight: bold;
+}
+
+.numero {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,59 +95,6 @@ button {
 
 button:hover {
     background-color: #0056b3;
-}
-
-#quote {
-    font-family: Great Vibes;
-    font-weight: lighter;
-    margin: 0;
-}
-
-#clientInfo, #adminInfo {
-    margin-top: 20px;
-}
-
-.tab-content {
-    display: none;
-    margin-top: 20px;
-}
-
-.buttons-row {
-    justify-content: space-between;
-    width: 100%;
-}
-
-.service-selection {
-    flex-direction: row;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.grid-item {
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: gray;
-    color: white;
-    border-radius: 5px;
-}
-
-.green {
-    background-color: green;
-}
-
-.discount-message {
-    margin-top: 20px;
-    color: green;
 }
 
 @media (max-width: 600px) {

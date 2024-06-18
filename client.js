@@ -26,7 +26,7 @@ async function displayClientInfo() {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            const services = {
+            const servicesCount = {
                 Eyelashes: 0,
                 Nails: 0,
                 Pedicure: 0,
@@ -34,39 +34,62 @@ async function displayClientInfo() {
             };
 
             userData.services.forEach(service => {
-                services[service.type]++;
+                servicesCount[service.type]++;
             });
 
-            const gridContainer = document.querySelector('.grid-container');
-            gridContainer.innerHTML = '';
+            const gridContainer = document.getElementById('grid-container');
+            gridContainer.innerHTML = `
+                <div class="service-row">
+                    <span>Eyelashes</span>
+                    ${generateBoxes(servicesCount.Eyelashes)}
+                    <span>20%</span>
+                </div>
+                <div class="service-row">
+                    <span>Nails</span>
+                    ${generateBoxes(servicesCount.Nails)}
+                    <span>20%</span>
+                </div>
+                <div class="service-row">
+                    <span>Pedicure</span>
+                    ${generateBoxes(servicesCount.Pedicure)}
+                    <span>20%</span>
+                </div>
+                <div class="service-row">
+                    <span>Retouches</span>
+                    ${generateBoxes(servicesCount.Retouches)}
+                    <span>30%</span>
+                </div>
+            `;
 
-            Object.keys(services).forEach(service => {
-                for (let i = 0; i < 5; i++) {
-                    const gridItem = document.createElement('div');
-                    gridItem.className = 'grid-item';
-                    if (i < services[service]) {
-                        gridItem.classList.add('green');
-                    }
-                    gridContainer.appendChild(gridItem);
-                }
-            });
-
-            const discountMessage = document.querySelector('.discount-message');
-            discountMessage.style.display = 'none';
-
-            Object.keys(services).forEach(service => {
-                if (services[service] >= 5) {
-                    discountMessage.style.display = 'block';
-                    discountMessage.textContent = "Congrats, schedule your next appointment to receive your discount";
-                }
-            });
+            checkForDiscounts(servicesCount);
         } else {
-            clientInfoDiv.innerHTML = '<p>No records found.</p>';
+            document.getElementById('client-info').innerHTML = '<p>No records found.</p>';
         }
     } catch (error) {
         console.error('Error displaying client info:', error);
-        clientInfoDiv.innerHTML = '<p>Error fetching records.</p>';
+        document.getElementById('client-info').innerHTML = '<p>Error fetching records.</p>';
     }
+}
+
+function generateBoxes(count) {
+    let boxes = '';
+    for (let i = 0; i < 5; i++) {
+        boxes += `<div class="box ${i < count ? 'green' : 'grey'}"></div>`;
+    }
+    return boxes;
+}
+
+function checkForDiscounts(servicesCount) {
+    const discountMessage = document.getElementById('discount-message');
+    discountMessage.style.display = 'none';
+    discountMessage.innerHTML = '';
+
+    Object.keys(servicesCount).forEach(service => {
+        if (servicesCount[service] >= 5) {
+            discountMessage.style.display = 'block';
+            discountMessage.innerHTML = 'Congrats, schedule your next appointment to receive your discount!';
+        }
+    });
 }
 
 window.onload = displayClientInfo;
