@@ -84,11 +84,12 @@ document.getElementById('addServiceButton').addEventListener('click', async () =
     const service = document.getElementById('service').value;
     const phoneNumber = new URLSearchParams(window.location.search).get('phone');
     const date = new Date().toLocaleDateString('en-GB');
+    const timestamp = new Date().getTime(); // Ensure uniqueness
 
     try {
         const userRef = doc(db, "users", phoneNumber);
         await updateDoc(userRef, {
-            services: arrayUnion({ date: date, type: service })
+            services: arrayUnion({ date: date, type: service, timestamp: timestamp })
         });
         alert('Service added successfully!');
         displayClientInfo(phoneNumber);
