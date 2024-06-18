@@ -64,6 +64,7 @@ button {
     font-family: cursive;
     font-weight: lighter;
     margin: 0;
+    margin-bottom: 30px;
 }
 
 button:hover {
