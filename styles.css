@@ -107,6 +107,7 @@ button:hover {
     align-items: center;
     margin-bottom: 10px;
     width: 100%;
+    padding-left: 20px;
 }
 
 .service-container p {
