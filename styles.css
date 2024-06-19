@@ -223,7 +223,7 @@ button:hover {
     }
 
     .row .label {
-        width: auto; /* Adjusted width for mobile */
+        width: 50px; /* Adjusted width for mobile */
         font-size: 0.8em; /* Smaller font size for mobile */
         padding-left: 10px; /* Move label slightly to the left for mobile */
     }
