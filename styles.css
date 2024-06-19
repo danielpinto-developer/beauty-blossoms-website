@@ -103,13 +103,15 @@ button:hover {
 
 .service-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 .service-container p {
-    margin-right: 10px;
+    margin-right: 0;
+    flex: 1;
 }
 
 .row {
