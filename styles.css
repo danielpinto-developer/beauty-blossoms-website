@@ -129,7 +129,7 @@ button:hover {
 }
 
 .box.filled {
-    background-color: green;
+    background-color: #A782EC;
 }
 
 .label {
@@ -225,7 +225,7 @@ button:hover {
     .row .label {
         width: 50px; /* Adjusted width for mobile */
         font-size: 0.8em; /* Smaller font size for mobile */
-        padding-left: 10px; /* Move label slightly to the left for mobile */
+        padding-right: 10px; /* Move label slightly to the left for mobile */
     }
 
     .row .label + .label {
