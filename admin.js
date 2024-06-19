@@ -97,7 +97,7 @@ async function displayClientInfo(phoneNumber, clientName) {
         const header = document.getElementById('header');
 
         header.textContent = 'Info de Cuenta';
-        clientDetails.innerHTML = `Nombre: ${clientName}<br>Teléfono: ${phoneNumber}`;
+        clientDetails.innerHTML = `${clientName} - ${phoneNumber}`;
         clientInfoDiv.innerHTML = '';
 
         if (userDoc.exists()) {
@@ -105,7 +105,7 @@ async function displayClientInfo(phoneNumber, clientName) {
             if (userData.services && userData.services.length > 0) {
                 userData.services.forEach(entry => {
                     const translatedService = serviceTranslation[entry.type] || entry.type;
-                    clientInfoDiv.innerHTML += `<p>${entry.date} - ${translatedService}</p>`;
+                    clientInfoDiv.innerHTML += `<p>${translatedService} - ${entry.date}</p>`;
                 });
             } else {
                 clientInfoDiv.innerHTML = '<p>No se encontraron registros.</p>';
@@ -189,8 +189,8 @@ async function displayDiscounts() {
                     button.classList.add('green-button');
                     button.addEventListener('click', () => redeemDiscount(type));
 
-                    serviceContainer.appendChild(p);
                     serviceContainer.appendChild(button);
+                    serviceContainer.appendChild(p);
                     discountsDiv.appendChild(serviceContainer);
                 }
             }
