@@ -152,6 +152,7 @@ button:hover {
     justify-content: center;
     width: 100%;
     gap: 5px;
+    margin-top: 10px;
 }
 
 .register-inputs input {
@@ -161,11 +162,13 @@ button:hover {
 #new-name {
     flex: 1;
     max-width: 25%;
+    border-radius: 5px;
 }
 
 #new-phone-number {
     flex: 3;
     max-width: 75%;
+    border-radius: 5px;
 }
 
 .green-button {
