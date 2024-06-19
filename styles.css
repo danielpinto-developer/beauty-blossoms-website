@@ -169,7 +169,7 @@ button:hover {
 }
 
 .green-button {
-    background-color: #19a337;
+    background-color: #A782EC;
     color: white; /* Ensure the text is readable */
     border: 1px solid black; /* Remove any default border */
     padding: 10px 20px; /* For better spacing */
@@ -178,7 +178,7 @@ button:hover {
 }
 
 .green-button:hover {
-    background-color: #148f2b; /* Optional: a darker shade for hover effect */
+    background-color: #c8b3f0; /* Optional: a darker shade for hover effect */
 }
 
 @media (max-width: 600px) {
