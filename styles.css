@@ -163,12 +163,14 @@ button:hover {
     flex: 1;
     max-width: 25%;
     border-radius: 5px;
+    border: 1px solid black;
 }
 
 #new-phone-number {
     flex: 3;
     max-width: 75%;
     border-radius: 5px;
+    border: 1px solid black;
 }
 
 .green-button {
