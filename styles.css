@@ -137,10 +137,6 @@ button:hover {
     text-align: center;
 }
 
-.spacing {
-    height: 20px;
-}
-
 .modal-content {
     display: flex;
     flex-direction: column;
