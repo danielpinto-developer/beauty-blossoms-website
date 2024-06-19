@@ -23,7 +23,7 @@ async function displayClientInfo() {
     const name = urlParams.get('name');
 
     const clientInfoDiv = document.getElementById('client-info');
-    clientInfoDiv.innerHTML = `<p>Teléfono: ${phoneNumber}</p><p>Nombre: ${name}</p>`;
+    clientInfoDiv.innerHTML = `<p>${name} - ${phoneNumber}</p>`;
 
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
