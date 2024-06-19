@@ -23,7 +23,7 @@ async function displayClientInfo() {
     const name = urlParams.get('name');
 
     const clientInfoDiv = document.getElementById('client-info');
-    clientInfoDiv.innerHTML = `<p>${name} - ${phoneNumber}</p>`;
+    clientInfoDiv.innerHTML = `<p>${name}, dicen que la felicidad no tiene precio, pero nuestras clientas te dirán lo contrario.</p>`;
 
     try {
         const userDoc = await getDoc(doc(db, "users", phoneNumber));
