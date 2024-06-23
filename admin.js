@@ -85,14 +85,17 @@ document.getElementById("addButton").addEventListener("click", async () => {
   const phoneNumber = document.getElementById("new-phone-number").value;
   const bday = document.getElementById("new-birthday").value;
 
-  if (!name || !phoneNumber) {
-    alert("Por favor ingrese un nombre y número de teléfono");
+  if (!name || !phoneNumber || !bday) {
+    alert(
+      "Por favor ingrese un nombre, número de teléfono y fecha de cumpleaños"
+    );
     return;
   }
 
   try {
     await setDoc(doc(db, "users", phoneNumber), {
       Name: name,
+      Birthday: bday,
       services: [],
     });
     alert("Nuevo número agregado exitosamente!");
@@ -111,11 +114,13 @@ async function displayClientInfo(phoneNumber, clientName) {
     const header = document.getElementById("header");
 
     header.textContent = "Info de Cuenta";
-    clientDetails.innerHTML = `${clientName} - ${phoneNumber} - ${bday}`;
-    clientInfoDiv.innerHTML = "";
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
+      const bday = userData.Birthday || "No especificado";
+      clientDetails.innerHTML = `${clientName} - ${phoneNumber} - ${bday}`;
+      clientInfoDiv.innerHTML = "";
+
       if (userData.services && userData.services.length > 0) {
         userData.services.forEach((entry) => {
           const translatedService =
