@@ -33,7 +33,7 @@ async function displayClientInfo() {
     if (userDoc.exists()) {
       const userData = userDoc.data();
       const bday = userData.Birthday || "No especificado";
-      clientInfoDiv.innerHTML = `<p>${name} - ${phoneNumber} - Cumpleaños: ${bday}</p>`;
+      clientInfoDiv.innerHTML = `<p>${name} - ${phoneNumber} - ${bday}</p>`;
       displayGrid(userData.services);
     } else {
       clientInfoDiv.innerHTML = "<p>No se encontraron registros.</p>";
