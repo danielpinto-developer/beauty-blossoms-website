@@ -157,19 +157,22 @@ button:hover {
 }
 
 .register-inputs input {
-    height: 30px;
+    display: flex;
+    flex-direction: column;
+    height: 60px;
 }
 
 #new-name {
-    flex: 1;
-    max-width: 25%;
     border-radius: 5px;
     border: 1px solid black;
 }
 
 #new-phone-number {
-    flex: 3;
-    max-width: 75%;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+#new-birthday {
     border-radius: 5px;
     border: 1px solid black;
 }
