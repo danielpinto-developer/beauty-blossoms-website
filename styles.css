@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
@@ -98,11 +97,11 @@ button {
 }
 
 #quote {
+    font-family: cursive;
     font-weight: lighter;
     margin: 0;
     margin-top: 20px;
     font-size: x-large;
-    text-align: center;
 }
 
 button:hover {
@@ -134,15 +133,10 @@ button:hover {
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
-    width: 100%;
-    padding-left: 20px;
 }
 
 .service-container p {
-    margin: 0;
-    margin-left: 10px;
-    flex: none;
-    min-width: 100px;
+    margin-right: 10px;
 }
 
 .row {
@@ -162,7 +156,7 @@ button:hover {
 }
 
 .box.filled {
-    background-color: #A782EC;
+    background-color: green;
 }
 
 .label {
@@ -182,11 +176,9 @@ button:hover {
 
 .register-inputs {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     width: 100%;
     gap: 5px;
-    margin-top: 10px;
 }
 
 .register-inputs input {
@@ -194,66 +186,41 @@ button:hover {
 }
 
 #new-name {
-    border-radius: 5px;
-    border: 1px solid black;
+    flex: 1;
+    max-width: 25%;
 }
 
 #new-phone-number {
-    border-radius: 5px;
-    border: 1px solid black;
+    flex: 3;
+    max-width: 75%;
 }
 
 #new-birthday {
-    border-radius: 5px;
-    border: 1px solid black;
+    flex: 1;
+    max-width: 100%;
 }
 
 .green-button {
-    background-color: #7500b4;
-    color: white; /* Ensure the text is readable */
-    border: 1px solid black; /* Remove any default border */
-    padding: 10px 20px; /* For better spacing */
-    border-radius: 5px; /* Match the existing style */
-    cursor: pointer; /* Show a pointer cursor on hover */
-}
-
-.green-button:hover {
-    background-color: #5e009a; /* Optional: a darker shade for hover effect */
-}
-
-.admin-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.admin-form input, .admin-form textarea {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.admin-form textarea {
-    resize: vertical;
-    height: 150px;
-}
-
-.admin-form button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #7500b4;
+    background-color: #19a337;
     color: white;
-    font-size: 16px;
+    border: 1px solid black;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.admin-form button:hover {
-    background-color: #5e009a;
+.green-button:hover {
+    background-color: #155d27;
+}
+
+#discount-message {
+    color: green;
+}
+
+.previous-section p {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 @media (max-width: 600px) {
@@ -291,22 +258,18 @@ button:hover {
     }
 
     .box {
-        width: 30px; /* Further reduced size for mobile */
-        height: 30px; /* Further reduced size for mobile */
-        margin: 0 2px; /* Adjusted margin for mobile */
+        width: 30px;
+        height: 30px;
+        margin: 0 2px;
     }
 
     .row .label {
-        width: 50px; /* Adjusted width for mobile */
-        font-size: 0.8em; /* Smaller font size for mobile */
-        padding-right: 10px; /* Move label slightly to the left for mobile */
+        width: 50px;
+        font-size: 0.8em;
+        padding-right: 10px;
     }
 
     .row .label + .label {
-        margin-left: -10px; /* Move percentage labels slightly to the right */
-    }
-
-    .admin-form input, .admin-form textarea {
-        width: 100%;
+        margin-left: -10px;
     }
 }
