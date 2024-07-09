@@ -10,19 +10,37 @@ body {
     padding-top: 10vh;
 }
 
-h1, h2, h3 {
-    font-family: cursive;
-    color: black;
-    margin: 0;
-    text-align: center;
+nav {
+    width: 100%;
+    background-color: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
 
-.logo {
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0;
+}
+
+nav ul li a {
     display: block;
-    margin: 5px auto;
-    max-width: 350px;
-    height: auto;
-    opacity: 1;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: #575757;
 }
 
 .background-container {
@@ -31,7 +49,7 @@ h1, h2, h3 {
     max-width: 600px;
     opacity: 0.9;
     padding: 40px;
-    margin: 0 20px;
+    margin: 100px 20px 20px; /* Adjusted margin to account for the nav bar */
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -39,18 +57,10 @@ h1, h2, h3 {
     box-sizing: border-box;
 }
 
-.numero {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-input {
-    width: 100%;
-    max-width: 150px;
-    box-sizing: border-box;
-    height: 30px;
+h1, h2, h3 {
+    color: black;
+    margin: 0;
+    text-align: center;
 }
 
 button {
@@ -58,184 +68,51 @@ button {
     color: white;
     border: none;
     cursor: pointer;
-    margin-left: 10px;
-    height: 30px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
     text-align: center;
     padding: 0 20px;
     border-radius: 5px;
-}
-
-#quote {
-    font-weight: lighter;
-    margin: 0;
-    margin-top: 20px;
-    font-size: x-large;
-    text-align: center;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-#clientInfo, #adminInfo {
-    margin-top: -10px;
-}
-
-.buttons-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.service-selection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.service-selection select {
-    margin-right: 10px;
-}
-
-.service-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    width: 100%;
-    padding-left: 20px;
-}
-
-.service-container p {
-    margin: 0;
-    margin-left: 10px;
-    flex: none;
-    min-width: 100px;
-}
-
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px 0;
-}
-
-.box {
-    width: 40px;
-    height: 40px;
-    margin: 0 5px;
-    background-color: grey;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-.box.filled {
-    background-color: #A782EC;
-}
-
-.label {
-    width: 80px;
-    text-align: center;
-}
-
-.modal-content {
+form {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    width: 100%;
 }
 
-.register-inputs {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    gap: 5px;
+form label {
     margin-top: 10px;
 }
 
-.register-inputs input {
-    height: 30px;
+form input, form textarea {
+    padding: 10px;
+    margin-top: 5px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-#new-name {
+form button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
     border-radius: 5px;
-    border: 1px solid black;
+    margin-top: 20px;
 }
 
-#new-phone-number {
-    border-radius: 5px;
-    border: 1px solid black;
-}
-
-#new-birthday {
-    border-radius: 5px;
-    border: 1px solid black;
-}
-
-.green-button {
-    background-color: #7500b4;
-    color: white; /* Ensure the text is readable */
-    border: 1px solid black; /* Remove any default border */
-    padding: 10px 20px; /* For better spacing */
-    border-radius: 5px; /* Match the existing style */
-    cursor: pointer; /* Show a pointer cursor on hover */
-}
-
-.green-button:hover {
-    background-color: #c8b3f0; /* Optional: a darker shade for hover effect */
-}
-
-@media (max-width: 600px) {
-    body {
-        padding-top: 5vh;
-    }
-
-    .background-container {
-        width: calc(100% - 20px);
-        padding: 20px;
-        margin: 0 10px;
-    }
-
-    .logo {
-        max-width: 250px;
-    }
-
-    .numero {
-        flex-direction: row;
-        align-items: center;
-    }
-
-    input {
-        flex: 1;
-        margin-bottom: 0;
-    }
-
-    button {
-        flex: 0 0 auto;
-        margin-left: 10px;
-    }
-
-    #quote {
-        font-size: large;
-    }
-
-    .box {
-        width: 30px; /* Further reduced size for mobile */
-        height: 30px; /* Further reduced size for mobile */
-        margin: 0 2px; /* Adjusted margin for mobile */
-    }
-
-    .row .label {
-        width: 50px; /* Adjusted width for mobile */
-        font-size: 0.8em; /* Smaller font size for mobile */
-        padding-right: 10px; /* Move label slightly to the left for mobile */
-    }
-
-    .row .label + .label {
-        margin-left: -10px; /* Move percentage labels slightly to the right */
-    }
+form button:hover {
+    background-color: #0056b3;
 }
