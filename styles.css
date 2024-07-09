@@ -217,7 +217,7 @@ button:hover {
     align-items: center;
     margin: 0 auto;
     max-width: 80%; /* Adjust this value as needed */
-    padding-left: 40px; /* Shift to the right */
+    padding-left: 80px; /* Shift to the right */
 }
 
 @media (max-width: 600px) {

@@ -58,7 +58,7 @@ document.getElementById("buscarButton").addEventListener("click", async () => {
           userData.Name
         )}`
       );
-      displayClientInfo(phoneNumber, userData.Name);
+      displayClientInfo(phoneNumber, userData.Name, userData.Birthday);
     } else {
       messageElement.style.display = "block";
       messageElement.textContent = "Cuenta no encontrada";
@@ -106,7 +106,7 @@ document.getElementById("addButton").addEventListener("click", async () => {
   }
 });
 
-async function displayClientInfo(phoneNumber, clientName) {
+async function displayClientInfo(phoneNumber, clientName, bday) {
   try {
     const userDoc = await getDoc(doc(db, "users", phoneNumber));
     const clientInfoDiv = document.getElementById("previous-section");
@@ -117,16 +117,19 @@ async function displayClientInfo(phoneNumber, clientName) {
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      const bday = userData.Birthday || "No especificado";
-      clientDetails.innerHTML = `${clientName} - ${phoneNumber} - ${bday}`;
+      const birthday = bday || "No especificado";
+      clientDetails.innerHTML = `${clientName} - ${phoneNumber} - ${birthday}`;
       clientInfoDiv.innerHTML = "";
 
       if (userData.services && userData.services.length > 0) {
-        userData.services.forEach((entry) => {
-          const translatedService =
-            serviceTranslation[entry.type] || entry.type;
-          clientInfoDiv.innerHTML += `<p>    ${entry.date} - ${translatedService}</p>`;
-        });
+        userData.services
+          .slice()
+          .reverse()
+          .forEach((entry) => {
+            const translatedService =
+              serviceTranslation[entry.type] || entry.type;
+            clientInfoDiv.innerHTML += `<p>${entry.date} - ${translatedService}</p>`;
+          });
       } else {
         clientInfoDiv.innerHTML = "<p>No se encontraron registros.</p>";
       }
@@ -173,11 +176,11 @@ document
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const updatedServices = [
-          ...(userData.services || []),
           { date, type: service },
+          ...(userData.services || []),
         ];
         await updateDoc(userRef, { services: updatedServices });
-        displayClientInfo(phoneNumber, userData.Name);
+        displayClientInfo(phoneNumber, userData.Name, userData.Birthday);
         alert("Servicio agregado exitosamente!");
         showTab("previous-section");
       }
