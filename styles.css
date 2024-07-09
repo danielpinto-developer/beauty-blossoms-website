@@ -10,44 +10,6 @@ body {
     padding-top: 10vh;
 }
 
-h1, h2, h3 {
-    color: black;
-    margin: 0;
-    text-align: center;
-}
-
-.logo {
-    display: block;
-    margin: 5px auto;
-    max-width: 350px;
-    height: auto;
-    opacity: 1;
-}
-
-.background-container {
-    background-color: whitesmoke;
-    width: calc(100% - 40px);
-    max-width: 600px;
-    opacity: 0.9;
-    padding: 40px;
-    margin: 100px 20px 20px; /* Adjusted margin to account for the nav bar */
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
-}
-
-#quote {
-    font-family: cursive; /* Ensure this is set to cursive */
-    font-weight: lighter;
-    margin: 0;
-    margin-top: 20px;
-    font-size: x-large;
-    text-align: center;
-}
-
-/* New styles for the navigation bar */
 nav {
     width: 100%;
     background-color: #000;
@@ -79,6 +41,43 @@ nav ul li a {
 
 nav ul li a:hover {
     background-color: #575757;
+}
+
+.background-container {
+    background-color: whitesmoke;
+    width: calc(100% - 40px);
+    max-width: 600px;
+    opacity: 0.9;
+    padding: 40px;
+    margin: 100px 20px 20px; /* Adjusted margin to account for the nav bar */
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+h1, h2, h3 {
+    color: black;
+    margin: 0;
+    text-align: center;
+}
+
+#quote {
+    font-family: cursive; /* Ensure this is set to cursive */
+    font-weight: lighter;
+    margin: 0;
+    margin-top: 20px;
+    font-size: x-large;
+    text-align: center;
+}
+
+.logo {
+    display: block;
+    margin: 5px auto;
+    max-width: 350px;
+    height: auto;
+    opacity: 1;
 }
 
 .numero {
@@ -148,4 +147,80 @@ form button {
 
 form button:hover {
     background-color: #0056b3;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.box {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    background-color: grey;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.box.filled {
+    background-color: #A782EC;
+}
+
+.label {
+    width: 80px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding-top: 5vh;
+    }
+
+    .background-container {
+        width: calc(100% - 20px);
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    .logo {
+        max-width: 250px;
+    }
+
+    .numero {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    input {
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    button {
+        flex: 0 0 auto;
+        margin-left: 10px;
+    }
+
+    #quote {
+        font-size: large;
+    }
+
+    .box {
+        width: 30px; /* Further reduced size for mobile */
+        height: 30px; /* Further reduced size for mobile */
+        margin: 0 2px; /* Adjusted margin for mobile */
+    }
+
+    .row .label {
+        width: 50px; /* Adjusted width for mobile */
+        font-size: 0.8em; /* Smaller font size for mobile */
+        padding-right: 10px; /* Move label slightly to the left for mobile */
+    }
+
+    .row .label + .label {
+        margin-left: -10px; /* Move percentage labels slightly to the right */
+    }
 }
