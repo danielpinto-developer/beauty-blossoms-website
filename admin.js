@@ -146,19 +146,21 @@ document.getElementById("showPreviousButton").addEventListener("click", () => {
   document.getElementById("previous-section").style.display = "block";
   document.getElementById("add-points-section").style.display = "none";
   document.getElementById("discounts-section").style.display = "none";
+  document.querySelector(".buttons-row").style.justifyContent = "center";
 });
 
 document.getElementById("showAddPointsButton").addEventListener("click", () => {
   document.getElementById("previous-section").style.display = "none";
   document.getElementById("add-points-section").style.display = "block";
   document.getElementById("discounts-section").style.display = "none";
+  document.querySelector(".buttons-row").style.justifyContent = "center";
 });
 
 document.getElementById("showDiscountsButton").addEventListener("click", () => {
   document.getElementById("previous-section").style.display = "none";
   document.getElementById("add-points-section").style.display = "none";
   document.getElementById("discounts-section").style.display = "block";
-  displayDiscounts();
+  document.querySelector(".buttons-row").style.justifyContent = "center";
 });
 
 document
