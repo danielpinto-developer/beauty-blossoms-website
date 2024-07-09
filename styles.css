@@ -210,6 +210,14 @@ button:hover {
     min-width: 100px;
 }
 
+#previous-section p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 80%; /* Adjust this value as needed */
+}
+
 @media (max-width: 600px) {
     .background-container {
         width: calc(100% - 20px);
