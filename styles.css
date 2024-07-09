@@ -193,6 +193,23 @@ button:hover {
     background-color: #148927;
 }
 
+.service-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+    padding-left: 20px;
+    text-align: center; /* Center align text */
+}
+
+.service-container p {
+    margin: 0;
+    margin-left: 10px;
+    flex: none;
+    min-width: 100px;
+}
+
 @media (max-width: 600px) {
     .background-container {
         width: calc(100% - 20px);
