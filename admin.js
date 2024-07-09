@@ -58,7 +58,7 @@ document.getElementById("buscarButton").addEventListener("click", async () => {
           userData.Name
         )}`
       );
-      displayClientInfo(phoneNumber, userData.Name, userData.Birthday);
+      displayClientInfo(phoneNumber, userData.Name);
     } else {
       messageElement.style.display = "block";
       messageElement.textContent = "Cuenta no encontrada";
@@ -106,7 +106,7 @@ document.getElementById("addButton").addEventListener("click", async () => {
   }
 });
 
-async function displayClientInfo(phoneNumber, clientName, bday) {
+async function displayClientInfo(phoneNumber, clientName) {
   try {
     const userDoc = await getDoc(doc(db, "users", phoneNumber));
     const clientInfoDiv = document.getElementById("previous-section");
@@ -117,8 +117,8 @@ async function displayClientInfo(phoneNumber, clientName, bday) {
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      const birthday = bday || "No especificado";
-      clientDetails.innerHTML = `${clientName} - ${phoneNumber} - ${birthday}`;
+      const bday = userData.Birthday || "No especificado";
+      clientDetails.innerHTML = `${clientName} - ${phoneNumber} - ${bday}`;
       clientInfoDiv.innerHTML = "";
 
       if (userData.services && userData.services.length > 0) {
@@ -160,37 +160,9 @@ document.getElementById("showDiscountsButton").addEventListener("click", () => {
   document.getElementById("previous-section").style.display = "none";
   document.getElementById("add-points-section").style.display = "none";
   document.getElementById("discounts-section").style.display = "block";
+  displayDiscounts();
   document.querySelector(".buttons-row").style.justifyContent = "center";
 });
-
-document
-  .getElementById("addServiceButton")
-  .addEventListener("click", async () => {
-    const service = document.getElementById("service").value;
-    const phoneNumber = new URLSearchParams(window.location.search).get(
-      "phone"
-    );
-    const date = new Date().toLocaleDateString("en-GB");
-
-    try {
-      const userRef = doc(db, "users", phoneNumber);
-      const userDoc = await getDoc(userRef);
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        const updatedServices = [
-          { date, type: service },
-          ...(userData.services || []),
-        ];
-        await updateDoc(userRef, { services: updatedServices });
-        displayClientInfo(phoneNumber, userData.Name, userData.Birthday);
-        alert("Servicio agregado exitosamente!");
-        showTab("previous-section");
-      }
-    } catch (error) {
-      console.error("Error updating Firestore:", error);
-      alert("Error al agregar el servicio.");
-    }
-  });
 
 async function displayDiscounts() {
   const phoneNumber = new URLSearchParams(window.location.search).get("phone");
