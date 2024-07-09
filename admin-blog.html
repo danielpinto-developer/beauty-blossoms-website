@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Blog - BB 27 Studio</title>
+    <title>Admin Blog - Beauty Blossoms</title>
     <link rel="icon" type="image/x-icon" href="favicon.png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -17,17 +17,20 @@
       </ul>
     </nav>
     <div class="background-container">
-      <h1>Crear Nueva Publicación</h1>
-      <form id="blog-form">
-        <label for="title">Título:</label>
-        <input type="text" id="title" name="title" />
-        <label for="content">Contenido:</label>
-        <textarea id="content" name="content"></textarea>
-        <label for="tags">Etiquetas:</label>
-        <input type="text" id="tags" name="tags" />
-        <button type="submit">Publicar</button>
-      </form>
+      <h1>Admin Blog</h1>
+      <div class="admin-form">
+        <input type="text" id="title" placeholder="Título" />
+        <textarea id="content" placeholder="Contenido"></textarea>
+        <input
+          type="text"
+          id="tags"
+          placeholder="Etiquetas (separadas por comas)"
+        />
+        <button id="createPostButton" style="background-color: #7500b4">
+          Crear Publicación
+        </button>
+      </div>
     </div>
-    <script src="admin-blog.js"></script>
+    <script type="module" src="admin-blog.js"></script>
   </body>
 </html>
