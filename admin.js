@@ -125,7 +125,7 @@ async function displayClientInfo(phoneNumber, clientName) {
         userData.services.forEach((entry) => {
           const translatedService =
             serviceTranslation[entry.type] || entry.type;
-          clientInfoDiv.innerHTML += `<p>${translatedService} - ${entry.date}</p>`;
+          clientInfoDiv.innerHTML += `<p>    ${entry.date} - ${translatedService}</p>`;
         });
       } else {
         clientInfoDiv.innerHTML = "<p>No se encontraron registros.</p>";
