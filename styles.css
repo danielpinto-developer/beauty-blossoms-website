@@ -71,18 +71,33 @@ h1, h2, h3 {
     opacity: 1;
 }
 
+.numero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+input {
+    width: calc(100% - 110px); /* Adjust to fit next to the button */
+    max-width: 250px; /* Adjust as needed */
+    box-sizing: border-box;
+    height: 30px;
+}
+
 button {
     background-color: #007BFF;
     color: white;
     border: none;
     cursor: pointer;
-    height: 40px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 0 20px;
     border-radius: 5px;
+    margin-left: 10px; /* Space between input and button */
 }
 
 button:hover {
