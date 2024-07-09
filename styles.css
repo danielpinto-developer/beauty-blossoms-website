@@ -63,6 +63,14 @@ h1, h2, h3 {
     text-align: center;
 }
 
+.logo {
+    display: block;
+    margin: 5px auto;
+    max-width: 350px; /* Adjust the size as needed */
+    height: auto;
+    opacity: 1;
+}
+
 button {
     background-color: #007BFF;
     color: white;
