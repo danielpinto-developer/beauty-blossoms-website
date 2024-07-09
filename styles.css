@@ -25,45 +25,52 @@ h1, h2, h3 {
     opacity: 1;
 }
 
-nav {
-    width: 100%;
-    background-color: black;
-    color: white;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-    padding: 10px;
-    margin: 0;
-    justify-content: space-around;
-}
-
-nav ul li {
-    margin: 0 10px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
-}
-
 .background-container {
     background-color: whitesmoke;
     width: calc(100% - 40px);
     max-width: 600px;
     opacity: 0.9;
     padding: 40px;
-    margin: 0 20px;
+    margin: 100px 20px 20px; /* Adjusted margin to account for the nav bar */
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+}
+
+/* New styles for the navigation bar */
+nav {
+    width: 100%;
+    background-color: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0;
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: #575757;
 }
 
 .numero {
@@ -74,8 +81,8 @@ nav ul li a:hover {
 }
 
 input {
-    width: 100%;
-    max-width: 150px;
+    width: calc(100% - 110px); /* Adjust to fit next to the button */
+    max-width: 250px; /* Adjust as needed */
     box-sizing: border-box;
     height: 30px;
 }
@@ -85,47 +92,106 @@ button {
     color: white;
     border: none;
     cursor: pointer;
-    margin-left: 10px;
     height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
     text-align: center;
     padding: 0 20px;
     border-radius: 5px;
-}
-
-#quote {
-    font-family: cursive;
-    font-weight: lighter;
-    margin: 0;
-    margin-top: 20px;
-    font-size: x-large;
+    margin-left: 10px; /* Space between input and button */
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-#clientInfo, #adminInfo {
-    margin-top: -10px;
-}
-
 .buttons-row {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tab-content {
+    width: 100%;
+    padding: 20px;
 }
 
 .service-selection {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 }
 
 .service-selection select {
     margin-right: 10px;
+}
+
+.register-inputs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.register-inputs input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#client-details {
+    margin-bottom: 20px;
+}
+
+#message {
+    margin-top: 20px;
+}
+
+/* Modal Styles */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+}
+
+.green-button {
+    background-color: #19a337;
+    color: white;
+    border: none;
+    cursor: pointer;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.green-button:hover {
+    background-color: #148927;
 }
 
 .service-container {
@@ -133,109 +199,32 @@ button:hover {
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
+    width: 100%;
+    padding-left: 20px;
+    text-align: center; /* Center align text */
 }
 
 .service-container p {
-    margin-right: 10px;
+    margin: 0;
+    margin-left: 10px;
+    flex: none;
+    min-width: 100px;
 }
 
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px 0;
-}
-
-.box {
-    width: 40px;
-    height: 40px;
-    margin: 0 5px;
-    background-color: grey;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-.box.filled {
-    background-color: green;
-}
-
-.label {
-    width: 80px;
-    text-align: center;
-}
-
-.spacing {
-    height: 20px;
-}
-
-.modal-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.register-inputs {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    gap: 5px;
-}
-
-.register-inputs input {
-    height: 30px;
-}
-
-#new-name {
-    flex: 1;
-    max-width: 25%;
-}
-
-#new-phone-number {
-    flex: 3;
-    max-width: 75%;
-}
-
-#new-birthday {
-    flex: 1;
-    max-width: 100%;
-}
-
-.green-button {
-    background-color: #19a337;
-    color: white;
-    border: 1px solid black;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.green-button:hover {
-    background-color: #155d27;
-}
-
-#discount-message {
-    color: green;
-}
-
-.previous-section p {
+#previous-section p {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 80%; /* Adjust this value as needed */
+    padding-left: 80px; /* Shift to the right */
 }
 
 @media (max-width: 600px) {
-    body {
-        padding-top: 5vh;
-    }
-
     .background-container {
         width: calc(100% - 20px);
         padding: 20px;
         margin: 0 10px;
-    }
-
-    .logo {
-        max-width: 250px;
     }
 
     .numero {
@@ -253,23 +242,18 @@ button:hover {
         margin-left: 10px;
     }
 
-    #quote {
-        font-size: large;
+    .buttons-row {
+        flex-direction: column;
+        align-items: center;
     }
 
-    .box {
-        width: 30px;
-        height: 30px;
-        margin: 0 2px;
+    .service-selection {
+        flex-direction: column;
+        align-items: center;
     }
 
-    .row .label {
-        width: 50px;
-        font-size: 0.8em;
-        padding-right: 10px;
-    }
-
-    .row .label + .label {
-        margin-left: -10px;
+    #previous-section p {
+        justify-content: space-between;
+        padding-left: 20px; /* Adjust as needed */
     }
 }
