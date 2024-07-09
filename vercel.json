@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+      {
+        "source": "/productos/shelo-nabel",
+        "destination": "/shelo-nabel.html"
+      }
+    ]
+  }
+  
