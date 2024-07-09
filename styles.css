@@ -291,4 +291,20 @@ button:hover {
         justify-content: space-between;
         padding-left: 20px; /* Adjust as needed */
     }
+
+    .box {
+        width: 30px;
+        height: 30px;
+        margin: 0 2px;
+    }
+
+    .row .label {
+        width: 50px;
+        font-size: 0.8em;
+        padding-right: 10px;
+    }
+
+    .row .label + .label {
+        margin-left: -10px;
+    }
 }
