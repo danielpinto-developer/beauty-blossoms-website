@@ -255,6 +255,31 @@ button:hover {
     background-color: #5e009a;
 }
 
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.box {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    background-color: grey;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.box.filled {
+    background-color: green;
+}
+
+.label {
+    width: 80px;
+    text-align: center;
+}
+
 @media (max-width: 600px) {
     .background-container {
         width: calc(100% - 20px);
