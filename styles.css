@@ -37,7 +37,6 @@ h1, h2, h3 {
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-    z-index: 1; /* Ensure it stays beneath the modal */
 }
 
 /* New styles for the navigation bar */
@@ -157,7 +156,7 @@ button:hover {
     justify-content: center;
     align-items: center;
     position: fixed;
-    z-index: 1000; /* Ensure it appears above other elements */
+    z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
@@ -174,7 +173,6 @@ button:hover {
     width: 80%;
     max-width: 400px;
     border-radius: 10px;
-    z-index: 1001; /* Ensure it appears above other elements */
 }
 
 .green-button {
@@ -295,6 +293,11 @@ button:hover {
     }
 }
 
-.row .box.filled {
+#grid-container .box.filled {
     background-color: #A782EC;
+}
+
+.row .label {
+    width: 80px; /* Ensure it aligns properly */
+    text-align: left; /* Ensure it aligns properly */
 }
