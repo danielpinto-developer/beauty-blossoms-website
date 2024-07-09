@@ -220,6 +220,41 @@ button:hover {
     padding-left: 80px; /* Shift to the right */
 }
 
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.admin-form input, .admin-form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.admin-form textarea {
+    resize: vertical;
+    height: 150px;
+}
+
+.admin-form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #7500b4;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.admin-form button:hover {
+    background-color: #5e009a;
+}
+
 @media (max-width: 600px) {
     .background-container {
         width: calc(100% - 20px);
