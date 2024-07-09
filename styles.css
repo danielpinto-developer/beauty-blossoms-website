@@ -224,7 +224,7 @@ nav ul li a:hover {
 }
 
 .admin-form input, .admin-form textarea {
-    width: 80%;
+    width: 100%;
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -241,6 +241,7 @@ nav ul li a:hover {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    background-color: #7500b4;
     color: white;
     font-size: 16px;
     cursor: pointer;
