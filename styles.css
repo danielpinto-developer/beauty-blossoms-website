@@ -150,9 +150,8 @@ button:hover {
     margin-top: 20px;
 }
 
-/* Modal Styles */
 .modal {
-    display: flex;
+    display: none; /* Hide the modal by default */
     justify-content: center;
     align-items: center;
     position: fixed;

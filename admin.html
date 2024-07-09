@@ -22,7 +22,7 @@
         <input type="text" placeholder="Número de teléfono" id="phone-number" />
         <button id="buscarButton">Buscar</button>
       </div>
-      <div class="register">
+      <div class="register" id="register-section">
         <button
           id="registerButton"
           style="background-color: #7500b4; margin-top: 40px"
@@ -32,21 +32,19 @@
       </div>
 
       <!-- Modal for adding new number -->
-      <div id="modal" class="modal" style="display: none">
-        <div class="modal-content">
-          <div class="register-inputs">
-            <input type="text" placeholder="Nombre" id="new-name" />
-            <input
-              type="text"
-              placeholder="Número de teléfono"
-              id="new-phone-number"
-            />
-            <input
-              type="text"
-              placeholder="Fecha de Cumpleaños"
-              id="new-birthday"
-            />
-          </div>
+      <div class="numero" id="modal" style="display: none">
+        <div class="register-inputs">
+          <input type="text" placeholder="Nombre" id="new-name" />
+          <input
+            type="text"
+            placeholder="Número de teléfono"
+            id="new-phone-number"
+          />
+          <input
+            type="text"
+            placeholder="Fecha de Cumpleaños"
+            id="new-birthday"
+          />
           <button
             id="addButton"
             style="margin-top: 10px; background-color: #7500b4"
@@ -61,7 +59,7 @@
       </div>
       <div id="client-info" style="display: none">
         <p id="client-details" style="text-align: center"></p>
-        <div class="buttons-row" style="justify-content: center">
+        <div class="buttons-row">
           <button id="showPreviousButton">Historial</button>
           <button id="showDiscountsButton">Descuentos</button>
           <button id="showAddPointsButton">Puntos</button>
@@ -76,7 +74,7 @@
         <div
           id="discounts-section"
           class="tab-content"
-          style="display: none; align-items: center; justify-content: center"
+          style="display: none; display: flex; align-items: center"
         >
           <!-- Discounts will be displayed here -->
         </div>
