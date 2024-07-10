@@ -54,9 +54,7 @@ document.getElementById("buscarButton").addEventListener("click", async () => {
       window.history.pushState(
         {},
         "",
-        `/admin.html?phone=${phoneNumber}&name=${encodeURIComponent(
-          userData.Name
-        )}`
+        `/admin?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`
       );
       displayClientInfo(phoneNumber, userData.Name);
     } else {
