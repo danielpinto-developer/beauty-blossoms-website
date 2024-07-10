@@ -21,27 +21,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function fetchBlogPosts() {
-  const querySnapshot = await getDocs(collection(db, "blogPosts"));
-  const blogPostsDiv = document.getElementById("blog-posts");
-  const noPostsMessage = document.getElementById("no-posts-message");
+async function displayBlogPosts() {
+  const blogContainer = document.getElementById("blog-container");
+  blogContainer.innerHTML = ""; // Clear previous content
 
-  if (querySnapshot.empty) {
-    noPostsMessage.style.display = "block";
-  } else {
-    noPostsMessage.style.display = "none";
-    querySnapshot.forEach((doc) => {
-      const postData = doc.data();
-      const postElement = document.createElement("div");
-      postElement.className = "blog-post";
-      postElement.innerHTML = `
-        <h2><a href="blog/${doc.id}.html">${postData.title}</a></h2>
-        <p>${postData.tags.join(", ")}</p>
-        <p>${new Date(postData.date).toLocaleDateString()}</p>
-      `;
-      blogPostsDiv.appendChild(postElement);
-    });
+  const blogPostsSnapshot = await getDocs(collection(db, "blogPosts"));
+  if (blogPostsSnapshot.empty) {
+    blogContainer.innerHTML = "<p>No hay publicaciones por el momento</p>";
+    return;
   }
+
+  blogPostsSnapshot.forEach((doc) => {
+    const blogData = doc.data();
+    const postTitle = blogData.title;
+    const postDate = blogData.date;
+    const postTags = blogData.tags.join(", ");
+    const postUrl = `/blog/${postTitle.replace(/\s+/g, "-").toLowerCase()}`;
+
+    const postElement = document.createElement("div");
+    postElement.className = "blog-post";
+    postElement.innerHTML = `
+      <h2 class="blog-title"><a href="${postUrl}">${postTitle}</a></h2>
+      <p class="blog-date">Fecha: ${postDate}</p>
+      <p class="blog-tags">Etiquetas: ${postTags}</p>
+    `;
+    blogContainer.appendChild(postElement);
+  });
 }
 
-fetchBlogPosts();
+window.onload = displayBlogPosts;
