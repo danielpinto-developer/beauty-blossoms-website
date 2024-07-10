@@ -36,7 +36,7 @@ document
         date: new Date().toISOString(),
       });
       alert("Publicación creada exitosamente!");
-      window.location.href = "dashboard.html";
+      window.location.href = "dashboard";
     } catch (e) {
       console.error("Error adding document: ", e);
       alert("Error al crear la publicación.");
