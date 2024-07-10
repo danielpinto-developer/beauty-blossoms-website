@@ -1,11 +1,13 @@
 {
-    "rewrites": [
-      { "source": "/admin-login", "destination": "/admin-login.html" },
-      { "source": "/dashboard", "destination": "/dashboard.html" },
-      { "source": "/admin", "destination": "/admin.html" },
-      { "source": "/admin-blog", "destination": "/admin-blog.html" },
-      { "source": "/blog", "destination": "/blog.html" },
-      { "source": "/blog/:slug", "destination": "/blog-post.html?slug=:slug" }
+    "routes": [
+      { "src": "/", "dest": "/html/index.html" },
+      { "src": "/admin-login", "dest": "/html/admin-login.html" },
+      { "src": "/admin", "dest": "/html/admin.html" },
+      { "src": "/blog", "dest": "/html/blog.html" },
+      { "src": "/dashboard", "dest": "/html/dashboard.html" },
+      { "src": "/admin-blog", "dest": "/html/admin-blog.html" },
+      { "src": "/productos", "dest": "/html/productos.html" },
+      { "src": "/productos/shelo-nabel", "dest": "/html/shelo-nabel.html" }
     ]
   }
   
