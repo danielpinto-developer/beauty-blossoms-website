@@ -151,6 +151,10 @@ button:hover {
     margin-top: 20px;
 }
 
+.login-container {
+    display: flex;
+}
+
 /* Modal Styles */
 .modal {
     display: none; /* Hide the modal by default */
