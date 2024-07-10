@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body>
+    <script>
+      if (!sessionStorage.getItem("adminLoggedIn")) {
+        const redirectUrl = window.location.pathname + window.location.search;
+        window.location.href = `/admin-login?redirect=${encodeURIComponent(
+          redirectUrl
+        )}`;
+      }
+    </script>
     <nav>
       <ul>
         <li><a href="/">Inicio</a></li>

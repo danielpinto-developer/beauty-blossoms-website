@@ -4,38 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Login</title>
-    <link rel="icon" type="image/x-icon" href="../static/favicon.png" />
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body>
-    <nav>
-      <ul>
-        <li><a href="/">Inicio</a></li>
-        <li><a href="productos">Productos</a></li>
-        <li><a href="blog">Blog</a></li>
-        <li><a href="admin-login">Admin</a></li>
-      </ul>
-    </nav>
     <div class="background-container">
       <h1>Admin Login</h1>
-      <div class="login-container">
+      <div class="login-form">
         <input
           type="password"
           id="admin-password"
           placeholder="Enter Password"
         />
-        <button id="login-button">Login</button>
+        <button id="loginButton">Login</button>
       </div>
+      <p id="loginMessage" style="color: red; display: none">
+        Incorrect password
+      </p>
     </div>
     <script>
       document
-        .getElementById("login-button")
+        .getElementById("loginButton")
         .addEventListener("click", function () {
           const password = document.getElementById("admin-password").value;
+          const redirectUrl = new URLSearchParams(window.location.search).get(
+            "redirect"
+          );
+
           if (password === "solyluna") {
-            window.location.href = "dashboard";
+            sessionStorage.setItem("adminLoggedIn", "true");
+            window.location.href = redirectUrl ? redirectUrl : "/dashboard";
           } else {
-            alert("Incorrect password");
+            document.getElementById("loginMessage").style.display = "block";
           }
         });
     </script>
