@@ -3,19 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Blog - Beauty Blossoms</title>
-    <link rel="icon" type="image/x-icon" href="../static/favicon.png" />
+    <title>Crear Publicación</title>
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body>
-    <script>
-      if (!sessionStorage.getItem("adminLoggedIn")) {
-        const redirectUrl = window.location.pathname + window.location.search;
-        window.location.href = `/admin-login?redirect=${encodeURIComponent(
-          redirectUrl
-        )}`;
-      }
-    </script>
     <nav>
       <ul>
         <li><a href="/">Inicio</a></li>
@@ -25,19 +16,19 @@
       </ul>
     </nav>
     <div class="background-container">
-      <h1>Admin Blog</h1>
-      <div class="admin-form">
-        <input type="text" id="title" placeholder="Título" />
-        <textarea id="content" placeholder="Contenido"></textarea>
+      <h1>Crear Publicación</h1>
+      <form id="blogPostForm">
+        <input type="text" id="title" placeholder="Título" required />
         <input
           type="text"
           id="tags"
           placeholder="Etiquetas (separadas por comas)"
+          required
         />
-        <button id="createPostButton" style="background-color: #7500b4">
-          Crear Publicación
-        </button>
-      </div>
+        <textarea id="content" placeholder="Contenido" required></textarea>
+        <button type="submit" id="submitButton">Crear Publicación</button>
+      </form>
+      <div id="message"></div>
     </div>
     <script type="module" src="../js/admin-blog.js"></script>
   </body>
