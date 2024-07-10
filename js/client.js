@@ -1,3 +1,5 @@
+// client.js
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -26,21 +28,21 @@ async function displayClientInfo() {
   const phoneNumber = urlParams.get("phone");
   const name = urlParams.get("name");
 
-  const clientInfoDiv = document.getElementById("client-info");
+  const clientDetailsDiv = document.getElementById("client-details");
 
   try {
     const userDoc = await getDoc(doc(db, "users", phoneNumber));
     if (userDoc.exists()) {
       const userData = userDoc.data();
       const bday = userData.Birthday || "No especificado";
-      clientInfoDiv.innerHTML = `<p>${name} - ${phoneNumber} - ${bday}</p>`;
+      clientDetailsDiv.innerHTML = `<p>${name} - ${phoneNumber} - ${bday}</p>`;
       displayGrid(userData.services);
     } else {
-      clientInfoDiv.innerHTML = "<p>No se encontraron registros.</p>";
+      clientDetailsDiv.innerHTML = "<p>No se encontraron registros.</p>";
     }
   } catch (error) {
     console.error("Error displaying client info:", error);
-    clientInfoDiv.innerHTML = "<p>Error al recuperar registros.</p>";
+    clientDetailsDiv.innerHTML = "<p>Error al recuperar registros.</p>";
   }
 }
 
