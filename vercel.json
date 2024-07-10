@@ -9,7 +9,7 @@
       { "src": "/productos", "dest": "/html/productos.html" },
       { "src": "/productos/shelo-nabel", "dest": "/html/shelo-nabel.html" },
       { "src": "/blog/:title", "dest": "/html/blog-post.html" },
-      { "src": "/client/:phone/:name", "dest": "/html/client.html" }
+      { "src": "/client", "dest": "/html/client.html" }
     ]
   }
   
