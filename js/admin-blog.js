@@ -21,24 +21,42 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-document
-  .getElementById("create-post-button")
-  .addEventListener("click", async () => {
-    const title = document.getElementById("post-title").value;
-    const content = document.getElementById("post-content").value;
-    const tags = document.getElementById("post-tags").value.split(",");
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("blogForm");
+  const titleInput = document.getElementById("title");
+  const tagsInput = document.getElementById("tags");
+  const contentTextarea = document.getElementById("content");
+  const messageDiv = document.getElementById("message");
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const title = titleInput.value;
+    const tags = tagsInput.value.split(",").map((tag) => tag.trim());
+    const content = contentTextarea.value;
+
+    if (!title || !tags || !content) {
+      messageDiv.textContent = "Todos los campos son obligatorios.";
+      messageDiv.style.color = "red";
+      return;
+    }
 
     try {
-      const docRef = await addDoc(collection(db, "blogPosts"), {
+      const blogPost = {
         title,
-        content,
         tags,
+        content,
         date: new Date().toISOString(),
-      });
-      alert("Publicación creada exitosamente!");
-      window.location.href = "dashboard";
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      alert("Error al crear la publicación.");
+      };
+
+      await addDoc(collection(db, "blogPosts"), blogPost);
+      messageDiv.textContent = "Publicación creada exitosamente!";
+      messageDiv.style.color = "green";
+      form.reset();
+    } catch (error) {
+      console.error("Error al crear la publicación:", error);
+      messageDiv.textContent = "Error al crear la publicación.";
+      messageDiv.style.color = "red";
     }
   });
+});
