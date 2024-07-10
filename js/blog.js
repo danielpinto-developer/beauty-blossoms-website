@@ -4,6 +4,10 @@ import {
   getFirestore,
   collection,
   getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -22,31 +26,45 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function displayBlogPosts() {
-  const blogContainer = document.getElementById("blog-container");
-  blogContainer.innerHTML = ""; // Clear previous content
+  try {
+    const querySnapshot = await getDocs(collection(db, "blogPosts"));
+    const blogPostsContainer = document.getElementById("blogPostsContainer");
 
-  const blogPostsSnapshot = await getDocs(collection(db, "blogPosts"));
-  if (blogPostsSnapshot.empty) {
-    blogContainer.innerHTML = "<p>No hay publicaciones por el momento</p>";
-    return;
+    if (!blogPostsContainer) {
+      throw new Error("blogPostsContainer element not found");
+    }
+
+    blogPostsContainer.innerHTML = "";
+
+    querySnapshot.forEach((doc) => {
+      const post = doc.data();
+      const postElement = document.createElement("div");
+      postElement.classList.add("blog-post");
+
+      const postTitle = document.createElement("h2");
+      const postLink = document.createElement("a");
+      postLink.href = `blog/${post.title.replace(/\s+/g, "-").toLowerCase()}`;
+      postLink.textContent = post.title;
+      postTitle.appendChild(postLink);
+
+      const postTags = document.createElement("p");
+      postTags.textContent = `Tags: ${post.tags.join(", ")}`;
+
+      const postDate = document.createElement("p");
+      postDate.textContent = `Published on: ${new Date(
+        post.timestamp.seconds * 1000
+      ).toLocaleDateString()}`;
+
+      postElement.appendChild(postTitle);
+      postElement.appendChild(postTags);
+      postElement.appendChild(postDate);
+      blogPostsContainer.appendChild(postElement);
+    });
+  } catch (error) {
+    console.error("Error displaying blog posts:", error);
   }
-
-  blogPostsSnapshot.forEach((doc) => {
-    const blogData = doc.data();
-    const postTitle = blogData.title;
-    const postDate = blogData.date;
-    const postTags = blogData.tags.join(", ");
-    const postUrl = `/blog/${postTitle.replace(/\s+/g, "-").toLowerCase()}`;
-
-    const postElement = document.createElement("div");
-    postElement.className = "blog-post";
-    postElement.innerHTML = `
-      <h2 class="blog-title"><a href="${postUrl}">${postTitle}</a></h2>
-      <p class="blog-date">Fecha: ${postDate}</p>
-      <p class="blog-tags">Etiquetas: ${postTags}</p>
-    `;
-    blogContainer.appendChild(postElement);
-  });
 }
 
-window.onload = displayBlogPosts;
+window.onload = () => {
+  displayBlogPosts();
+};
