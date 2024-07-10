@@ -153,6 +153,7 @@ button:hover {
 
 .login-container {
     display: flex;
+    margin-left: 20px;
 }
 
 /* Modal Styles */
