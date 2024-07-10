@@ -21,26 +21,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function loadBlogPosts() {
-  const blogPostsContainer = document.getElementById("blog-posts");
-  const noPostsMessage = document.getElementById("no-posts");
-
+async function fetchBlogPosts() {
   const querySnapshot = await getDocs(collection(db, "blogPosts"));
+  const blogPostsDiv = document.getElementById("blog-posts");
+  const noPostsMessage = document.getElementById("no-posts-message");
+
   if (querySnapshot.empty) {
     noPostsMessage.style.display = "block";
   } else {
+    noPostsMessage.style.display = "none";
     querySnapshot.forEach((doc) => {
-      const post = doc.data();
+      const postData = doc.data();
       const postElement = document.createElement("div");
       postElement.className = "blog-post";
       postElement.innerHTML = `
-        <h2>${post.title}</h2>
-        <p>${post.content}</p>
-        <p><strong>Etiquetas:</strong> ${post.tags.join(", ")}</p>
+        <h2><a href="blog/${doc.id}.html">${postData.title}</a></h2>
+        <p>${postData.tags.join(", ")}</p>
+        <p>${new Date(postData.date).toLocaleDateString()}</p>
       `;
-      blogPostsContainer.appendChild(postElement);
+      blogPostsDiv.appendChild(postElement);
     });
   }
 }
 
-loadBlogPosts();
+fetchBlogPosts();

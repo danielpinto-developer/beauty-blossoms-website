@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="admin-login.html">Admin Blog</a></li>
+      </ul>
+    </nav>
+    <div class="background-container">
+      <h1>Admin Login</h1>
+      <div class="login-container">
+        <input
+          type="password"
+          id="admin-password"
+          placeholder="Enter Password"
+        />
+        <button id="login-button">Login</button>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("login-button")
+        .addEventListener("click", function () {
+          const password = document.getElementById("admin-password").value;
+          if (password === "solyluna") {
+            window.location.href = "dashboard.html";
+          } else {
+            alert("Incorrect password");
+          }
+        });
+    </script>
+  </body>
+</html>

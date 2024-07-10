@@ -22,33 +22,23 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 document
-  .getElementById("createPostButton")
+  .getElementById("create-post-button")
   .addEventListener("click", async () => {
-    const title = document.getElementById("title").value;
-    const content = document.getElementById("content").value;
-    const tags = document
-      .getElementById("tags")
-      .value.split(",")
-      .map((tag) => tag.trim());
-
-    if (!title || !content || tags.length === 0) {
-      alert("Por favor, complete todos los campos.");
-      return;
-    }
+    const title = document.getElementById("post-title").value;
+    const content = document.getElementById("post-content").value;
+    const tags = document.getElementById("post-tags").value.split(",");
 
     try {
-      await addDoc(collection(db, "blogPosts"), {
-        title: title,
-        content: content,
-        tags: tags,
-        timestamp: new Date(),
+      const docRef = await addDoc(collection(db, "blogPosts"), {
+        title,
+        content,
+        tags,
+        date: new Date().toISOString(),
       });
       alert("Publicación creada exitosamente!");
-      document.getElementById("title").value = "";
-      document.getElementById("content").value = "";
-      document.getElementById("tags").value = "";
-    } catch (error) {
-      console.error("Error al crear la publicación:", error);
+      window.location.href = "dashboard.html";
+    } catch (e) {
+      console.error("Error adding document: ", e);
       alert("Error al crear la publicación.");
     }
   });

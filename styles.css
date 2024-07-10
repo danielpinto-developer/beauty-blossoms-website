@@ -151,6 +151,7 @@ button:hover {
     margin-top: 20px;
 }
 
+/* Modal Styles */
 .modal {
     display: none; /* Hide the modal by default */
     justify-content: center;
@@ -255,6 +256,49 @@ button:hover {
     background-color: #5e009a;
 }
 
+.blog-post {
+    margin-bottom: 20px;
+}
+
+.blog-post h2 a {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.blog-post h2 a:hover {
+    text-decoration: underline;
+}
+
+.dashboard-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.dashboard-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #7500b4;
+    color: white;
+}
+
+.dashboard-buttons button:hover {
+    background-color: #5e009a;
+}
+
+#grid-container .box.filled {
+    background-color: #A782EC;
+}
+
+.row .label {
+    width: 80px; /* Ensure it aligns properly */
+    text-align: left; /* Ensure it aligns properly */
+}
+
 @media (max-width: 600px) {
     .background-container {
         width: calc(100% - 20px);
@@ -291,36 +335,4 @@ button:hover {
         justify-content: space-between;
         padding-left: 20px; /* Adjust as needed */
     }
-}
-
-#grid-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 0;
-}
-
-.box {
-    width: 40px;
-    height: 40px;
-    margin: 0 5px;
-    background-color: grey;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-.box.filled {
-    background-color: #A782EC; /* Light purple color */
-}
-
-.label {
-    width: 80px;
-    text-align: left;
-    padding-right: 10px; /* Space between label and boxes */
 }

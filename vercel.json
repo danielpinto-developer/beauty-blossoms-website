@@ -1,9 +1,11 @@
 {
     "rewrites": [
-      {
-        "source": "/productos/shelo-nabel",
-        "destination": "/shelo-nabel.html"
-      }
+      { "source": "/admin-login", "destination": "/admin-login.html" },
+      { "source": "/dashboard", "destination": "/dashboard.html" },
+      { "source": "/admin", "destination": "/admin.html" },
+      { "source": "/admin-blog", "destination": "/admin-blog.html" },
+      { "source": "/blog", "destination": "/blog.html" },
+      { "source": "/blog/:slug", "destination": "/blog-post.html?slug=:slug" }
     ]
   }
   
