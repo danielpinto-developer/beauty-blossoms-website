@@ -6,7 +6,6 @@ import {
   getDoc,
   setDoc,
   updateDoc,
-  arrayUnion,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -54,7 +53,7 @@ document.getElementById("buscarButton").addEventListener("click", async () => {
       window.history.pushState(
         {},
         "",
-        `/admin?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`
+        `/client?phone=${phoneNumber}&name=${encodeURIComponent(userData.Name)}`
       );
       displayClientInfo(phoneNumber, userData.Name);
     } else {
@@ -120,14 +119,11 @@ async function displayClientInfo(phoneNumber, clientName) {
       clientInfoDiv.innerHTML = "";
 
       if (userData.services && userData.services.length > 0) {
-        userData.services
-          .slice()
-          .reverse()
-          .forEach((entry) => {
-            const translatedService =
-              serviceTranslation[entry.type] || entry.type;
-            clientInfoDiv.innerHTML += `<p>${entry.date} - ${translatedService}</p>`;
-          });
+        userData.services.forEach((entry) => {
+          const translatedService =
+            serviceTranslation[entry.type] || entry.type;
+          clientInfoDiv.innerHTML += `<p>${entry.date} - ${translatedService}</p>`;
+        });
       } else {
         clientInfoDiv.innerHTML = "<p>No se encontraron registros.</p>";
       }
@@ -144,14 +140,12 @@ document.getElementById("showPreviousButton").addEventListener("click", () => {
   document.getElementById("previous-section").style.display = "block";
   document.getElementById("add-points-section").style.display = "none";
   document.getElementById("discounts-section").style.display = "none";
-  document.querySelector(".buttons-row").style.justifyContent = "center";
 });
 
 document.getElementById("showAddPointsButton").addEventListener("click", () => {
   document.getElementById("previous-section").style.display = "none";
   document.getElementById("add-points-section").style.display = "block";
   document.getElementById("discounts-section").style.display = "none";
-  document.querySelector(".buttons-row").style.justifyContent = "center";
 });
 
 document.getElementById("showDiscountsButton").addEventListener("click", () => {
@@ -159,8 +153,36 @@ document.getElementById("showDiscountsButton").addEventListener("click", () => {
   document.getElementById("add-points-section").style.display = "none";
   document.getElementById("discounts-section").style.display = "block";
   displayDiscounts();
-  document.querySelector(".buttons-row").style.justifyContent = "center";
 });
+
+document
+  .getElementById("addServiceButton")
+  .addEventListener("click", async () => {
+    const service = document.getElementById("service").value;
+    const phoneNumber = new URLSearchParams(window.location.search).get(
+      "phone"
+    );
+    const date = new Date().toLocaleDateString("en-GB");
+
+    try {
+      const userRef = doc(db, "users", phoneNumber);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const updatedServices = [
+          ...(userData.services || []),
+          { date, type: service },
+        ];
+        await updateDoc(userRef, { services: updatedServices });
+        displayClientInfo(phoneNumber, userData.Name);
+        alert("Servicio agregado exitosamente!");
+        showTab("previous-section");
+      }
+    } catch (error) {
+      console.error("Error updating Firestore:", error);
+      alert("Error al agregar el servicio.");
+    }
+  });
 
 async function displayDiscounts() {
   const phoneNumber = new URLSearchParams(window.location.search).get("phone");
