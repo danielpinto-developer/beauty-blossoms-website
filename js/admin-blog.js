@@ -20,43 +20,54 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+console.log("Firebase initialized");
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("blogForm");
-  const titleInput = document.getElementById("title");
-  const tagsInput = document.getElementById("tags");
-  const contentTextarea = document.getElementById("content");
-  const messageDiv = document.getElementById("message");
+  if (form) {
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      console.log("Form submitted");
 
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
+      const title = document.getElementById("title").value;
+      const tags = document
+        .getElementById("tags")
+        .value.split(",")
+        .map((tag) => tag.trim());
+      const content = document.getElementById("content").value;
+      console.log("Title:", title);
+      console.log("Tags:", tags);
+      console.log("Content:", content);
 
-    const title = titleInput.value;
-    const tags = tagsInput.value.split(",").map((tag) => tag.trim());
-    const content = contentTextarea.value;
+      const messageDiv = document.getElementById("message");
 
-    if (!title || !tags || !content) {
-      messageDiv.textContent = "Todos los campos son obligatorios.";
-      messageDiv.style.color = "red";
-      return;
-    }
+      if (!title || !tags || !content) {
+        messageDiv.textContent = "Todos los campos son obligatorios.";
+        messageDiv.style.color = "red";
+        return;
+      }
 
-    try {
-      const blogPost = {
-        title,
-        tags,
-        content,
-        date: new Date().toISOString(),
-      };
+      try {
+        const blogPost = {
+          title,
+          tags,
+          content,
+          date: new Date().toISOString(),
+        };
 
-      await addDoc(collection(db, "blogPosts"), blogPost);
-      messageDiv.textContent = "Publicación creada exitosamente!";
-      messageDiv.style.color = "green";
-      form.reset();
-    } catch (error) {
-      console.error("Error al crear la publicación:", error);
-      messageDiv.textContent = "Error al crear la publicación.";
-      messageDiv.style.color = "red";
-    }
-  });
+        console.log("Blog post:", blogPost);
+
+        await addDoc(collection(db, "blogPosts"), blogPost);
+        messageDiv.textContent = "Publicación creada exitosamente!";
+        messageDiv.style.color = "green";
+        form.reset();
+      } catch (error) {
+        console.error("Error al crear la publicación:", error);
+        messageDiv.textContent = "Error al crear la publicación.";
+        messageDiv.style.color = "red";
+      }
+    });
+  } else {
+    console.error("Form not found");
+  }
 });

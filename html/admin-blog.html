@@ -17,7 +17,7 @@
     </nav>
     <div class="background-container">
       <h1>Crear Publicación</h1>
-      <div class="admin-form">
+      <form class="admin-form" id="blogForm">
         <input type="text" id="title" placeholder="Título" required />
         <input
           type="text"
@@ -26,8 +26,8 @@
           required
         />
         <textarea id="content" placeholder="Contenido" required></textarea>
-        <button type="submit" id="submitButton">Crear Publicación</button>
-      </div>
+        <button type="submit">Crear Publicación</button>
+      </form>
       <div id="message"></div>
     </div>
     <script type="module" src="../js/admin-blog.js"></script>
