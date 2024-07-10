@@ -2,8 +2,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
-  collection,
-  getDocs,
+  doc,
+  getDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -21,33 +21,36 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Function to display blog posts
-async function displayBlogPosts() {
-  const blogContainer = document.getElementById("blog-container");
+async function displayBlogPost() {
+  const urlParams = new URLSearchParams(
+    window.location.pathname.split("/").pop()
+  );
+  const title = urlParams.get("title");
+
+  const blogPostContent = document.getElementById("blog-post-content");
 
   try {
-    const querySnapshot = await getDocs(collection(db, "blogPosts"));
-    blogContainer.innerHTML = ""; // Clear previous contents
+    const docRef = doc(db, "blogPosts", title);
+    const docSnap = await getDoc(docRef);
 
-    querySnapshot.forEach((doc) => {
-      const postData = doc.data();
-      const postElement = document.createElement("div");
-      postElement.classList.add("blog-post");
-      postElement.innerHTML = `
-        <h2><a href="/blog/${encodeURIComponent(doc.id)}">${
-        postData.title
-      }</a></h2>
+    if (docSnap.exists()) {
+      const postData = docSnap.data();
+      blogPostContent.innerHTML = `
+        <h1>${postData.title}</h1>
         <p>Tags: ${postData.tags.join(", ")}</p>
         <p>Published on: ${new Date(
           postData.timestamp.seconds * 1000
         ).toLocaleDateString()}</p>
+        <div>${postData.content}</div>
       `;
-      blogContainer.appendChild(postElement);
-    });
+    } else {
+      blogPostContent.innerHTML = "<p>No such document!</p>";
+    }
   } catch (error) {
-    console.error("Error fetching blog posts: ", error);
+    console.error("Error fetching blog post: ", error);
+    blogPostContent.innerHTML = "<p>Error fetching blog post.</p>";
   }
 }
 
-// Load blog posts when the window loads
-window.onload = displayBlogPosts;
+// Load blog post content when the window loads
+window.onload = displayBlogPost;
