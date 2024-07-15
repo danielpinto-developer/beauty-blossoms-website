@@ -39,7 +39,7 @@ body {
     width: calc(100% - 40px);
     max-width: 600px;
     opacity: 0.9;
-    padding: 40px;
+    padding: 20px;
     margin: 100px 20px 20px;
     border-radius: 10px;
     display: flex;
@@ -343,6 +343,7 @@ body {
     .numero {
       flex-direction: row;
       align-items: center;
+      width: 300px;
     }
   
     input {
