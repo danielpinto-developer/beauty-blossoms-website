@@ -42,6 +42,7 @@ body {
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+    overflow: hidden;
   }
   
   nav {
@@ -82,6 +83,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-bottom: 20px;
   }
   
   input {
@@ -365,3 +367,9 @@ body {
       padding-left: 20px;
     }
   }
+  
+  .numero, input, button {
+    width: 100%;
+    max-width: 600px;
+  }
+  
