@@ -343,7 +343,7 @@ body {
     .numero {
       flex-direction: row;
       align-items: center;
-      width: 200px;
+      width: 250px;
     }
   
     input {
