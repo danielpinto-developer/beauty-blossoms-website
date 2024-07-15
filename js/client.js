@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
@@ -6,7 +5,6 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC4eMq0Y8ERerdBIzsySqtG9QnisI3CBIc",
   authDomain: "bb27studio-loyalty-program.firebaseapp.com",
@@ -17,7 +15,6 @@ const firebaseConfig = {
   measurementId: "G-Y30PX1R10P",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -115,11 +112,9 @@ function checkDiscountEligibility(serviceCounts) {
 window.onload = () => {
   displayClientInfo();
 
-  // Check if a discount was redeemed and reset the grid
   if (localStorage.getItem("redeemed") === "true") {
-    console.log("Discount redeemed, resetting grid."); // Add log
+    console.log("Discount redeemed, resetting grid.");
     localStorage.removeItem("redeemed");
-    // Reset the grid (all boxes gray)
     const gridContainer = document.getElementById("grid-container");
     const rows = gridContainer.getElementsByClassName("row");
     for (let row of rows) {

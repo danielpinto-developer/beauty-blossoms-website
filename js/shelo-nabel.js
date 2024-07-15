@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const productList = document.getElementById("product-list");
-  // Fetch and display Shelo Nabel products
   productList.innerHTML = `
         <div class="product">
             <h3>Producto 1</h3>

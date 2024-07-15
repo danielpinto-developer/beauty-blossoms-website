@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
@@ -8,7 +7,6 @@ import {
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC4eMq0Y8ERerdBIzsySqtG9QnisI3CBIc",
   authDomain: "bb27studio-loyalty-program.firebaseapp.com",
@@ -19,7 +17,6 @@ const firebaseConfig = {
   measurementId: "G-Y30PX1R10P",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -96,7 +93,7 @@ document.getElementById("addButton").addEventListener("click", async () => {
       services: [],
     });
     alert("Nuevo número agregado exitosamente!");
-    location.reload(); // Refresh the page
+    location.reload();
   } catch (error) {
     console.error("Error al agregar un nuevo número:", error);
     alert("Error al agregar un nuevo número.");
@@ -234,31 +231,30 @@ async function displayDiscounts() {
 }
 
 async function redeemDiscount(type) {
-  console.log("Redeem button clicked for:", type); // Add log
+  console.log("Redeem button clicked for:", type);
   const phoneNumber = new URLSearchParams(window.location.search).get("phone");
   const userDocRef = doc(db, "users", phoneNumber);
 
   try {
     const userDoc = await getDoc(userDocRef);
     if (userDoc.exists()) {
-      console.log("User document found:", userDoc.data()); // Add log
+      console.log("User document found:", userDoc.data());
       const userData = userDoc.data();
       const updatedServices = userData.services.map((service) => {
         if (service.type === type && !service.redeemed) {
-          console.log("Redeeming service:", service); // Add log
+          console.log("Redeeming service:", service);
           return { ...service, redeemed: true };
         }
         return service;
       });
 
       await updateDoc(userDocRef, { services: updatedServices });
-      console.log("Updated services:", updatedServices); // Add log
+      console.log("Updated services:", updatedServices);
       displayDiscounts();
       alert(
         `${serviceTranslation[type] || type} descuento activado exitosamente!`
       );
 
-      // Notify client page to reset the grid
       localStorage.setItem("redeemed", "true");
     } else {
       console.error("Error redeeming discount: user document not found.");

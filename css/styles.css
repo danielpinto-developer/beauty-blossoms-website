@@ -4,90 +4,94 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    height: 100vh;
-    background: url('../static/background.jpg') repeat;
+    min-height: 100vh;
+    background: url('../static/background.jpg') no-repeat center center fixed;
     background-size: cover;
     padding-top: 10vh;
-}
-
-h1, h2, h3 {
+  }
+  
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3 {
     font-family: cursive;
     color: black;
     margin: 0;
     text-align: center;
-}
-
-.logo {
+  }
+  
+  .logo {
     display: block;
     margin: 5px auto;
     max-width: 350px;
     height: auto;
     opacity: 1;
-}
-
-.background-container {
+  }
+  
+  .background-container {
     background-color: whitesmoke;
     width: calc(100% - 40px);
     max-width: 600px;
     opacity: 0.9;
     padding: 40px;
-    margin: 100px 20px 20px; /* Adjusted margin to account for the nav bar */
+    margin: 100px 20px 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-}
-
-/* New styles for the navigation bar */
-nav {
+  }
+  
+  nav {
     width: 100%;
     background-color: #000;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
-}
-
-nav ul {
+  }
+  
+  nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-}
-
-nav ul li {
+  }
+  
+  nav ul li {
     margin: 0;
-}
-
-nav ul li a {
+  }
+  
+  nav ul li a {
     display: block;
     color: white;
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
-}
-
-nav ul li a:hover {
+  }
+  
+  nav ul li a:hover {
     background-color: #575757;
-}
-
-.numero {
+  }
+  
+  .numero {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-input {
-    width: calc(100% - 110px); /* Adjust to fit next to the button */
-    max-width: 250px; /* Adjust as needed */
+  }
+  
+  input {
+    width: calc(100% - 110px);
+    max-width: 250px;
     box-sizing: border-box;
     height: 30px;
-}
-
-button {
+  }
+  
+  button {
     background-color: #007BFF;
     color: white;
     border: none;
@@ -99,67 +103,66 @@ button {
     text-align: center;
     padding: 0 20px;
     border-radius: 5px;
-    margin-left: 10px; /* Space between input and button */
-}
-
-button:hover {
+    margin-left: 10px;
+  }
+  
+  button:hover {
     background-color: #0056b3;
-}
-
-.buttons-row {
+  }
+  
+  .buttons-row {
     display: flex;
     justify-content: space-around;
     width: 100%;
     margin-top: 20px;
-}
-
-.tab-content {
+  }
+  
+  .tab-content {
     width: 100%;
     padding: 20px;
-}
-
-.service-selection {
+  }
+  
+  .service-selection {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-}
-
-.service-selection select {
+  }
+  
+  .service-selection select {
     margin-right: 10px;
-}
-
-.register-inputs {
+  }
+  
+  .register-inputs {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-}
-
-.register-inputs input {
+  }
+  
+  .register-inputs input {
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-}
-
-#client-details {
+  }
+  
+  #client-details {
     margin-bottom: 20px;
-}
-
-#message {
+  }
+  
+  #message {
     margin-top: 20px;
-}
-
-.login-form {
+  }
+  
+  .login-form {
     display: flex;
     margin-left: 20px;
     margin-top: 20px;
-}
-
-/* Modal Styles */
-.modal {
-    display: none; /* Hide the modal by default */
+  }
+  
+  .modal {
+    display: none;
     justify-content: center;
     align-items: center;
     position: fixed;
@@ -170,9 +173,9 @@ button:hover {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
+  }
+  
+  .modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
@@ -180,9 +183,9 @@ button:hover {
     width: 80%;
     max-width: 400px;
     border-radius: 10px;
-}
-
-.green-button {
+  }
+  
+  .green-button {
     background-color: #19a337;
     color: white;
     border: none;
@@ -195,60 +198,60 @@ button:hover {
     padding: 0 20px;
     border-radius: 5px;
     margin-left: 10px;
-}
-
-.green-button:hover {
+  }
+  
+  .green-button:hover {
     background-color: #148927;
-}
-
-.service-container {
+  }
+  
+  .service-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
     width: 100%;
     padding-left: 20px;
-    text-align: center; /* Center align text */
-}
-
-.service-container p {
+    text-align: center;
+  }
+  
+  .service-container p {
     margin: 0;
     margin-left: 10px;
     flex: none;
     min-width: 100px;
-}
-
-#previous-section p {
+  }
+  
+  #previous-section p {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
-    max-width: 80%; /* Adjust this value as needed */
-    padding-left: 80px; /* Shift to the right */
-}
-
-.admin-form {
+    max-width: 80%;
+    padding-left: 80px;
+  }
+  
+  .admin-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-}
-
-.admin-form input, .admin-form textarea {
+  }
+  
+  .admin-form input, .admin-form textarea {
     width: 100%;
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-}
-
-.admin-form textarea {
+  }
+  
+  .admin-form textarea {
     resize: vertical;
     height: 150px;
-}
-
-.admin-form button {
+  }
+  
+  .admin-form button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -256,33 +259,33 @@ button:hover {
     color: white;
     font-size: 16px;
     cursor: pointer;
-}
-
-.admin-form button:hover {
+  }
+  
+  .admin-form button:hover {
     background-color: #5e009a;
-}
-
-.blog-post {
+  }
+  
+  .blog-post {
     margin-bottom: 20px;
-}
-
-.blog-post h2 a {
+  }
+  
+  .blog-post h2 a {
     text-decoration: none;
     color: #007BFF;
-}
-
-.blog-post h2 a:hover {
+  }
+  
+  .blog-post h2 a:hover {
     text-decoration: underline;
-}
-
-.dashboard-buttons {
+  }
+  
+  .dashboard-buttons {
     display: flex;
     justify-content: space-around;
     width: 100%;
     margin-top: 20px;
-}
-
-.dashboard-buttons button {
+  }
+  
+  .dashboard-buttons button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -290,75 +293,75 @@ button:hover {
     border-radius: 5px;
     background-color: #7500b4;
     color: white;
-}
-
-.dashboard-buttons button:hover {
+  }
+  
+  .dashboard-buttons button:hover {
     background-color: #5e009a;
-}
-
-#grid-container {
+  }
+  
+  #grid-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 20px;
-}
-
-.row {
+  }
+  
+  .row {
     display: flex;
     align-items: center;
     gap: 5px;
-}
-
-.box {
+  }
+  
+  .box {
     width: 30px;
     height: 30px;
     background-color: lightgrey;
     border: 1px solid black;
-}
-
-.box.filled {
-    background-color: #A782EC; /* Light purple color */
-}
-
-.row .label {
-    width: 80px; /* Ensure it aligns properly */
-    text-align: left; /* Ensure it aligns properly */
-}
-
-@media (max-width: 600px) {
+  }
+  
+  .box.filled {
+    background-color: #A782EC;
+  }
+  
+  .row .label {
+    width: 80px;
+    text-align: left;
+  }
+  
+  @media (max-width: 600px) {
     .background-container {
-        width: calc(100% - 20px);
-        padding: 20px;
-        margin: 0 10px;
+      width: calc(100% - 20px);
+      padding: 20px;
+      margin: 0 10px;
     }
-
+  
     .numero {
-        flex-direction: row;
-        align-items: center;
+      flex-direction: row;
+      align-items: center;
     }
-
+  
     input {
-        flex: 1;
-        margin-bottom: 0;
+      flex: 1;
+      margin-bottom: 0;
     }
-
+  
     button {
-        flex: 0 0 auto;
-        margin-left: 10px;
+      flex: 0 0 auto;
+      margin-left: 10px;
     }
-
+  
     .buttons-row {
-        flex-direction: column;
-        align-items: center;
+      flex-direction: column;
+      align-items: center;
     }
-
+  
     .service-selection {
-        flex-direction: column;
-        align-items: center;
+      flex-direction: column;
+      align-items: center;
     }
-
+  
     #previous-section p {
-        justify-content: space-between;
-        padding-left: 20px; /* Adjust as needed */
+      justify-content: space-between;
+      padding-left: 20px;
     }
-}
+  }

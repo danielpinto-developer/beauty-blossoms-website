@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
@@ -6,7 +5,6 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC4eMq0Y8ERerdBIzsySqtG9QnisI3CBIc",
   authDomain: "bb27studio-loyalty-program.firebaseapp.com",
@@ -17,7 +15,6 @@ const firebaseConfig = {
   measurementId: "G-Y30PX1R10P",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -52,5 +49,4 @@ async function displayBlogPost() {
   }
 }
 
-// Load blog post content when the window loads
 window.onload = displayBlogPost;
