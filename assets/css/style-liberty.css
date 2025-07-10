@@ -3042,7 +3042,6 @@ a.read-more-btn2.btn:hover {
     -moz-background-size: cover; }
   .w3l-banner-slider-main .carousel-item:before {
     content: "";
-    background: rgba(16, 16, 16, 0.470588);
     position: absolute;
     top: 0;
     min-height: 100%;
