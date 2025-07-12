@@ -521,6 +521,134 @@
       </table>
     </div>
 
+    <!-- 📅 Booking Form Snippet for /admin -->
+    <div
+      id="booking-form"
+      style="
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      "
+    >
+      <h2>📋 Book Appointment</h2>
+
+      <label>Client Name:</label>
+      <input type="text" id="clientName" required /><br /><br />
+
+      <label>Staff:</label>
+      <select id="staffSelect" required></select
+      ><br /><br />
+
+      <label>Service Name:</label>
+      <input type="text" id="serviceName" required /><br /><br />
+
+      <label>Duration (minutes):</label>
+      <input
+        type="number"
+        id="duration"
+        min="30"
+        step="30"
+        required
+      /><br /><br />
+
+      <label>Date & Time:</label>
+      <select id="dateTimeSelect" required></select
+      ><br /><br />
+
+      <button onclick="submitBooking()">✅ Book Now</button>
+
+      <p id="status" style="color: green; margin-top: 1rem"></p>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        query,
+        where,
+        Timestamp,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        // ✅ Paste your config here
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const staffSelect = document.getElementById("staffSelect");
+      const dateTimeSelect = document.getElementById("dateTimeSelect");
+      const statusText = document.getElementById("status");
+
+      // 🔁 Fetch staff list
+      async function loadStaff() {
+        const staffSnap = await getDocs(collection(db, "staff"));
+        staffSnap.forEach((doc) => {
+          const s = doc.data();
+          const opt = document.createElement("option");
+          opt.value = s.name;
+          opt.textContent = s.name;
+          staffSelect.appendChild(opt);
+        });
+      }
+
+      // 🔁 Load available slots for next 14 days
+      async function loadSlots() {
+        const now = new Date();
+        const today = now.toISOString().split("T")[0];
+        const selectedStaff = staffSelect.value;
+
+        dateTimeSelect.innerHTML = ""; // reset
+
+        const q = query(
+          collection(db, "available_slots"),
+          where("staff", "==", selectedStaff)
+        );
+        const slotSnap = await getDocs(q);
+
+        slotSnap.forEach((doc) => {
+          const data = doc.data();
+          const slotTime = new Date(data.time.seconds * 1000);
+
+          // ⏳ Filter to future times only
+          if (slotTime > now && slotTime - now < 14 * 24 * 60 * 60 * 1000) {
+            const opt = document.createElement("option");
+            opt.value = data.time.toDate();
+            opt.textContent = slotTime.toLocaleString();
+            dateTimeSelect.appendChild(opt);
+          }
+        });
+      }
+
+      // 🚀 Submit Booking
+      async function submitBooking() {
+        const booking = {
+          name: document.getElementById("clientName").value,
+          staff: staffSelect.value,
+          service: document.getElementById("serviceName").value,
+          duration: parseInt(document.getElementById("duration").value),
+          time: Timestamp.fromDate(new Date(dateTimeSelect.value)),
+        };
+
+        await addDoc(collection(db, "bookings"), booking);
+        statusText.textContent = `✅ Booking saved for ${booking.name}`;
+
+        // 🔁 Reload slots to reflect new availability
+        loadSlots();
+      }
+
+      staffSelect.addEventListener("change", loadSlots);
+
+      loadStaff().then(() => {
+        if (staffSelect.value) loadSlots();
+      });
+    </script>
+
     <!-- Main Content -->
     <div class="container py-5">
       <!-- Formulario para Agendar Cita -->
