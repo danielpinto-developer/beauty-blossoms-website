@@ -22,6 +22,30 @@
     <!-- Template CSS -->
   </head>
   <body>
+    <script>
+      async function loadSingleProduct() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("product_id");
+
+        const res = await fetch("assets/data/shelo-products.json");
+        const products = await res.json();
+        const product = products[parseInt(id)];
+
+        if (!product) return;
+
+        // Update product details
+        document.querySelector("h3").textContent = product.name;
+        document.querySelector(".item_price").textContent = product.price;
+        document.querySelector(".desc_single p").textContent =
+          product.description;
+        document.querySelectorAll(".thumb-image img").forEach((img) => {
+          img.src = product.image;
+        });
+      }
+
+      loadSingleProduct();
+    </script>
+
     <section class="w3l-banner-slider-main inner-pagehny">
       <div class="breadcrumb-infhny">
         <div class="top-header-content">

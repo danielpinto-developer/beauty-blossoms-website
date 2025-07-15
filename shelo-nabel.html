@@ -1365,6 +1365,50 @@
       </script>
       <!-- /move top -->
     </section>
+    <script>
+      async function loadProducts() {
+        const container = document.querySelector(".ecom-products-grids");
+        const res = await fetch("assets/data/shelo-products.json");
+        const products = await res.json();
+
+        products.forEach((product, index) => {
+          const card = document.createElement("div");
+          card.className = "col-lg-3 col-6 product-incfhny mt-4";
+
+          card.innerHTML = `
+        <div class="product-grid2 transmitv">
+          <div class="product-image2">
+            <a href="ecommerce-single.html?product_id=${index}">
+              <img class="pic-1 img-fluid" src="${product.image}" />
+              <img class="pic-2 img-fluid" src="${product.image}" />
+            </a>
+            <ul class="social">
+              <li><a data-tip="Vista Rápida" href="#"><span class="fa fa-eye"></span></a></li>
+              <li><a data-tip="Añadir al Carrito" href="#"><span class="fa fa-shopping-bag"></span></a></li>
+            </ul>
+            <div class="transmitv single-item">
+              <form action="#" method="post">
+                <input type="hidden" name="cmd" value="_cart">
+                <input type="hidden" name="add" value="1">
+                <input type="hidden" name="transmitv_item" value="${product.name}">
+                <input type="hidden" name="amount" value="${product.price}">
+                <button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">Añadir al Carrito</button>
+              </form>
+            </div>
+          </div>
+          <div class="product-content">
+            <h3 class="title"><a href="ecommerce-single.html?product_id=${index}">${product.name}</a></h3>
+            <span class="price">${product.price}</span>
+          </div>
+        </div>
+      `;
+
+          container.appendChild(card);
+        });
+      }
+
+      loadProducts();
+    </script>
   </body>
 </html>
 <script src="assets/js/jquery-3.3.1.min.js"></script>
