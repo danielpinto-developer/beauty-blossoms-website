@@ -225,9 +225,7 @@
           async function loadStats() {
             console.log("🚀 loadStats() triggered");
 
-            const bookingsSnapshot = await getDocs(
-              collection(db, "confirmed_appointments")
-            );
+            const bookingsSnapshot = await getDocs(collection(db, "bookings"));
             console.log("📦 Total bookings fetched:", bookingsSnapshot.size);
 
             if (bookingsSnapshot.empty) {
