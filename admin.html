@@ -171,7 +171,7 @@
         <script type="module">
           import Chart from "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/+esm";
           window.Chart = Chart;
-          import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
           import {
             getFirestore,
             collection,
@@ -181,7 +181,7 @@
             doc,
             updateDoc,
             serverTimestamp,
-          } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+          } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
           const firebaseConfig = {
             apiKey: "AIzaSyAO6w0ZXugY8nyuMpwDq32FlTmrqWLNtJc",
@@ -197,8 +197,7 @@
 
           // 🚀 Load stats
           async function loadStats() {
-            const db = getFirestore(app);
-            const bookings = await db.collection("bookings").get();
+            const bookingsSnapshot = await getDocs(collection(db, "bookings"));
             const serviceCounts = {};
             const categoryCounts = {};
             let totalRevenue = 0;
@@ -225,7 +224,7 @@
               Extensiones: "Cabello",
             };
 
-            bookings.forEach((doc) => {
+            bookingsSnapshot.forEach((doc) => {
               const data = doc.data();
               const price = parseFloat(data.price || 0);
               const service = data.service;
