@@ -169,8 +169,35 @@
         </div>
 
         <script type="module">
-          import { Chart } from "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/+esm";
-          window.Chart = Chart;
+          import {
+            Chart,
+            PieController,
+            ArcElement,
+            BarController,
+            BarElement,
+            CategoryScale,
+            LinearScale,
+            LineController,
+            LineElement,
+            PointElement,
+            Tooltip,
+            Legend,
+            Title,
+          } from "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/+esm";
+          Chart.register(
+            PieController,
+            ArcElement,
+            BarController,
+            BarElement,
+            CategoryScale,
+            LinearScale,
+            LineController,
+            LineElement,
+            PointElement,
+            Tooltip,
+            Legend,
+            Title
+          );
           import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
           import {
             getFirestore,
@@ -195,11 +222,17 @@
           const app = initializeApp(firebaseConfig);
           const db = getFirestore(app);
 
-          // 🚀 Load stats
           async function loadStats() {
-            const bookingsSnapshot = await getDocs(collection(db, "bookings"));
+            const bookingsSnapshot = await getDocs(
+              collection(db, "confirmed_appointments")
+            );
+
             const serviceCounts = {};
             const categoryCounts = {};
+            const phoneTracker = {};
+            const comboCounts = {};
+            let newClients = 0;
+            let returningClients = 0;
             let totalRevenue = 0;
 
             const categoryMap = {
@@ -224,22 +257,71 @@
               Extensiones: "Cabello",
             };
 
+            const timeCounts = {};
+            const weekCounts = {};
+            const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
             bookingsSnapshot.forEach((doc) => {
               const data = doc.data();
               const price = parseFloat(data.price || 0);
               const service = data.service;
+              const phone = data.clientPhone;
               const category = categoryMap[service] || "Otros";
 
               totalRevenue += price;
-
               serviceCounts[service] = (serviceCounts[service] || 0) + 1;
               categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+
+              // Time count
+              const time = data.start_time || data.time || "Sin hora";
+              timeCounts[time] = (timeCounts[time] || 0) + 1;
+
+              // Weekly trend
+              if (data.date) {
+                const date = new Date(data.date);
+                const weekStart = new Date(date.getFullYear(), 0, 1);
+                const weekNum = Math.floor((date - weekStart) / WEEK_MS + 1);
+                weekCounts[`Semana ${weekNum}`] =
+                  (weekCounts[`Semana ${weekNum}`] || 0) + 1;
+              }
+
+              // New vs returning clients
+              if (phone) {
+                if (phoneTracker[phone]) {
+                  returningClients++;
+                } else {
+                  phoneTracker[phone] = true;
+                  newClients++;
+                }
+              }
+
+              // Combos
+              if (service) {
+                const services = service
+                  .split(/[,|\/\-]+|\s+/)
+                  .map((s) => s.trim())
+                  .filter(Boolean);
+                services.sort();
+                if (services.length > 1) {
+                  const comboKey = services.join(" + ");
+                  comboCounts[comboKey] = (comboCounts[comboKey] || 0) + 1;
+                }
+              }
             });
 
+            // Ingresos Totales
             document.getElementById(
               "totalRevenue"
             ).textContent = `$${totalRevenue.toFixed(2)}`;
 
+            // Fill Rate
+            const TOTAL_SLOTS = 5 * 5 * 2;
+            const fillRate = Math.round(
+              (bookingsSnapshot.size / TOTAL_SLOTS) * 100
+            );
+            document.getElementById("fillRate").textContent = `${fillRate}%`;
+
+            // Top Servicios (Pie)
             new Chart(document.getElementById("topServicesChart"), {
               type: "pie",
               data: {
@@ -259,6 +341,7 @@
               },
             });
 
+            // Categorías (Bar)
             new Chart(document.getElementById("categoryChart"), {
               type: "bar",
               data: {
@@ -272,14 +355,80 @@
                 ],
               },
               options: {
-                scales: {
-                  y: { beginAtZero: true },
-                },
+                scales: { y: { beginAtZero: true } },
+              },
+            });
+
+            // Citas por hora (Bar)
+            new Chart(document.getElementById("popularTimesChart"), {
+              type: "bar",
+              data: {
+                labels: Object.keys(timeCounts),
+                datasets: [
+                  {
+                    label: "Citas por hora",
+                    data: Object.values(timeCounts),
+                    backgroundColor: "#D9A441",
+                  },
+                ],
+              },
+              options: {
+                scales: { y: { beginAtZero: true } },
+              },
+            });
+
+            // Semanas (Line)
+            new Chart(document.getElementById("weeklyTrendChart"), {
+              type: "line",
+              data: {
+                labels: Object.keys(weekCounts),
+                datasets: [
+                  {
+                    label: "Citas",
+                    data: Object.values(weekCounts),
+                    borderColor: "#6F7C4E",
+                    fill: false,
+                  },
+                ],
+              },
+              options: {
+                tension: 0.3,
+                scales: { y: { beginAtZero: true } },
+              },
+            });
+
+            // Nuevos vs Recurrentes (Pie)
+            new Chart(document.getElementById("clientTypeChart"), {
+              type: "pie",
+              data: {
+                labels: ["Nuevos", "Recurrentes"],
+                datasets: [
+                  {
+                    data: [newClients, returningClients],
+                    backgroundColor: ["#D9A441", "#6F7C4E"],
+                  },
+                ],
+              },
+            });
+
+            // Combos (Bar)
+            new Chart(document.getElementById("comboChart"), {
+              type: "bar",
+              data: {
+                labels: Object.keys(comboCounts),
+                datasets: [
+                  {
+                    label: "Veces Usado",
+                    data: Object.values(comboCounts),
+                    backgroundColor: "#1C1C1C",
+                  },
+                ],
+              },
+              options: {
+                scales: { y: { beginAtZero: true } },
               },
             });
           }
-
-          window.addEventListener("DOMContentLoaded", loadStats);
 
           // 🚀 Load pending requests
           async function loadPendingRequests() {
@@ -298,33 +447,33 @@
               const div = document.createElement("div");
               div.className = "border rounded p-3 mb-2";
               div.innerHTML = `
-        <strong>${data.name}</strong> – ${data.phone}<br />
-        <b>Servicio:</b> ${data.intent_data?.service || "-"}<br />
-        <b>Fecha:</b> ${data.intent_data?.date} — <b>Hora:</b> ${
+                <strong>${data.name}</strong> – ${data.phone}<br />
+                <b>Servicio:</b> ${data.intent_data?.service || "-"}<br />
+                <b>Fecha:</b> ${data.intent_data?.date} — <b>Hora:</b> ${
                 data.intent_data?.time
               }<br />
-        <div class="row mt-2">
-          <div class="col-md-5">
-            <input type="text" class="form-control" placeholder="Precio ($MXN)" id="price-${
-              docSnap.id
-            }" />
-          </div>
-          <div class="col-md-5">
-            <input type="text" class="form-control" placeholder="Duración (min)" id="duration-${
-              docSnap.id
-            }" />
-          </div>
-          <div class="col-md-2 d-grid">
-            <button class="btn btn-success" onclick="confirmBooking('${
-              docSnap.id
-            }', '${data.name}', '${data.phone}', '${
+                <div class="row mt-2">
+                  <div class="col-md-5">
+                    <input type="text" class="form-control" placeholder="Precio ($MXN)" id="price-${
+                      docSnap.id
+                    }" />
+                  </div>
+                  <div class="col-md-5">
+                    <input type="text" class="form-control" placeholder="Duración (min)" id="duration-${
+                      docSnap.id
+                    }" />
+                  </div>
+                  <div class="col-md-2 d-grid">
+                    <button class="btn btn-success" onclick="confirmBooking('${
+                      docSnap.id
+                    }', '${data.name}', '${data.phone}', '${
                 data.intent_data?.date
               }', '${data.intent_data?.time}', '${
                 data.intent_data?.service
               }')">Confirmar</button>
-          </div>
-        </div>
-      `;
+                  </div>
+                </div>
+              `;
               container.appendChild(div);
             });
           }
@@ -369,142 +518,8 @@
 
           // ⏱️ On page load
           window.addEventListener("DOMContentLoaded", () => {
+            loadStats();
             loadPendingRequests();
-          });
-
-          // 🕓 Horas Populares
-          const timeCounts = {};
-          // 📈 Citas por Semana
-          const weekCounts = {};
-          const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
-
-          // Base: Moni handles 5 slots/day × 5 days × 2 weeks = 50 slots
-          const TOTAL_SLOTS = 5 * 5 * 2;
-          const confirmed = await getDocs(
-            collection(db, "confirmed_appointments")
-          );
-          const fillRate = Math.round((confirmed.size / TOTAL_SLOTS) * 100);
-          document.getElementById("fillRate").textContent = `${fillRate}%`;
-
-          // Process time + weekly grouping
-          bookingsSnapshot.forEach((doc) => {
-            const data = doc.data();
-            const time = data.start_time || "Sin hora";
-            timeCounts[time] = (timeCounts[time] || 0) + 1;
-
-            const date = new Date(data.date);
-            const weekStart = new Date(date.getFullYear(), 0, 1);
-            const weekNum = Math.floor((date - weekStart) / WEEK_MS + 1);
-            weekCounts[`Semana ${weekNum}`] =
-              (weekCounts[`Semana ${weekNum}`] || 0) + 1;
-          });
-
-          // Chart: Horas Populares
-          new Chart(document.getElementById("popularTimesChart"), {
-            type: "bar",
-            data: {
-              labels: Object.keys(timeCounts),
-              datasets: [
-                {
-                  label: "Citas por hora",
-                  data: Object.values(timeCounts),
-                  backgroundColor: "#D9A441",
-                },
-              ],
-            },
-            options: {
-              scales: { y: { beginAtZero: true } },
-            },
-          });
-
-          // Chart: Citas por Semana
-          new Chart(document.getElementById("weeklyTrendChart"), {
-            type: "line",
-            data: {
-              labels: Object.keys(weekCounts),
-              datasets: [
-                {
-                  label: "Citas",
-                  data: Object.values(weekCounts),
-                  borderColor: "#6F7C4E",
-                  fill: false,
-                },
-              ],
-            },
-            options: {
-              tension: 0.3,
-              scales: { y: { beginAtZero: true } },
-            },
-          });
-
-          // 👥 Nuevos vs Recurrentes
-          const phoneTracker = {};
-          let newClients = 0;
-          let returningClients = 0;
-
-          // 📌 Combos
-          const comboCounts = {};
-
-          bookingsSnapshot.forEach((doc) => {
-            const data = doc.data();
-            const phone = data.clientPhone;
-            const serviceField = data.service;
-
-            // Track new/returning clients
-            if (phone) {
-              if (phoneTracker[phone]) {
-                returningClients++;
-              } else {
-                phoneTracker[phone] = true;
-                newClients++;
-              }
-            }
-
-            // Handle service combos
-            if (serviceField) {
-              const services = serviceField
-                .split(/[,|\/\-]+|\s+/)
-                .map((s) => s.trim())
-                .filter(Boolean);
-              services.sort(); // Normalize for grouping
-
-              if (services.length > 1) {
-                const comboKey = services.join(" + ");
-                comboCounts[comboKey] = (comboCounts[comboKey] || 0) + 1;
-              }
-            }
-          });
-
-          // Chart: Nuevos vs Recurrentes
-          new Chart(document.getElementById("clientTypeChart"), {
-            type: "pie",
-            data: {
-              labels: ["Nuevos", "Recurrentes"],
-              datasets: [
-                {
-                  data: [newClients, returningClients],
-                  backgroundColor: ["#D9A441", "#6F7C4E"],
-                },
-              ],
-            },
-          });
-
-          // Chart: Combos Populares
-          new Chart(document.getElementById("comboChart"), {
-            type: "bar",
-            data: {
-              labels: Object.keys(comboCounts),
-              datasets: [
-                {
-                  label: "Veces Usado",
-                  data: Object.values(comboCounts),
-                  backgroundColor: "#1C1C1C",
-                },
-              ],
-            },
-            options: {
-              scales: { y: { beginAtZero: true } },
-            },
           });
         </script>
 
