@@ -198,6 +198,7 @@
             Legend,
             Title
           );
+
           import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
           import {
             getFirestore,
@@ -206,7 +207,6 @@
             deleteDoc,
             addDoc,
             doc,
-            updateDoc,
             serverTimestamp,
           } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -223,21 +223,28 @@
           const db = getFirestore(app);
 
           async function loadStats() {
+            console.log("🚀 loadStats() triggered");
+
             const bookingsSnapshot = await getDocs(
               collection(db, "confirmed_appointments")
             );
+            console.log("📦 Total bookings fetched:", bookingsSnapshot.size);
+
+            if (bookingsSnapshot.empty) {
+              console.warn("⚠️ No data found in confirmed_appointments");
+              return;
+            }
 
             const serviceCounts = {};
             const categoryCounts = {};
-            const phoneTracker = {};
             const comboCounts = {};
-            const staffCounts = {};
-            const dateCounts = {};
-            const durations = [];
-
+            const phoneTracker = {};
             let newClients = 0;
             let returningClients = 0;
             let totalRevenue = 0;
+            const timeCounts = {};
+            const weekCounts = {};
+            const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
             const categoryMap = {
               Clásica: "Pestañas",
@@ -259,52 +266,41 @@
               Nanoplastia: "Cabello",
               Keratina: "Cabello",
               Extensiones: "Cabello",
-              "BB Glow": "Rostro",
-              "BB Lips": "Labios",
-              "Lifting de Pestañas": "Pestañas",
             };
-
-            const timeCounts = {};
-            const weekCounts = {};
-            const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
             bookingsSnapshot.forEach((doc) => {
               const data = doc.data();
-              const price = parseFloat(data.price || 0);
-              const service = data.service;
-              const phone = data.clientPhone || data.phone;
-              const category = categoryMap[service] || "Otros";
-              const staff = data.staff_id || "Sin asignar";
-              const date = data.date;
+              console.log("📄 Booking:", data);
+
+              const price =
+                typeof data.price === "number"
+                  ? data.price
+                  : parseFloat(data.price || 0);
+              if (isNaN(price)) {
+                console.warn("⚠️ Skipping booking due to invalid price:", data);
+                return;
+              }
 
               totalRevenue += price;
+
+              const service = data.service || "Otro";
+              const phone = data.clientPhone || data.phone || null;
+              const category = categoryMap[service] || "Otros";
+              const time = data.start_time || data.time || "Sin hora";
+              const dateStr = data.date;
+
               serviceCounts[service] = (serviceCounts[service] || 0) + 1;
               categoryCounts[category] = (categoryCounts[category] || 0) + 1;
-              staffCounts[staff] = (staffCounts[staff] || 0) + 1;
-
-              // Time count
-              const time = data.start_time || data.time || "Sin hora";
               timeCounts[time] = (timeCounts[time] || 0) + 1;
 
-              // Daily appointments
-              if (date) {
-                dateCounts[date] = (dateCounts[date] || 0) + 1;
-
-                const d = new Date(date);
-                const weekStart = new Date(d.getFullYear(), 0, 1);
-                const weekNum = Math.floor((d - weekStart) / WEEK_MS + 1);
+              if (dateStr) {
+                const date = new Date(dateStr);
+                const weekStart = new Date(date.getFullYear(), 0, 1);
+                const weekNum = Math.floor((date - weekStart) / WEEK_MS + 1);
                 weekCounts[`Semana ${weekNum}`] =
                   (weekCounts[`Semana ${weekNum}`] || 0) + 1;
               }
 
-              // Duration
-              if (data.duration || data.duration_minutes) {
-                durations.push(
-                  parseInt(data.duration || data.duration_minutes)
-                );
-              }
-
-              // New vs Returning
               if (phone) {
                 if (phoneTracker[phone]) {
                   returningClients++;
@@ -314,7 +310,6 @@
                 }
               }
 
-              // Combos
               if (service) {
                 const services = service
                   .split(/[,|\/\-]+|\s+/)
@@ -328,248 +323,98 @@
               }
             });
 
-            const avgDuration = durations.length
-              ? Math.round(
-                  durations.reduce((a, b) => a + b, 0) / durations.length
-                )
-              : 0;
-
             const TOTAL_SLOTS = 5 * 5 * 2;
             const fillRate = Math.round(
               (bookingsSnapshot.size / TOTAL_SLOTS) * 100
             );
 
-            // 💰 Ingresos
             document.getElementById(
               "totalRevenue"
             ).textContent = `$${totalRevenue.toFixed(2)}`;
             document.getElementById("fillRate").textContent = `${fillRate}%`;
-            document.getElementById(
-              "avgDuration"
-            ).textContent = `${avgDuration} min`;
 
-            // 📊 Servicios más solicitados
-            new Chart(document.getElementById("topServicesChart"), {
-              type: "pie",
-              data: {
-                labels: Object.keys(serviceCounts),
-                datasets: [
-                  {
-                    data: Object.values(serviceCounts),
-                    backgroundColor: [
-                      "#6F7C4E",
-                      "#D9A441",
-                      "#1C1C1C",
-                      "#F8F6F2",
-                      "#8AB661",
-                    ],
-                  },
-                ],
+            const charts = [
+              {
+                id: "topServicesChart",
+                type: "pie",
+                label: null,
+                data: serviceCounts,
+                bg: ["#6F7C4E", "#D9A441", "#1C1C1C", "#F8F6F2", "#8AB661"],
               },
-            });
+              {
+                id: "categoryChart",
+                type: "bar",
+                label: "Servicios por Categoría",
+                data: categoryCounts,
+                bg: "#D9A441",
+              },
+              {
+                id: "popularTimesChart",
+                type: "bar",
+                label: "Citas por hora",
+                data: timeCounts,
+                bg: "#D9A441",
+              },
+              {
+                id: "weeklyTrendChart",
+                type: "line",
+                label: "Citas",
+                data: weekCounts,
+                border: "#6F7C4E",
+              },
+              {
+                id: "clientTypeChart",
+                type: "pie",
+                label: null,
+                data: { Nuevos: newClients, Recurrentes: returningClients },
+                bg: ["#D9A441", "#6F7C4E"],
+              },
+              {
+                id: "comboChart",
+                type: "bar",
+                label: "Veces Usado",
+                data: comboCounts,
+                bg: "#1C1C1C",
+              },
+            ];
 
-            // 📦 Categorías
-            new Chart(document.getElementById("categoryChart"), {
-              type: "bar",
-              data: {
-                labels: Object.keys(categoryCounts),
-                datasets: [
-                  {
-                    label: "Servicios por Categoría",
-                    data: Object.values(categoryCounts),
-                    backgroundColor: "#D9A441",
-                  },
-                ],
-              },
-              options: { scales: { y: { beginAtZero: true } } },
-            });
+            charts.forEach((chart) => {
+              const el = document.getElementById(chart.id);
+              if (!el) {
+                console.error(`🚨 Missing canvas: ${chart.id}`);
+                return;
+              }
 
-            // 🕓 Horas Populares
-            new Chart(document.getElementById("popularTimesChart"), {
-              type: "bar",
-              data: {
-                labels: Object.keys(timeCounts),
-                datasets: [
-                  {
-                    label: "Citas por hora",
-                    data: Object.values(timeCounts),
-                    backgroundColor: "#D9A441",
-                  },
-                ],
-              },
-              options: { scales: { y: { beginAtZero: true } } },
-            });
+              const config = {
+                type: chart.type,
+                data: {
+                  labels: Object.keys(chart.data),
+                  datasets: [
+                    {
+                      label: chart.label || undefined,
+                      data: Object.values(chart.data),
+                      backgroundColor: chart.bg || undefined,
+                      borderColor: chart.border || undefined,
+                      fill: chart.type === "line" ? false : undefined,
+                    },
+                  ],
+                },
+                options: {
+                  scales:
+                    chart.type !== "pie"
+                      ? { y: { beginAtZero: true } }
+                      : undefined,
+                  tension: chart.type === "line" ? 0.3 : undefined,
+                },
+              };
 
-            // 📅 Por semana
-            new Chart(document.getElementById("weeklyTrendChart"), {
-              type: "line",
-              data: {
-                labels: Object.keys(weekCounts),
-                datasets: [
-                  {
-                    label: "Citas",
-                    data: Object.values(weekCounts),
-                    borderColor: "#6F7C4E",
-                    fill: false,
-                  },
-                ],
-              },
-              options: { tension: 0.3, scales: { y: { beginAtZero: true } } },
-            });
-
-            // 👥 Nuevos vs Recurrentes
-            new Chart(document.getElementById("clientTypeChart"), {
-              type: "pie",
-              data: {
-                labels: ["Nuevos", "Recurrentes"],
-                datasets: [
-                  {
-                    data: [newClients, returningClients],
-                    backgroundColor: ["#D9A441", "#6F7C4E"],
-                  },
-                ],
-              },
-            });
-
-            // 📌 Combos
-            new Chart(document.getElementById("comboChart"), {
-              type: "bar",
-              data: {
-                labels: Object.keys(comboCounts),
-                datasets: [
-                  {
-                    label: "Veces Usado",
-                    data: Object.values(comboCounts),
-                    backgroundColor: "#1C1C1C",
-                  },
-                ],
-              },
-              options: { scales: { y: { beginAtZero: true } } },
-            });
-
-            // 📅 Citas por día
-            new Chart(document.getElementById("appointmentsPerDayChart"), {
-              type: "bar",
-              data: {
-                labels: Object.keys(dateCounts),
-                datasets: [
-                  {
-                    label: "Citas por Día",
-                    data: Object.values(dateCounts),
-                    backgroundColor: "#8AB661",
-                  },
-                ],
-              },
-              options: { scales: { y: { beginAtZero: true } } },
-            });
-
-            // 🧍‍♀️ Citas por Staff
-            new Chart(document.getElementById("staffPerformanceChart"), {
-              type: "bar",
-              data: {
-                labels: Object.keys(staffCounts),
-                datasets: [
-                  {
-                    label: "Citas por Staff",
-                    data: Object.values(staffCounts),
-                    backgroundColor: "#D9A441",
-                  },
-                ],
-              },
-              options: { scales: { y: { beginAtZero: true } } },
+              console.log(`📊 Rendering chart: ${chart.id}`, config);
+              new Chart(el, config);
             });
           }
 
-          // 🚀 Load pending requests
-          async function loadPendingRequests() {
-            const container = document.getElementById("pendingRequests");
-            container.innerHTML = "Cargando...";
-
-            const snapshot = await getDocs(collection(db, "pending_requests"));
-            if (snapshot.empty) {
-              container.innerHTML = "<p>No hay solicitudes pendientes</p>";
-              return;
-            }
-
-            container.innerHTML = "";
-            snapshot.forEach((docSnap) => {
-              const data = docSnap.data();
-              const div = document.createElement("div");
-              div.className = "border rounded p-3 mb-2";
-              div.innerHTML = `
-                <strong>${data.name}</strong> – ${data.phone}<br />
-                <b>Servicio:</b> ${data.intent_data?.service || "-"}<br />
-                <b>Fecha:</b> ${data.intent_data?.date} — <b>Hora:</b> ${
-                data.intent_data?.time
-              }<br />
-                <div class="row mt-2">
-                  <div class="col-md-5">
-                    <input type="text" class="form-control" placeholder="Precio ($MXN)" id="price-${
-                      docSnap.id
-                    }" />
-                  </div>
-                  <div class="col-md-5">
-                    <input type="text" class="form-control" placeholder="Duración (min)" id="duration-${
-                      docSnap.id
-                    }" />
-                  </div>
-                  <div class="col-md-2 d-grid">
-                    <button class="btn btn-success" onclick="confirmBooking('${
-                      docSnap.id
-                    }', '${data.name}', '${data.phone}', '${
-                data.intent_data?.date
-              }', '${data.intent_data?.time}', '${
-                data.intent_data?.service
-              }')">Confirmar</button>
-                  </div>
-                </div>
-              `;
-              container.appendChild(div);
-            });
-          }
-
-          window.confirmBooking = async function (
-            id,
-            name,
-            phone,
-            date,
-            time,
-            service
-          ) {
-            const price = document.getElementById(`price-${id}`).value.trim();
-            const duration = document
-              .getElementById(`duration-${id}`)
-              .value.trim();
-
-            if (!price || !duration) return alert("Falta precio o duración.");
-
-            await addDoc(collection(db, "confirmed_appointments"), {
-              name,
-              phone,
-              date,
-              time,
-              service,
-              price,
-              duration,
-              timestamp: serverTimestamp(),
-            });
-
-            // Auto-send WhatsApp confirmation
-            const msg = `¡Gracias guapa! Ya está reservado tu espacio para ${date} a las ${time} 💕\nPor favor envía tu anticipo de $100 pesos para confirmar tu cita 💸`;
-            await fetch("/send", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ phone, message: msg }),
-            });
-
-            await deleteDoc(doc(db, "pending_requests", id));
-            loadPendingRequests(); // Refresh UI
-          };
-
-          // ⏱️ On page load
           window.addEventListener("DOMContentLoaded", () => {
             loadStats();
-            loadPendingRequests();
           });
         </script>
 
