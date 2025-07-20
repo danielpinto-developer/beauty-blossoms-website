@@ -169,7 +169,7 @@
         </div>
 
         <script type="module">
-          import Chart from "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/+esm";
+          import { Chart } from "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/+esm";
           window.Chart = Chart;
           import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
           import {
@@ -387,7 +387,7 @@
           document.getElementById("fillRate").textContent = `${fillRate}%`;
 
           // Process time + weekly grouping
-          bookings.forEach((doc) => {
+          bookingsSnapshot.forEach((doc) => {
             const data = doc.data();
             const time = data.start_time || "Sin hora";
             timeCounts[time] = (timeCounts[time] || 0) + 1;
@@ -445,7 +445,7 @@
           // 📌 Combos
           const comboCounts = {};
 
-          bookings.forEach((doc) => {
+          bookingsSnapshot.forEach((doc) => {
             const data = doc.data();
             const phone = data.clientPhone;
             const serviceField = data.service;
