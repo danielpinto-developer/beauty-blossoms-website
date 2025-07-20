@@ -231,6 +231,10 @@
             const categoryCounts = {};
             const phoneTracker = {};
             const comboCounts = {};
+            const staffCounts = {};
+            const dateCounts = {};
+            const durations = [];
+
             let newClients = 0;
             let returningClients = 0;
             let totalRevenue = 0;
@@ -255,6 +259,9 @@
               Nanoplastia: "Cabello",
               Keratina: "Cabello",
               Extensiones: "Cabello",
+              "BB Glow": "Rostro",
+              "BB Lips": "Labios",
+              "Lifting de Pestañas": "Pestañas",
             };
 
             const timeCounts = {};
@@ -265,27 +272,39 @@
               const data = doc.data();
               const price = parseFloat(data.price || 0);
               const service = data.service;
-              const phone = data.clientPhone;
+              const phone = data.clientPhone || data.phone;
               const category = categoryMap[service] || "Otros";
+              const staff = data.staff_id || "Sin asignar";
+              const date = data.date;
 
               totalRevenue += price;
               serviceCounts[service] = (serviceCounts[service] || 0) + 1;
               categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+              staffCounts[staff] = (staffCounts[staff] || 0) + 1;
 
               // Time count
               const time = data.start_time || data.time || "Sin hora";
               timeCounts[time] = (timeCounts[time] || 0) + 1;
 
-              // Weekly trend
-              if (data.date) {
-                const date = new Date(data.date);
-                const weekStart = new Date(date.getFullYear(), 0, 1);
-                const weekNum = Math.floor((date - weekStart) / WEEK_MS + 1);
+              // Daily appointments
+              if (date) {
+                dateCounts[date] = (dateCounts[date] || 0) + 1;
+
+                const d = new Date(date);
+                const weekStart = new Date(d.getFullYear(), 0, 1);
+                const weekNum = Math.floor((d - weekStart) / WEEK_MS + 1);
                 weekCounts[`Semana ${weekNum}`] =
                   (weekCounts[`Semana ${weekNum}`] || 0) + 1;
               }
 
-              // New vs returning clients
+              // Duration
+              if (data.duration || data.duration_minutes) {
+                durations.push(
+                  parseInt(data.duration || data.duration_minutes)
+                );
+              }
+
+              // New vs Returning
               if (phone) {
                 if (phoneTracker[phone]) {
                   returningClients++;
@@ -309,19 +328,27 @@
               }
             });
 
-            // Ingresos Totales
-            document.getElementById(
-              "totalRevenue"
-            ).textContent = `$${totalRevenue.toFixed(2)}`;
+            const avgDuration = durations.length
+              ? Math.round(
+                  durations.reduce((a, b) => a + b, 0) / durations.length
+                )
+              : 0;
 
-            // Fill Rate
             const TOTAL_SLOTS = 5 * 5 * 2;
             const fillRate = Math.round(
               (bookingsSnapshot.size / TOTAL_SLOTS) * 100
             );
-            document.getElementById("fillRate").textContent = `${fillRate}%`;
 
-            // Top Servicios (Pie)
+            // 💰 Ingresos
+            document.getElementById(
+              "totalRevenue"
+            ).textContent = `$${totalRevenue.toFixed(2)}`;
+            document.getElementById("fillRate").textContent = `${fillRate}%`;
+            document.getElementById(
+              "avgDuration"
+            ).textContent = `${avgDuration} min`;
+
+            // 📊 Servicios más solicitados
             new Chart(document.getElementById("topServicesChart"), {
               type: "pie",
               data: {
@@ -341,7 +368,7 @@
               },
             });
 
-            // Categorías (Bar)
+            // 📦 Categorías
             new Chart(document.getElementById("categoryChart"), {
               type: "bar",
               data: {
@@ -354,12 +381,10 @@
                   },
                 ],
               },
-              options: {
-                scales: { y: { beginAtZero: true } },
-              },
+              options: { scales: { y: { beginAtZero: true } } },
             });
 
-            // Citas por hora (Bar)
+            // 🕓 Horas Populares
             new Chart(document.getElementById("popularTimesChart"), {
               type: "bar",
               data: {
@@ -372,12 +397,10 @@
                   },
                 ],
               },
-              options: {
-                scales: { y: { beginAtZero: true } },
-              },
+              options: { scales: { y: { beginAtZero: true } } },
             });
 
-            // Semanas (Line)
+            // 📅 Por semana
             new Chart(document.getElementById("weeklyTrendChart"), {
               type: "line",
               data: {
@@ -391,13 +414,10 @@
                   },
                 ],
               },
-              options: {
-                tension: 0.3,
-                scales: { y: { beginAtZero: true } },
-              },
+              options: { tension: 0.3, scales: { y: { beginAtZero: true } } },
             });
 
-            // Nuevos vs Recurrentes (Pie)
+            // 👥 Nuevos vs Recurrentes
             new Chart(document.getElementById("clientTypeChart"), {
               type: "pie",
               data: {
@@ -411,7 +431,7 @@
               },
             });
 
-            // Combos (Bar)
+            // 📌 Combos
             new Chart(document.getElementById("comboChart"), {
               type: "bar",
               data: {
@@ -424,9 +444,39 @@
                   },
                 ],
               },
-              options: {
-                scales: { y: { beginAtZero: true } },
+              options: { scales: { y: { beginAtZero: true } } },
+            });
+
+            // 📅 Citas por día
+            new Chart(document.getElementById("appointmentsPerDayChart"), {
+              type: "bar",
+              data: {
+                labels: Object.keys(dateCounts),
+                datasets: [
+                  {
+                    label: "Citas por Día",
+                    data: Object.values(dateCounts),
+                    backgroundColor: "#8AB661",
+                  },
+                ],
               },
+              options: { scales: { y: { beginAtZero: true } } },
+            });
+
+            // 🧍‍♀️ Citas por Staff
+            new Chart(document.getElementById("staffPerformanceChart"), {
+              type: "bar",
+              data: {
+                labels: Object.keys(staffCounts),
+                datasets: [
+                  {
+                    label: "Citas por Staff",
+                    data: Object.values(staffCounts),
+                    backgroundColor: "#D9A441",
+                  },
+                ],
+              },
+              options: { scales: { y: { beginAtZero: true } } },
             });
           }
 
